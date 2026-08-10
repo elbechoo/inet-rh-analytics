@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="200" viewBox="0 0 600 200">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <linearGradient id="circleGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#4f46e5"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#6366f1" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Background rounded rect -->
+  <rect width="600" height="200" rx="20" fill="url(#bgGrad)"/>
+
+  <!-- Subtle grid lines -->
+  <line x1="0" y1="100" x2="600" y2="100" stroke="#ffffff" stroke-width="0.3" opacity="0.05"/>
+  <line x1="300" y1="0" x2="300" y2="200" stroke="#ffffff" stroke-width="0.3" opacity="0.05"/>
+
+  <!-- Glow circle behind logo -->
+  <circle cx="100" cy="100" r="65" fill="#6366f1" opacity="0.08"/>
+
+  <!-- Main logo circle -->
+  <circle cx="100" cy="100" r="55" fill="url(#circleGrad)" filter="url(#shadow)"/>
+
+  <!-- Inner ring -->
+  <circle cx="100" cy="100" r="48" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.2"/>
+
+  <!-- iN letters -->
+  <text x="100" y="92" font-family="Arial" font-size="28" font-weight="900" fill="white"
+        text-anchor="middle" letter-spacing="-1">i</text>
+  <text x="100" y="118" font-family="Arial" font-size="22" font-weight="900" fill="#c7d2fe"
+        text-anchor="middle">NET</text>
+
+  <!-- Company name: iNET -->
+  <text x="178" y="88" font-family="Arial" font-size="48" font-weight="900" fill="white"
+        letter-spacing="-1">iNET</text>
+
+  <!-- RH badge -->
+  <rect x="180" y="98" width="68" height="32" rx="6" fill="url(#accentGrad)"/>
+  <text x="214" y="120" font-family="Arial" font-size="20" font-weight="900" fill="white"
+        text-anchor="middle" letter-spacing="2">RH</text>
+
+  <!-- Accent underline -->
+  <rect x="178" y="145" width="240" height="3" rx="2" fill="url(#accentGrad)" opacity="0.8"/>
+
+  <!-- Tagline -->
+  <text x="178" y="168" font-family="Arial" font-size="13" fill="#94a3b8"
+        letter-spacing="0.5">Système de Gestion RH Intelligente</text>
+
+  <!-- Small decorative dots top-right -->
+  <circle cx="555" cy="30" r="4" fill="#6366f1" opacity="0.6"/>
+  <circle cx="572" cy="30" r="4" fill="#10b981" opacity="0.6"/>
+  <circle cx="555" cy="47" r="4" fill="#10b981" opacity="0.6"/>
+  <circle cx="572" cy="47" r="4" fill="#6366f1" opacity="0.3"/>
+</svg>

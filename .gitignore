@@ -1,0 +1,72 @@
+# Environment variables — never commit secrets
+.env
+.env.local
+.env.production
+
+# Client registry — names your customers and their databases. Deployment
+# config, not source, and not something to hand to a prospect with the repo.
+config/tenants.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Trained model artifacts (large binary files)
+ai/models/*.pkl
+
+# Logs
+logs/
+*.log
+
+# Node / Next.js
+frontend-next/node_modules/
+frontend-next/.next/
+frontend-next/out/
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.user
+
+# OS
+.DS_Store
+Thumbs.db
+
+# internal working notes
+_private/
+
+# Editor / assistant tooling — local setup, not part of the project
+.claude/
+.pytest_cache/
+
+# Generated employee documents (attestations, payslips). These are produced at
+# runtime and contain personal data — they belong on the server, not in git.
+documents_pdf/
+
+# ── Report and presentation workspace ───────────────────────────────────────
+# These are the writing workspace for the PFE report and defence, not part of
+# the software: 54 versions of the same PDF, 13 PowerPoint revisions, hundreds
+# of rendered diagrams and a 116 MB screen recording — over half a gigabyte of
+# build artifacts. GitHub also rejects any single file above 100 MB, so the
+# video alone would fail the push.
+#
+# Keep them locally. To publish the finished report, add that one file
+# explicitly:  git add -f iNET-RH-Rapport-PFE-FINAL.docx
+rapport-pfe/
+rapport-pfe-1/
+soutenance/
+
+# Power BI workbooks are large binaries that diff as one blob every save.
+*.pbix
+
+# Full SSMS schema dump: 45 MB of UTF-16 CREATE TABLE statements duplicating
+# what models/models.py and fix_schema.sql already define. No data in it, just
+# bulk nobody reads.
+script.sql

@@ -1,0 +1,11 @@
+# Reverse proxy + automatic HTTPS.
+# For a real domain, set SITE_ADDRESS=hr.youragency.com and Caddy fetches a
+# valid Let's Encrypt certificate automatically. For local testing, the default
+# `localhost` uses Caddy's local CA (HTTPS on https://localhost).
+#
+# All traffic goes to the frontend, which itself proxies /api/* to the API
+# container. The API is never exposed to the public network directly.
+{$SITE_ADDRESS:localhost} {
+	encode gzip
+	reverse_proxy frontend:3000
+}

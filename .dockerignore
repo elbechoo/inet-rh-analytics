@@ -1,0 +1,36 @@
+# Keep build context small and secrets out of images.
+.git
+.gitignore
+venv
+**/__pycache__
+**/*.pyc
+.pytest_cache
+logs
+*.log
+
+# Frontend build/deps (rebuilt inside the image)
+frontend-next/node_modules
+frontend-next/.next
+
+# Large data / report artifacts not needed at runtime
+*.pbix
+*.docx
+script.sql
+fix_schema.sql
+documents_pdf
+powerbi
+rapport-pfe
+rapport-pfe-1
+soutenance
+
+# NOTE: demo/ stays in the image because scripts/seed_history.py imports the
+# simulator from it, and seeding is how a fresh deployment gets something to
+# show. scripts/ already ships the other seeders, so excluding only demo/ was
+# inconsistent.
+# For a paying client, neither belongs in the image — a tool that fabricates
+# attendance records has no business on a production server. The clean fix is a
+# separate build target that omits scripts/ and demo/ entirely.
+
+# Never ship real secrets
+.env
+frontend-next/.env.local

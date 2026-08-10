@@ -1,0 +1,91 @@
+# Phase 2 — full stack in containers: Postgres + FastAPI + Next.js + Caddy.
+# Copy .env.example to .env, fill in SECRET_KEY / DB_PASSWORD, then:
+#   docker compose up --build
+# App: https://localhost   (or your SITE_ADDRESS domain)
+#
+# This is also the artifact you hand an on-premise buyer: `docker compose up`.
+
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-inet}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in .env}
+      POSTGRES_DB: ${DB_DATABASE:-inet_rh}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-inet} -d ${DB_DATABASE:-inet_rh}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    restart: unless-stopped
+    environment:
+      DB_ENGINE: postgres
+      DB_SERVER: db
+      DB_PORT: "5432"
+      DB_DATABASE: ${DB_DATABASE:-inet_rh}
+      DB_USER: ${DB_USER:-inet}
+      DB_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in .env}
+      SECRET_KEY: ${SECRET_KEY:?set SECRET_KEY in .env}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      FORCE_HTTPS: ${FORCE_HTTPS:-false}
+      GMAIL_USER: ${GMAIL_USER:-}
+      GMAIL_PASSWORD: ${GMAIL_PASSWORD:-}
+      RH_EMAIL: ${RH_EMAIL:-}
+    depends_on:
+      db:
+        condition: service_healthy
+    expose:
+      - "8000"
+
+  frontend:
+    build:
+      context: ./frontend-next
+      dockerfile: Dockerfile
+      args:
+        # Must be a build arg, not just runtime env: Next.js resolves the
+        # rewrites() destination during `npm run build` and freezes it into the
+        # routes manifest.
+        NEXT_PUBLIC_API_URL: http://api:8000
+    restart: unless-stopped
+    environment:
+      # Kept for any runtime reader; the /api/* proxy target comes from the
+      # build arg above.
+      NEXT_PUBLIC_API_URL: http://api:8000
+    depends_on:
+      - api
+    expose:
+      - "3000"
+    ports:
+      # Published so a tunnel (cloudflared/ngrok) can reach the app directly.
+      # Going through Caddy on :80 does not work for that: it redirects to
+      # HTTPS on localhost, which only resolves on this machine.
+      # In production remove this and let the proxy be the only way in.
+      - "127.0.0.1:3000:3000"
+
+  proxy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:-localhost}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - frontend
+
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:

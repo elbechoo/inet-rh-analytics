@@ -1,0 +1,603 @@
+2026-04-16 00:37:40,779 - INFO - ==================================================
+2026-04-16 00:37:40,779 - INFO - 🚀 DÉMARRAGE DU PIPELINE ETL
+2026-04-16 00:37:40,781 - INFO - ==================================================
+2026-04-16 00:37:40,781 - INFO - 
+📤 ÉTAPE 1: EXTRACTION
+2026-04-16 00:37:40,782 - INFO - 🚀 Début de l'extraction complète...
+2026-04-16 00:37:40,790 - INFO - 📤 Extraction des employés...
+2026-04-16 00:37:41,028 - INFO - ✅ 76 employés extraits
+2026-04-16 00:37:41,028 - INFO - 📤 Extraction des pointages...
+2026-04-16 00:37:53,972 - INFO - ✅ 59743 pointages extraits
+2026-04-16 00:37:53,972 - INFO - 📤 Extraction des absences...
+2026-04-16 00:37:54,021 - INFO - ✅ 505 absences extraites
+2026-04-16 00:37:54,022 - INFO - 📤 Extraction des congés...
+2026-04-16 00:37:54,034 - INFO - ✅ 226 congés extraits
+2026-04-16 00:37:54,035 - INFO - 📤 Extraction des alertes IA...
+2026-04-16 00:37:54,072 - INFO - ✅ 338 alertes extraites
+2026-04-16 00:37:54,074 - INFO - ✅ Extraction complète terminée!
+2026-04-16 00:37:54,075 - INFO - 
+🔄 ÉTAPE 2: TRANSFORMATION
+2026-04-16 00:37:54,075 - INFO - 🚀 Début de la transformation complète...
+2026-04-16 00:37:54,075 - INFO - 🔄 Transformation des employés...
+2026-04-16 00:37:54,121 - INFO - ✅ 76 employés transformés
+2026-04-16 00:37:54,122 - INFO - 🔄 Transformation des pointages...
+2026-04-16 00:37:54,163 - INFO - ✅ 59743 pointages transformés
+2026-04-16 00:37:54,163 - INFO - 🔄 Transformation des absences...
+2026-04-16 00:37:54,165 - INFO - ✅ 505 absences transformées
+2026-04-16 00:37:54,166 - INFO - 🔄 Transformation des congés...
+2026-04-16 00:37:54,167 - INFO - ✅ 226 congés transformés
+2026-04-16 00:37:54,168 - INFO - 📊 Calcul des KPIs...
+2026-04-16 00:37:54,185 - INFO - 🔍 Statuts pointage trouvés: ['Présent' 'En retard' 'Sortie manquante']
+2026-04-16 00:37:54,607 - INFO - ✅ KPIs calculés pour 76 employés
+2026-04-16 00:37:54,631 - INFO - 📊 Sample KPIs:
+           nom_complet  nb_pointages  nb_presents  taux_presence
+0  Soufienne CHAABOUNI           823          462          56.14
+1      Mohamed BEN ALI           818          469          57.33
+2      Braik CHAABOUNI           823          482          58.57
+3  El Aidi EL KHARRATI           703          409          58.18
+4           Bilel SAFI           826          490          59.32
+2026-04-16 00:37:54,634 - INFO - ✅ Transformation complète terminée!
+2026-04-16 00:37:54,635 - INFO - 
+📥 ÉTAPE 3: CHARGEMENT
+2026-04-16 00:37:54,639 - INFO - 🚀 Début du chargement...
+2026-04-16 00:37:54,646 - INFO - 🏗️ Création des tables DW...
+2026-04-16 00:37:54,689 - INFO - ✅ Tables DW créées!
+2026-04-16 00:37:54,689 - INFO - 📥 Chargement des KPIs employés...
+2026-04-16 00:37:54,873 - INFO - ✅ 76 KPIs employés chargés
+2026-04-16 00:37:54,874 - INFO - 📥 Chargement des KPIs mensuels...
+2026-04-16 00:37:54,944 - INFO - ✅ 40 mois chargés
+2026-04-16 00:37:54,945 - INFO - ✅ Chargement complet terminé!
+2026-04-16 00:37:54,945 - INFO - 
+==================================================
+2026-04-16 00:37:54,946 - INFO - ✅ PIPELINE ETL TERMINÉ AVEC SUCCÈS!
+2026-04-16 00:37:54,946 - INFO - ⏱️  Durée: 14 secondes
+2026-04-16 00:37:54,947 - INFO - 👥 Employés traités : 76
+2026-04-16 00:37:54,947 - INFO - ⏰ Pointages traités: 59743
+2026-04-16 00:37:54,948 - INFO - ❌ Absences traitées: 505
+2026-04-16 00:37:54,948 - INFO - 🏖️  Congés traités   : 226
+2026-04-16 00:37:54,948 - INFO - 📊 KPIs calculés    : 76
+2026-04-16 00:37:54,948 - INFO - ==================================================
+2026-04-18 01:31:58,391 - INFO - ==================================================
+2026-04-18 01:31:58,392 - INFO - 🚀 DÉMARRAGE DU PIPELINE ETL
+2026-04-18 01:31:58,392 - INFO - ==================================================
+2026-04-18 01:31:58,392 - INFO - 
+📤 ÉTAPE 1: EXTRACTION
+2026-04-18 01:31:58,393 - INFO - 🚀 Début de l'extraction complète...
+2026-04-18 01:31:58,393 - INFO - 📤 Extraction des employés...
+2026-04-18 01:31:59,384 - INFO - ✅ 76 employés extraits
+2026-04-18 01:31:59,385 - INFO - 📤 Extraction des pointages...
+2026-04-18 01:32:15,929 - INFO - ✅ 59745 pointages extraits
+2026-04-18 01:32:15,930 - INFO - 📤 Extraction des absences...
+2026-04-18 01:32:15,973 - INFO - ✅ 505 absences extraites
+2026-04-18 01:32:15,974 - INFO - 📤 Extraction des congés...
+2026-04-18 01:32:15,987 - INFO - ✅ 226 congés extraits
+2026-04-18 01:32:15,989 - INFO - 📤 Extraction des alertes IA...
+2026-04-18 01:32:16,007 - INFO - ✅ 338 alertes extraites
+2026-04-18 01:32:16,008 - INFO - ✅ Extraction complète terminée!
+2026-04-18 01:32:16,008 - INFO - 
+🔄 ÉTAPE 2: TRANSFORMATION
+2026-04-18 01:32:16,009 - INFO - 🚀 Début de la transformation complète...
+2026-04-18 01:32:16,010 - INFO - 🔄 Transformation des employés...
+2026-04-18 01:32:16,053 - INFO - ✅ 76 employés transformés
+2026-04-18 01:32:16,054 - INFO - 🔄 Transformation des pointages...
+2026-04-18 01:32:16,105 - INFO - ✅ 59745 pointages transformés
+2026-04-18 01:32:16,106 - INFO - 🔄 Transformation des absences...
+2026-04-18 01:32:16,108 - INFO - ✅ 505 absences transformées
+2026-04-18 01:32:16,109 - INFO - 🔄 Transformation des congés...
+2026-04-18 01:32:16,110 - INFO - ✅ 226 congés transformés
+2026-04-18 01:32:16,110 - INFO - 📊 Calcul des KPIs...
+2026-04-18 01:32:16,118 - INFO - 🔍 Statuts pointage trouvés: ['Présent' 'En retard' 'Sortie manquante' 'Present']
+2026-04-18 01:32:16,478 - INFO - ✅ KPIs calculés pour 76 employés
+2026-04-18 01:32:16,490 - INFO - 📊 Sample KPIs:
+           nom_complet  nb_pointages  nb_presents  taux_presence
+0  Soufienne CHAABOUNI           825          463          56.12
+1      Mohamed BEN ALI           818          469          57.33
+2      Braik CHAABOUNI           823          482          58.57
+3  El Aidi EL KHARRATI           703          409          58.18
+4           Bilel SAFI           826          490          59.32
+2026-04-18 01:32:16,491 - INFO - ✅ Transformation complète terminée!
+2026-04-18 01:32:16,491 - INFO - 
+📥 ÉTAPE 3: CHARGEMENT
+2026-04-18 01:32:16,492 - INFO - 🚀 Début du chargement...
+2026-04-18 01:32:16,493 - INFO - 🏗️ Création des tables DW...
+2026-04-18 01:32:16,537 - INFO - ✅ Tables DW créées!
+2026-04-18 01:32:16,538 - INFO - 📥 Chargement des KPIs employés...
+2026-04-18 01:32:16,688 - INFO - ✅ 76 KPIs employés chargés
+2026-04-18 01:32:16,688 - INFO - 📥 Chargement des KPIs mensuels...
+2026-04-18 01:32:16,782 - INFO - ✅ 40 mois chargés
+2026-04-18 01:32:16,783 - INFO - ✅ Chargement complet terminé!
+2026-04-18 01:32:16,783 - INFO - 
+==================================================
+2026-04-18 01:32:16,784 - INFO - ✅ PIPELINE ETL TERMINÉ AVEC SUCCÈS!
+2026-04-18 01:32:16,784 - INFO - ⏱️  Durée: 18 secondes
+2026-04-18 01:32:16,785 - INFO - 👥 Employés traités : 76
+2026-04-18 01:32:16,785 - INFO - ⏰ Pointages traités: 59745
+2026-04-18 01:32:16,786 - INFO - ❌ Absences traitées: 505
+2026-04-18 01:32:16,786 - INFO - 🏖️  Congés traités   : 226
+2026-04-18 01:32:16,787 - INFO - 📊 KPIs calculés    : 76
+2026-04-18 01:32:16,788 - INFO - ==================================================
+2026-04-18 01:36:20,016 - INFO - ==================================================
+2026-04-18 01:36:20,017 - INFO - 🚀 DÉMARRAGE DU PIPELINE ETL
+2026-04-18 01:36:20,017 - INFO - ==================================================
+2026-04-18 01:36:20,018 - INFO - 
+📤 ÉTAPE 1: EXTRACTION
+2026-04-18 01:36:20,018 - INFO - 🚀 Début de l'extraction complète...
+2026-04-18 01:36:20,018 - INFO - 📤 Extraction des employés...
+2026-04-18 01:36:20,340 - INFO - ✅ 76 employés extraits
+2026-04-18 01:36:20,340 - INFO - 📤 Extraction des pointages...
+2026-04-18 01:36:20,662 - INFO - ✅ 59745 pointages extraits
+2026-04-18 01:36:20,662 - INFO - 📤 Extraction des absences...
+2026-04-18 01:36:20,669 - INFO - ✅ 505 absences extraites
+2026-04-18 01:36:20,669 - INFO - 📤 Extraction des congés...
+2026-04-18 01:36:20,676 - INFO - ✅ 226 congés extraits
+2026-04-18 01:36:20,677 - INFO - 📤 Extraction des alertes IA...
+2026-04-18 01:36:20,689 - INFO - ✅ 338 alertes extraites
+2026-04-18 01:36:20,689 - INFO - ✅ Extraction complète terminée!
+2026-04-18 01:36:20,690 - INFO - 
+🔄 ÉTAPE 2: TRANSFORMATION
+2026-04-18 01:36:20,690 - INFO - 🚀 Début de la transformation complète...
+2026-04-18 01:36:20,690 - INFO - 🔄 Transformation des employés...
+2026-04-18 01:36:20,724 - INFO - ✅ 76 employés transformés
+2026-04-18 01:36:20,724 - INFO - 🔄 Transformation des pointages...
+2026-04-18 01:36:20,744 - INFO - ✅ 59745 pointages transformés
+2026-04-18 01:36:20,744 - INFO - 🔄 Transformation des absences...
+2026-04-18 01:36:20,745 - INFO - ✅ 505 absences transformées
+2026-04-18 01:36:20,746 - INFO - 🔄 Transformation des congés...
+2026-04-18 01:36:20,747 - INFO - ✅ 226 congés transformés
+2026-04-18 01:36:20,748 - INFO - 📊 Calcul des KPIs...
+2026-04-18 01:36:20,753 - INFO - 🔍 Statuts pointage trouvés: ['Présent' 'En retard' 'Sortie manquante' 'Present']
+2026-04-18 01:36:20,907 - INFO - ✅ KPIs calculés pour 76 employés
+2026-04-18 01:36:20,915 - INFO - 📊 Sample KPIs:
+           nom_complet  nb_pointages  nb_presents  taux_presence
+0  Soufienne CHAABOUNI           825          463          56.12
+1      Mohamed BEN ALI           818          469          57.33
+2      Braik CHAABOUNI           823          482          58.57
+3  El Aidi EL KHARRATI           703          409          58.18
+4           Bilel SAFI           826          490          59.32
+2026-04-18 01:36:20,915 - INFO - ✅ Transformation complète terminée!
+2026-04-18 01:36:20,915 - INFO - 
+📥 ÉTAPE 3: CHARGEMENT
+2026-04-18 01:36:20,915 - INFO - 🚀 Début du chargement...
+2026-04-18 01:36:20,916 - INFO - 🏗️ Création des tables DW...
+2026-04-18 01:36:20,934 - INFO - ✅ Tables DW créées!
+2026-04-18 01:36:20,934 - INFO - 📥 Chargement des KPIs employés...
+2026-04-18 01:36:21,025 - INFO - ✅ 76 KPIs employés chargés
+2026-04-18 01:36:21,026 - INFO - 📥 Chargement des KPIs mensuels...
+2026-04-18 01:36:21,075 - INFO - ✅ 40 mois chargés
+2026-04-18 01:36:21,075 - INFO - ✅ Chargement complet terminé!
+2026-04-18 01:36:21,076 - INFO - 
+==================================================
+2026-04-18 01:36:21,076 - INFO - ✅ PIPELINE ETL TERMINÉ AVEC SUCCÈS!
+2026-04-18 01:36:21,076 - INFO - ⏱️  Durée: 1 secondes
+2026-04-18 01:36:21,076 - INFO - 👥 Employés traités : 76
+2026-04-18 01:36:21,076 - INFO - ⏰ Pointages traités: 59745
+2026-04-18 01:36:21,077 - INFO - ❌ Absences traitées: 505
+2026-04-18 01:36:21,077 - INFO - 🏖️  Congés traités   : 226
+2026-04-18 01:36:21,077 - INFO - 📊 KPIs calculés    : 76
+2026-04-18 01:36:21,077 - INFO - ==================================================
+2026-04-20 14:32:27,747 - INFO - ==================================================
+2026-04-20 14:32:27,748 - INFO - 🚀 DÉMARRAGE DU PIPELINE ETL
+2026-04-20 14:32:27,748 - INFO - ==================================================
+2026-04-20 14:32:27,748 - INFO - 
+📤 ÉTAPE 1: EXTRACTION
+2026-04-20 14:32:27,749 - INFO - 🚀 Début de l'extraction complète...
+2026-04-20 14:32:27,749 - INFO - 📤 Extraction des employés...
+2026-04-20 14:32:27,864 - INFO - ✅ 76 employés extraits
+2026-04-20 14:32:27,864 - INFO - 📤 Extraction des pointages...
+2026-04-20 14:32:28,212 - INFO - ✅ 59821 pointages extraits
+2026-04-20 14:32:28,212 - INFO - 📤 Extraction des absences...
+2026-04-20 14:32:28,225 - INFO - ✅ 510 absences extraites
+2026-04-20 14:32:28,225 - INFO - 📤 Extraction des congés...
+2026-04-20 14:32:28,230 - INFO - ✅ 230 congés extraits
+2026-04-20 14:32:28,230 - INFO - 📤 Extraction des alertes IA...
+2026-04-20 14:32:28,244 - INFO - ✅ 338 alertes extraites
+2026-04-20 14:32:28,244 - INFO - ✅ Extraction complète terminée!
+2026-04-20 14:32:28,245 - INFO - 
+🔄 ÉTAPE 2: TRANSFORMATION
+2026-04-20 14:32:28,245 - INFO - 🚀 Début de la transformation complète...
+2026-04-20 14:32:28,245 - INFO - 🔄 Transformation des employés...
+2026-04-20 14:32:28,270 - INFO - ✅ 76 employés transformés
+2026-04-20 14:32:28,270 - INFO - 🔄 Transformation des pointages...
+2026-04-20 14:32:28,289 - INFO - ✅ 59821 pointages transformés
+2026-04-20 14:32:28,290 - INFO - 🔄 Transformation des absences...
+2026-04-20 14:32:28,291 - INFO - ✅ 510 absences transformées
+2026-04-20 14:32:28,291 - INFO - 🔄 Transformation des congés...
+2026-04-20 14:32:28,292 - INFO - ✅ 230 congés transformés
+2026-04-20 14:32:28,293 - INFO - 📊 Calcul des KPIs...
+2026-04-20 14:32:28,298 - INFO - 🔍 Statuts pointage trouvés: ['Présent' 'En retard' 'Sortie manquante' 'Present']
+2026-04-20 14:32:28,448 - INFO - ✅ KPIs calculés pour 76 employés
+2026-04-20 14:32:28,466 - INFO - 📊 Sample KPIs:
+           nom_complet  nb_pointages  nb_presents  taux_presence
+0  Soufienne CHAABOUNI           826          463          56.05
+1      Mohamed BEN ALI           819          470          57.39
+2      Braik CHAABOUNI           824          483          58.62
+3  El Aidi EL KHARRATI           704          409          58.10
+4           Bilel SAFI           827          491          59.37
+2026-04-20 14:32:28,467 - INFO - ✅ Transformation complète terminée!
+2026-04-20 14:32:28,467 - INFO - 
+📥 ÉTAPE 3: CHARGEMENT
+2026-04-20 14:32:28,468 - INFO - 🚀 Début du chargement...
+2026-04-20 14:32:28,469 - INFO - 🏗️ Création des tables DW...
+2026-04-20 14:32:28,500 - INFO - ✅ Tables DW créées!
+2026-04-20 14:32:28,500 - INFO - 📥 Chargement des KPIs employés...
+2026-04-20 14:32:28,606 - INFO - ✅ 76 KPIs employés chargés
+2026-04-20 14:32:28,606 - INFO - 📥 Chargement des KPIs mensuels...
+2026-04-20 14:32:28,651 - INFO - ✅ 40 mois chargés
+2026-04-20 14:32:28,652 - INFO - ✅ Chargement complet terminé!
+2026-04-20 14:32:28,652 - INFO - 
+==================================================
+2026-04-20 14:32:28,653 - INFO - ✅ PIPELINE ETL TERMINÉ AVEC SUCCÈS!
+2026-04-20 14:32:28,653 - INFO - ⏱️  Durée: 0 secondes
+2026-04-20 14:32:28,654 - INFO - 👥 Employés traités : 76
+2026-04-20 14:32:28,654 - INFO - ⏰ Pointages traités: 59821
+2026-04-20 14:32:28,654 - INFO - ❌ Absences traitées: 510
+2026-04-20 14:32:28,654 - INFO - 🏖️  Congés traités   : 230
+2026-04-20 14:32:28,655 - INFO - 📊 KPIs calculés    : 76
+2026-04-20 14:32:28,655 - INFO - ==================================================
+2026-04-22 02:21:31,806 - INFO - ==================================================
+2026-04-22 02:21:31,806 - INFO - 🚀 DÉMARRAGE DU PIPELINE ETL
+2026-04-22 02:21:31,807 - INFO - ==================================================
+2026-04-22 02:21:31,807 - INFO - 
+📤 ÉTAPE 1: EXTRACTION
+2026-04-22 02:21:31,807 - INFO - 🚀 Début de l'extraction complète...
+2026-04-22 02:21:31,807 - INFO - 📤 Extraction des employés...
+2026-04-22 02:21:32,151 - INFO - ✅ 76 employés extraits
+2026-04-22 02:21:32,151 - INFO - 📤 Extraction des pointages...
+2026-04-22 02:21:56,038 - INFO - ✅ 59897 pointages extraits
+2026-04-22 02:21:56,039 - INFO - 📤 Extraction des absences...
+2026-04-22 02:21:56,113 - INFO - ✅ 511 absences extraites
+2026-04-22 02:21:56,114 - INFO - 📤 Extraction des congés...
+2026-04-22 02:21:56,132 - INFO - ✅ 233 congés extraits
+2026-04-22 02:21:56,133 - INFO - 📤 Extraction des alertes IA...
+2026-04-22 02:21:56,154 - INFO - ✅ 338 alertes extraites
+2026-04-22 02:21:56,156 - INFO - ✅ Extraction complète terminée!
+2026-04-22 02:21:56,157 - INFO - 
+🔄 ÉTAPE 2: TRANSFORMATION
+2026-04-22 02:21:56,160 - INFO - 🚀 Début de la transformation complète...
+2026-04-22 02:21:56,161 - INFO - 🔄 Transformation des employés...
+2026-04-22 02:21:56,218 - INFO - ✅ 76 employés transformés
+2026-04-22 02:21:56,219 - INFO - 🔄 Transformation des pointages...
+2026-04-22 02:21:56,257 - INFO - ✅ 59897 pointages transformés
+2026-04-22 02:21:56,258 - INFO - 🔄 Transformation des absences...
+2026-04-22 02:21:56,259 - INFO - ✅ 511 absences transformées
+2026-04-22 02:21:56,260 - INFO - 🔄 Transformation des congés...
+2026-04-22 02:21:56,261 - INFO - ✅ 233 congés transformés
+2026-04-22 02:21:56,261 - INFO - 📊 Calcul des KPIs...
+2026-04-22 02:21:56,267 - INFO - 🔍 Statuts pointage trouvés: ['Présent' 'En retard' 'Sortie manquante' 'Present']
+2026-04-22 02:21:56,681 - INFO - ✅ KPIs calculés pour 76 employés
+2026-04-22 02:21:56,692 - INFO - 📊 Sample KPIs:
+           nom_complet  nb_pointages  nb_presents  taux_presence
+0  Soufienne CHAABOUNI           827          464          56.11
+1      Mohamed BEN ALI           820          471          57.44
+2      Braik CHAABOUNI           825          484          58.67
+3  El Aidi EL KHARRATI           705          410          58.16
+4           Bilel SAFI           828          492          59.42
+2026-04-22 02:21:56,692 - INFO - ✅ Transformation complète terminée!
+2026-04-22 02:21:56,693 - INFO - 
+📥 ÉTAPE 3: CHARGEMENT
+2026-04-22 02:21:56,693 - INFO - 🚀 Début du chargement...
+2026-04-22 02:21:56,693 - INFO - 🏗️ Création des tables DW...
+2026-04-22 02:21:56,731 - INFO - ✅ Tables DW créées!
+2026-04-22 02:21:56,732 - INFO - 📥 Chargement des KPIs employés...
+2026-04-22 02:21:56,871 - INFO - ✅ 76 KPIs employés chargés
+2026-04-22 02:21:56,872 - INFO - 📥 Chargement des KPIs mensuels...
+2026-04-22 02:21:56,930 - INFO - ✅ 40 mois chargés
+2026-04-22 02:21:56,932 - INFO - ✅ Chargement complet terminé!
+2026-04-22 02:21:56,932 - INFO - 
+==================================================
+2026-04-22 02:21:56,933 - INFO - ✅ PIPELINE ETL TERMINÉ AVEC SUCCÈS!
+2026-04-22 02:21:56,933 - INFO - ⏱️  Durée: 25 secondes
+2026-04-22 02:21:56,934 - INFO - 👥 Employés traités : 76
+2026-04-22 02:21:56,935 - INFO - ⏰ Pointages traités: 59897
+2026-04-22 02:21:56,935 - INFO - ❌ Absences traitées: 511
+2026-04-22 02:21:56,936 - INFO - 🏖️  Congés traités   : 233
+2026-04-22 02:21:56,937 - INFO - 📊 KPIs calculés    : 76
+2026-04-22 02:21:56,938 - INFO - ==================================================
+2026-04-22 02:22:20,182 - INFO - ==================================================
+2026-04-22 02:22:20,183 - INFO - 🚀 DÉMARRAGE DU PIPELINE ETL
+2026-04-22 02:22:20,183 - INFO - ==================================================
+2026-04-22 02:22:20,183 - INFO - 
+📤 ÉTAPE 1: EXTRACTION
+2026-04-22 02:22:20,183 - INFO - 🚀 Début de l'extraction complète...
+2026-04-22 02:22:20,183 - INFO - 📤 Extraction des employés...
+2026-04-22 02:22:20,291 - INFO - ✅ 76 employés extraits
+2026-04-22 02:22:20,292 - INFO - 📤 Extraction des pointages...
+2026-04-22 02:22:20,653 - INFO - ✅ 59897 pointages extraits
+2026-04-22 02:22:20,653 - INFO - 📤 Extraction des absences...
+2026-04-22 02:22:20,658 - INFO - ✅ 511 absences extraites
+2026-04-22 02:22:20,658 - INFO - 📤 Extraction des congés...
+2026-04-22 02:22:20,670 - INFO - ✅ 233 congés extraits
+2026-04-22 02:22:20,670 - INFO - 📤 Extraction des alertes IA...
+2026-04-22 02:22:20,681 - INFO - ✅ 338 alertes extraites
+2026-04-22 02:22:20,682 - INFO - ✅ Extraction complète terminée!
+2026-04-22 02:22:20,683 - INFO - 
+🔄 ÉTAPE 2: TRANSFORMATION
+2026-04-22 02:22:20,683 - INFO - 🚀 Début de la transformation complète...
+2026-04-22 02:22:20,684 - INFO - 🔄 Transformation des employés...
+2026-04-22 02:22:20,692 - INFO - ✅ 76 employés transformés
+2026-04-22 02:22:20,693 - INFO - 🔄 Transformation des pointages...
+2026-04-22 02:22:20,715 - INFO - ✅ 59897 pointages transformés
+2026-04-22 02:22:20,716 - INFO - 🔄 Transformation des absences...
+2026-04-22 02:22:20,718 - INFO - ✅ 511 absences transformées
+2026-04-22 02:22:20,719 - INFO - 🔄 Transformation des congés...
+2026-04-22 02:22:20,720 - INFO - ✅ 233 congés transformés
+2026-04-22 02:22:20,725 - INFO - 📊 Calcul des KPIs...
+2026-04-22 02:22:20,728 - INFO - 🔍 Statuts pointage trouvés: ['Présent' 'En retard' 'Sortie manquante' 'Present']
+2026-04-22 02:22:20,892 - INFO - ✅ KPIs calculés pour 76 employés
+2026-04-22 02:22:20,898 - INFO - 📊 Sample KPIs:
+           nom_complet  nb_pointages  nb_presents  taux_presence
+0  Soufienne CHAABOUNI           827          464          56.11
+1      Mohamed BEN ALI           820          471          57.44
+2      Braik CHAABOUNI           825          484          58.67
+3  El Aidi EL KHARRATI           705          410          58.16
+4           Bilel SAFI           828          492          59.42
+2026-04-22 02:22:20,898 - INFO - ✅ Transformation complète terminée!
+2026-04-22 02:22:20,898 - INFO - 
+📥 ÉTAPE 3: CHARGEMENT
+2026-04-22 02:22:20,898 - INFO - 🚀 Début du chargement...
+2026-04-22 02:22:20,898 - INFO - 🏗️ Création des tables DW...
+2026-04-22 02:22:20,938 - INFO - ✅ Tables DW créées!
+2026-04-22 02:22:20,939 - INFO - 📥 Chargement des KPIs employés...
+2026-04-22 02:22:21,132 - INFO - ✅ 76 KPIs employés chargés
+2026-04-22 02:22:21,137 - INFO - 📥 Chargement des KPIs mensuels...
+2026-04-22 02:22:21,189 - INFO - ✅ 40 mois chargés
+2026-04-22 02:22:21,190 - INFO - ✅ Chargement complet terminé!
+2026-04-22 02:22:21,190 - INFO - 
+==================================================
+2026-04-22 02:22:21,190 - INFO - ✅ PIPELINE ETL TERMINÉ AVEC SUCCÈS!
+2026-04-22 02:22:21,190 - INFO - ⏱️  Durée: 1 secondes
+2026-04-22 02:22:21,190 - INFO - 👥 Employés traités : 76
+2026-04-22 02:22:21,190 - INFO - ⏰ Pointages traités: 59897
+2026-04-22 02:22:21,190 - INFO - ❌ Absences traitées: 511
+2026-04-22 02:22:21,191 - INFO - 🏖️  Congés traités   : 233
+2026-04-22 02:22:21,191 - INFO - 📊 KPIs calculés    : 76
+2026-04-22 02:22:21,191 - INFO - ==================================================
+2026-05-29 23:29:10,067 - INFO - ==================================================
+2026-05-29 23:29:10,067 - INFO - 🚀 DÉMARRAGE DU PIPELINE ETL
+2026-05-29 23:29:10,068 - INFO - ==================================================
+2026-05-29 23:29:10,068 - INFO - 
+📤 ÉTAPE 1: EXTRACTION
+2026-05-29 23:29:10,068 - INFO - 🚀 Début de l'extraction complète...
+2026-05-29 23:29:10,068 - INFO - 📤 Extraction des employés...
+2026-05-29 23:29:13,999 - INFO - ✅ 76 employés extraits
+2026-05-29 23:29:13,999 - INFO - 📤 Extraction des pointages...
+2026-05-29 23:32:03,296 - INFO - ✅ 196299 pointages extraits
+2026-05-29 23:32:03,296 - INFO - 📤 Extraction des absences...
+2026-05-29 23:32:05,162 - INFO - ✅ 13898 absences extraites
+2026-05-29 23:32:05,162 - INFO - 📤 Extraction des congés...
+2026-05-29 23:32:07,393 - INFO - ✅ 14873 congés extraits
+2026-05-29 23:32:07,393 - INFO - 📤 Extraction des alertes IA...
+2026-05-29 23:32:07,623 - INFO - ✅ 398 alertes extraites
+2026-05-29 23:32:07,623 - INFO - ✅ Extraction complète terminée!
+2026-05-29 23:32:07,623 - INFO - 
+🔄 ÉTAPE 2: TRANSFORMATION
+2026-05-29 23:32:07,623 - INFO - 🚀 Début de la transformation complète...
+2026-05-29 23:32:07,623 - INFO - 🔄 Transformation des employés...
+2026-05-29 23:32:07,652 - INFO - ✅ 76 employés transformés
+2026-05-29 23:32:07,652 - INFO - 🔄 Transformation des pointages...
+2026-05-29 23:32:07,718 - INFO - ✅ 196299 pointages transformés
+2026-05-29 23:32:07,718 - INFO - 🔄 Transformation des absences...
+2026-05-29 23:32:07,720 - INFO - ✅ 13898 absences transformées
+2026-05-29 23:32:07,720 - INFO - 🔄 Transformation des congés...
+2026-05-29 23:32:07,722 - INFO - ✅ 14873 congés transformés
+2026-05-29 23:32:07,723 - INFO - 📊 Calcul des KPIs...
+2026-05-29 23:32:07,736 - INFO - 🔍 Statuts pointage trouvés: ['En retard' 'Présent' 'Sortie manquante' 'Present']
+2026-05-29 23:32:07,960 - INFO - ✅ KPIs calculés pour 76 employés
+2026-05-29 23:32:07,972 - INFO - 📊 Sample KPIs:
+           nom_complet  nb_pointages  nb_presents  taux_presence
+0  Soufienne CHAABOUNI          2602         1569          60.30
+1      Mohamed BEN ALI          2661         2421          90.98
+2      Braik CHAABOUNI          2618         1600          61.12
+3  El Aidi EL KHARRATI          2569         2117          82.41
+4           Bilel SAFI          2614         1618          61.90
+2026-05-29 23:32:07,973 - INFO - ✅ Transformation complète terminée!
+2026-05-29 23:32:07,973 - INFO - 
+📥 ÉTAPE 3: CHARGEMENT KPI
+2026-05-29 23:32:07,973 - INFO - 🚀 Début du chargement...
+2026-05-29 23:32:07,974 - INFO - 🏗️ Création des tables DW...
+2026-05-29 23:32:08,077 - INFO - ✅ Tables DW créées!
+2026-05-29 23:32:08,077 - INFO - 📥 Chargement des KPIs employés...
+2026-05-29 23:32:08,328 - INFO - ✅ 76 KPIs employés chargés
+2026-05-29 23:32:08,328 - INFO - 📥 Chargement des KPIs mensuels...
+2026-05-29 23:32:08,479 - INFO - ✅ 125 mois chargés
+2026-05-29 23:32:08,479 - INFO - ✅ Chargement complet terminé!
+2026-05-29 23:32:08,479 - INFO - 
+📥 ÉTAPE 4: CHARGEMENT STAR SCHEMA
+2026-05-29 23:32:08,479 - INFO - ==================================================
+2026-05-29 23:32:08,479 - INFO - STAR SCHEMA ETL — START
+2026-05-29 23:32:08,479 - INFO - ==================================================
+2026-05-29 23:32:08,479 - INFO - Dim_Date — generating calendar rows...
+2026-05-29 23:32:08,506 - INFO - Dim_Date already up-to-date (4748 rows). Skipping.
+2026-05-29 23:32:08,507 - INFO - Dim_Departement — loading...
+2026-05-29 23:32:12,262 - INFO - Dim_Departement — 10 rows loaded.
+2026-05-29 23:32:12,262 - INFO - Dim_Employe — loading...
+2026-05-29 23:32:12,359 - INFO - Dim_Employe — 76 rows loaded.
+2026-05-29 23:32:12,359 - INFO - Dim_Formation — loading...
+2026-05-29 23:32:12,406 - INFO - Dim_Formation — 54 rows loaded.
+2026-05-29 23:32:12,406 - INFO - Fact_Pointage — loading...
+2026-05-29 23:34:18,238 - INFO - Fact_Pointage — 196299 rows loaded.
+2026-05-29 23:34:18,302 - INFO - Fact_Absence — loading...
+2026-05-29 23:34:20,201 - INFO - Fact_Absence — 13898 rows loaded.
+2026-05-29 23:34:20,203 - INFO - Fact_Conge — loading...
+2026-05-29 23:34:22,102 - INFO - Fact_Conge — 14873 rows loaded.
+2026-05-29 23:34:22,107 - INFO - Fact_Formation — loading...
+2026-05-29 23:34:23,229 - INFO - Fact_Formation — 2194 rows loaded.
+2026-05-29 23:34:23,230 - INFO - ==================================================
+2026-05-29 23:34:23,230 - INFO - STAR SCHEMA ETL — COMPLETE
+2026-05-29 23:34:23,230 - INFO - ==================================================
+2026-05-29 23:34:23,230 - INFO - 
+==================================================
+2026-05-29 23:34:23,230 - INFO - ✅ PIPELINE ETL TERMINÉ AVEC SUCCÈS!
+2026-05-29 23:34:23,232 - INFO - ⏱️  Durée: 313 secondes
+2026-05-29 23:34:23,233 - INFO - 👥 Employés traités : 76
+2026-05-29 23:34:23,233 - INFO - ⏰ Pointages traités: 196299
+2026-05-29 23:34:23,233 - INFO - ❌ Absences traitées: 13898
+2026-05-29 23:34:23,233 - INFO - 🏖️  Congés traités   : 14873
+2026-05-29 23:34:23,234 - INFO - 📊 KPIs calculés    : 76
+2026-05-29 23:34:23,234 - INFO - ==================================================
+2026-05-30 00:26:54,225 - INFO - ==================================================
+2026-05-30 00:26:54,226 - INFO - 🚀 DÉMARRAGE DU PIPELINE ETL
+2026-05-30 00:26:54,226 - INFO - ==================================================
+2026-05-30 00:26:54,226 - INFO - 
+📤 ÉTAPE 1: EXTRACTION
+2026-05-30 00:26:54,226 - INFO - 🚀 Début de l'extraction complète...
+2026-05-30 00:26:54,226 - INFO - 📤 Extraction des employés...
+2026-05-30 00:26:56,627 - INFO - ✅ 76 employés extraits
+2026-05-30 00:26:56,627 - INFO - 📤 Extraction des pointages...
+2026-05-30 00:28:28,959 - INFO - ✅ 196371 pointages extraits
+2026-05-30 00:28:28,959 - INFO - 📤 Extraction des absences...
+2026-05-30 00:28:29,070 - INFO - ✅ 13902 absences extraites
+2026-05-30 00:28:29,070 - INFO - 📤 Extraction des congés...
+2026-05-30 00:28:29,131 - INFO - ✅ 14876 congés extraits
+2026-05-30 00:28:29,131 - INFO - 📤 Extraction des alertes IA...
+2026-05-30 00:28:29,144 - INFO - ✅ 398 alertes extraites
+2026-05-30 00:28:29,144 - INFO - ✅ Extraction complète terminée!
+2026-05-30 00:28:29,144 - INFO - 
+🔄 ÉTAPE 2: TRANSFORMATION
+2026-05-30 00:28:29,144 - INFO - 🚀 Début de la transformation complète...
+2026-05-30 00:28:29,144 - INFO - 🔄 Transformation des employés...
+2026-05-30 00:28:29,171 - INFO - ✅ 76 employés transformés
+2026-05-30 00:28:29,171 - INFO - 🔄 Transformation des pointages...
+2026-05-30 00:28:29,229 - INFO - ✅ 196371 pointages transformés
+2026-05-30 00:28:29,229 - INFO - 🔄 Transformation des absences...
+2026-05-30 00:28:29,231 - INFO - ✅ 13902 absences transformées
+2026-05-30 00:28:29,232 - INFO - 🔄 Transformation des congés...
+2026-05-30 00:28:29,233 - INFO - ✅ 14876 congés transformés
+2026-05-30 00:28:29,233 - INFO - 📊 Calcul des KPIs...
+2026-05-30 00:28:29,243 - INFO - 🔍 Statuts pointage trouvés: ['En retard' 'Présent' 'Sortie manquante' 'Present']
+2026-05-30 00:28:29,448 - INFO - ✅ KPIs calculés pour 76 employés
+2026-05-30 00:28:29,457 - INFO - 📊 Sample KPIs:
+           nom_complet  nb_pointages  nb_presents  taux_presence
+0  Soufienne CHAABOUNI          2603         1570          60.32
+1      Mohamed BEN ALI          2661         2421          90.98
+2      Braik CHAABOUNI          2619         1601          61.13
+3  El Aidi EL KHARRATI          2570         2118          82.41
+4           Bilel SAFI          2615         1619          61.91
+2026-05-30 00:28:29,458 - INFO - ✅ Transformation complète terminée!
+2026-05-30 00:28:29,458 - INFO - 
+📥 ÉTAPE 3: CHARGEMENT KPI
+2026-05-30 00:28:29,458 - INFO - 🚀 Début du chargement...
+2026-05-30 00:28:29,458 - INFO - 🏗️ Création des tables DW...
+2026-05-30 00:28:29,482 - INFO - ✅ Tables DW créées!
+2026-05-30 00:28:29,482 - INFO - 📥 Chargement des KPIs employés...
+2026-05-30 00:28:29,643 - INFO - ✅ 76 KPIs employés chargés
+2026-05-30 00:28:29,643 - INFO - 📥 Chargement des KPIs mensuels...
+2026-05-30 00:28:29,812 - INFO - ✅ 125 mois chargés
+2026-05-30 00:28:29,812 - INFO - ✅ Chargement complet terminé!
+2026-05-30 00:28:29,812 - INFO - 
+📥 ÉTAPE 4: CHARGEMENT STAR SCHEMA
+2026-05-30 00:28:29,812 - INFO - ==================================================
+2026-05-30 00:28:29,812 - INFO - STAR SCHEMA ETL — START
+2026-05-30 00:28:29,812 - INFO - ==================================================
+2026-05-30 00:28:29,813 - INFO - Dim_Date — generating calendar rows...
+2026-05-30 00:28:29,843 - INFO - Dim_Date already up-to-date (4748 rows). Skipping.
+2026-05-30 00:28:29,844 - INFO - Dim_Departement — loading...
+2026-05-30 00:28:31,053 - INFO - Dim_Departement — 10 rows loaded.
+2026-05-30 00:28:31,053 - INFO - Dim_Employe — loading...
+2026-05-30 00:28:31,117 - INFO - Dim_Employe — 76 rows loaded.
+2026-05-30 00:28:31,117 - INFO - Dim_Formation — loading...
+2026-05-30 00:28:31,170 - INFO - Dim_Formation — 54 rows loaded.
+2026-05-30 00:28:31,170 - INFO - Fact_Pointage — loading...
+2026-05-30 00:31:00,144 - INFO - Fact_Pointage — 196371 rows loaded.
+2026-05-30 00:31:00,179 - INFO - Fact_Absence — loading...
+2026-05-30 00:31:01,735 - INFO - Fact_Absence — 13902 rows loaded.
+2026-05-30 00:31:01,736 - INFO - Fact_Conge — loading...
+2026-05-30 00:31:03,822 - INFO - Fact_Conge — 14876 rows loaded.
+2026-05-30 00:31:03,824 - INFO - Fact_Formation — loading...
+2026-05-30 00:31:05,059 - INFO - Fact_Formation — 2194 rows loaded.
+2026-05-30 00:31:05,059 - INFO - ==================================================
+2026-05-30 00:31:05,059 - INFO - STAR SCHEMA ETL — COMPLETE
+2026-05-30 00:31:05,059 - INFO - ==================================================
+2026-05-30 00:31:05,060 - INFO - 
+==================================================
+2026-05-30 00:31:05,060 - INFO - ✅ PIPELINE ETL TERMINÉ AVEC SUCCÈS!
+2026-05-30 00:31:05,061 - INFO - ⏱️  Durée: 250 secondes
+2026-05-30 00:31:05,061 - INFO - 👥 Employés traités : 76
+2026-05-30 00:31:05,062 - INFO - ⏰ Pointages traités: 196371
+2026-05-30 00:31:05,062 - INFO - ❌ Absences traitées: 13902
+2026-05-30 00:31:05,062 - INFO - 🏖️  Congés traités   : 14876
+2026-05-30 00:31:05,062 - INFO - 📊 KPIs calculés    : 76
+2026-05-30 00:31:05,062 - INFO - ==================================================
+2026-06-03 22:07:47,759 - INFO - ==================================================
+2026-06-03 22:07:47,760 - INFO - 🚀 DÉMARRAGE DU PIPELINE ETL
+2026-06-03 22:07:47,760 - INFO - ==================================================
+2026-06-03 22:07:47,760 - INFO - 
+📤 ÉTAPE 1: EXTRACTION
+2026-06-03 22:07:47,760 - INFO - 🚀 Début de l'extraction complète...
+2026-06-03 22:07:47,760 - INFO - 📤 Extraction des employés...
+2026-06-03 22:11:06,530 - INFO - ✅ 76 employés extraits
+2026-06-03 22:11:06,534 - INFO - 📤 Extraction des pointages...
+2026-06-03 22:13:28,995 - INFO - ✅ 196583 pointages extraits
+2026-06-03 22:13:28,998 - INFO - 📤 Extraction des absences...
+2026-06-03 22:13:36,104 - INFO - ✅ 13918 absences extraites
+2026-06-03 22:13:36,104 - INFO - 📤 Extraction des congés...
+2026-06-03 22:13:42,346 - INFO - ✅ 14909 congés extraits
+2026-06-03 22:13:42,347 - INFO - 📤 Extraction des alertes IA...
+2026-06-03 22:14:59,077 - INFO - ✅ 11 alertes extraites
+2026-06-03 22:14:59,081 - INFO - ✅ Extraction complète terminée!
+2026-06-03 22:14:59,082 - INFO - 
+🔄 ÉTAPE 2: TRANSFORMATION
+2026-06-03 22:14:59,082 - INFO - 🚀 Début de la transformation complète...
+2026-06-03 22:14:59,082 - INFO - 🔄 Transformation des employés...
+2026-06-03 22:14:59,146 - INFO - ✅ 76 employés transformés
+2026-06-03 22:14:59,146 - INFO - 🔄 Transformation des pointages...
+2026-06-03 22:14:59,332 - INFO - ✅ 196583 pointages transformés
+2026-06-03 22:14:59,333 - INFO - 🔄 Transformation des absences...
+2026-06-03 22:14:59,339 - INFO - ✅ 13918 absences transformées
+2026-06-03 22:14:59,339 - INFO - 🔄 Transformation des congés...
+2026-06-03 22:14:59,355 - INFO - ✅ 14909 congés transformés
+2026-06-03 22:14:59,355 - INFO - 📊 Calcul des KPIs...
+2026-06-03 22:14:59,376 - INFO - 🔍 Statuts pointage trouvés: ['En retard' 'Présent' 'Sortie manquante' 'Present']
+2026-06-03 22:14:59,673 - INFO - ✅ KPIs calculés pour 76 employés
+2026-06-03 22:14:59,691 - INFO - 📊 Sample KPIs:
+           nom_complet  nb_pointages  nb_presents  taux_presence
+0  Soufienne CHAABOUNI          2606         1571          60.28
+1      Mohamed BEN ALI          2664         2424          90.99
+2      Braik CHAABOUNI          2622         1603          61.14
+3  El Aidi EL KHARRATI          2573         2120          82.39
+4           Bilel SAFI          2618         1621          61.92
+2026-06-03 22:14:59,691 - INFO - ✅ Transformation complète terminée!
+2026-06-03 22:14:59,691 - INFO - 
+📥 ÉTAPE 3: CHARGEMENT KPI
+2026-06-03 22:14:59,691 - INFO - 🚀 Début du chargement...
+2026-06-03 22:14:59,691 - INFO - 🏗️ Création des tables DW...
+2026-06-03 22:14:59,832 - INFO - ✅ Tables DW créées!
+2026-06-03 22:14:59,832 - INFO - 📥 Chargement des KPIs employés...
+2026-06-03 22:15:03,936 - INFO - ✅ 76 KPIs employés chargés
+2026-06-03 22:15:03,936 - INFO - 📥 Chargement des KPIs mensuels...
+2026-06-03 22:15:05,158 - INFO - ✅ 126 mois chargés
+2026-06-03 22:15:05,158 - INFO - ✅ Chargement complet terminé!
+2026-06-03 22:15:05,158 - INFO - 
+📥 ÉTAPE 4: CHARGEMENT STAR SCHEMA
+2026-06-03 22:15:05,158 - INFO - ==================================================
+2026-06-03 22:15:05,158 - INFO - STAR SCHEMA ETL — START
+2026-06-03 22:15:05,158 - INFO - ==================================================
+2026-06-03 22:15:05,158 - INFO - Dim_Date — generating calendar rows...
+2026-06-03 22:15:06,582 - INFO - Dim_Date already up-to-date (4748 rows). Skipping.
+2026-06-03 22:15:06,583 - INFO - Dim_Departement — loading...
+2026-06-03 22:19:58,924 - INFO - Dim_Departement — 10 rows loaded.
+2026-06-03 22:19:58,934 - INFO - Dim_Employe — loading...
+2026-06-03 22:20:00,677 - INFO - Dim_Employe — 76 rows loaded.
+2026-06-03 22:20:00,677 - INFO - Dim_Formation — loading...
+2026-06-03 22:20:07,860 - INFO - Dim_Formation — 54 rows loaded.
+2026-06-03 22:20:07,860 - INFO - Fact_Pointage — loading...
+2026-06-03 22:20:30,756 - INFO - Fact_Pointage — 196583 rows loaded.
+2026-06-03 22:20:30,773 - INFO - Fact_Absence — loading...
+2026-06-03 22:20:31,453 - INFO - Fact_Absence — 13918 rows loaded.
+2026-06-03 22:20:31,454 - INFO - Fact_Conge — loading...
+2026-06-03 22:20:32,277 - INFO - Fact_Conge — 14909 rows loaded.
+2026-06-03 22:20:32,279 - INFO - Fact_Formation — loading...
+2026-06-03 22:20:32,423 - INFO - Fact_Formation — 2194 rows loaded.
+2026-06-03 22:20:32,423 - INFO - ==================================================
+2026-06-03 22:20:32,423 - INFO - STAR SCHEMA ETL — COMPLETE
+2026-06-03 22:20:32,423 - INFO - ==================================================
+2026-06-03 22:20:32,423 - INFO - 
+==================================================
+2026-06-03 22:20:32,423 - INFO - ✅ PIPELINE ETL TERMINÉ AVEC SUCCÈS!
+2026-06-03 22:20:32,424 - INFO - ⏱️  Durée: 764 secondes
+2026-06-03 22:20:32,424 - INFO - 👥 Employés traités : 76
+2026-06-03 22:20:32,425 - INFO - ⏰ Pointages traités: 196583
+2026-06-03 22:20:32,425 - INFO - ❌ Absences traitées: 13918
+2026-06-03 22:20:32,425 - INFO - 🏖️  Congés traités   : 14909
+2026-06-03 22:20:32,426 - INFO - 📊 KPIs calculés    : 76
+2026-06-03 22:20:32,426 - INFO - ==================================================

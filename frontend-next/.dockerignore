@@ -1,0 +1,20 @@
+# The frontend build context is ./frontend-next, so Docker reads THIS file —
+# the repository-root .dockerignore does not apply here. Its
+# "frontend-next/.env.local" entry had no effect.
+
+# Local env files. NEXT_PUBLIC_API_URL comes from the build arg in the
+# Dockerfile; a stray .env.local baked into the image is a config landmine and
+# env files have no business in a distributable artifact.
+.env
+.env.local
+.env.*.local
+
+# Rebuilt inside the image
+node_modules
+.next
+
+# Not needed at build time
+.git
+.gitignore
+npm-debug.log*
+README.md

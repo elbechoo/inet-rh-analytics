@@ -1,0 +1,53 @@
+{
+  "trained_at": "2026-06-19T14:47:13",
+  "validation_method": "temporal (2016-2023 features \u2192 2024-2025 labels)",
+  "nb_employes": 76,
+  "nb_a_risque": 19,
+  "accuracy": 100.0,
+  "precision": 100.0,
+  "recall": 100.0,
+  "f1": 100.0,
+  "cv_f1_mean": 67.38,
+  "cv_f1_std": 19.97,
+  "cv_acc_mean": 85.42,
+  "cv_acc_std": 7.86,
+  "baseline_f1": 73.68,
+  "feature_importance": [
+    {
+      "feature": "Absence rate (%)",
+      "importance": 28.0
+    },
+    {
+      "feature": "Total absences",
+      "importance": 26.5
+    },
+    {
+      "feature": "Unjustified absences",
+      "importance": 15.2
+    },
+    {
+      "feature": "Avg hours/day",
+      "importance": 5.9
+    },
+    {
+      "feature": "Late rate (%)",
+      "importance": 5.8
+    },
+    {
+      "feature": "Avg lateness (min)",
+      "importance": 5.2
+    },
+    {
+      "feature": "Late arrivals",
+      "importance": 4.6
+    },
+    {
+      "feature": "Leave days taken",
+      "importance": 4.6
+    },
+    {
+      "feature": "Seniority (months)",
+      "importance": 4.2
+    }
+  ]
+}
