@@ -20,8 +20,10 @@ build/
 # Trained model artifacts (large binary files)
 ai/models/*.pkl
 
-# Logs
-logs/
+# Logs — anchored to the repository root with a leading slash. Without it,
+# "logs/" matches any directory named logs at any depth, which silently
+# excluded frontend-next/app/admin/logs/ (the System Logs page).
+/logs/
 *.log
 
 # Node / Next.js
