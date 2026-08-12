@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from api.deps import require_hr_or_admin, require_self_or_hr
 from sqlalchemy.orm import Session
 from config.database import get_db
@@ -110,14 +110,26 @@ def get_all_employes(db: Session = Depends(get_db)):
 
 
 @router.post("/", dependencies=[Depends(require_hr_or_admin)])
-def create_employe(data: EmployeCreate, db: Session = Depends(get_db)):
+def create_employe(data: EmployeCreate, request: Request, db: Session = Depends(get_db),
+                   current: dict = Depends(require_hr_or_admin)):
     """Créer un nouvel employé"""
     try:
         employe_data = data.model_dump(exclude={"password", "role"})
         employe_data["role"] = data.role
-        return employe_service.create_employe(db, employe_data, data.password)
+        result = employe_service.create_employe(db, employe_data, data.password)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+    # This also creates a login with a role, so it is an access-granting event.
+    from services import audit_service
+    audit_service.record(
+        action=audit_service.EMPLOYEE_CREATE, actor=current,
+        entite="Employe", entite_id=(result or {}).get("employe_id"),
+        cible_employe_id=(result or {}).get("employe_id"),
+        nouvelle_valeur=f"{employe_data.get('prenom')} {employe_data.get('nom')} — role {data.role}",
+        request=request,
+    )
+    return result
 
 
 @router.get("/{employe_id}", dependencies=[Depends(require_self_or_hr)])
@@ -130,19 +142,49 @@ def get_employe(employe_id: int, db: Session = Depends(get_db)):
 
 
 @router.put("/{employe_id}", dependencies=[Depends(require_hr_or_admin)])
-def update_employe(employe_id: int, data: EmployeUpdate, db: Session = Depends(get_db)):
+def update_employe(employe_id: int, data: EmployeUpdate, request: Request,
+                   db: Session = Depends(get_db),
+                   current: dict = Depends(require_hr_or_admin)):
     """Mettre à jour un employé"""
+    employe_data = {k: v for k, v in data.dict().items() if v is not None}
     try:
-        employe_data = {k: v for k, v in data.dict().items() if v is not None}
-        return employe_service.update_employe(db, employe_id, employe_data)
+        avant = employe_service.get_employe(db, employe_id)
+        avant_desc = ", ".join(
+            f"{k}={getattr(avant, k, None)}" for k in employe_data if hasattr(avant, k)
+        )
+    except Exception:
+        avant_desc = None
+
+    try:
+        result = employe_service.update_employe(db, employe_id, employe_data)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
+
+    from services import audit_service
+    audit_service.record(
+        action=audit_service.EMPLOYEE_UPDATE, actor=current,
+        entite="Employe", entite_id=employe_id, cible_employe_id=employe_id,
+        ancienne_valeur=avant_desc,
+        nouvelle_valeur=", ".join(f"{k}={v}" for k, v in employe_data.items()),
+        request=request,
+    )
+    return result
 
 
 @router.delete("/{employe_id}", dependencies=[Depends(require_hr_or_admin)])
-def delete_employe(employe_id: int, db: Session = Depends(get_db)):
+def delete_employe(employe_id: int, request: Request, db: Session = Depends(get_db),
+                   current: dict = Depends(require_hr_or_admin)):
     """Désactiver un employé"""
     try:
-        return employe_service.delete_employe(db, employe_id)
+        result = employe_service.delete_employe(db, employe_id)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
+
+    # Ends someone's employment record and their access with it.
+    from services import audit_service
+    audit_service.record(
+        action=audit_service.EMPLOYEE_DELETE, actor=current,
+        entite="Employe", entite_id=employe_id, cible_employe_id=employe_id,
+        request=request,
+    )
+    return result

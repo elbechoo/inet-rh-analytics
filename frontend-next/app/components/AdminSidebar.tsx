@@ -1,7 +1,7 @@
 'use client';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { LayoutDashboard, Users, Building2, Settings, ScrollText, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, Building2, Settings, ScrollText, LogOut, ShieldCheck } from 'lucide-react';
 import { useRipple } from './motion';
 import { LogoWordmark } from './Logo';
 import { logout as doLogout } from './../lib/api';
@@ -11,6 +11,7 @@ const navItems = [
   { label: 'Users',         href: '/admin/users',     Icon: Users },
   { label: 'Departments',   href: '/admin/depts',     Icon: Building2 },
   { label: 'Configuration', href: '/admin/config',    Icon: Settings },
+  { label: 'Audit Trail',   href: '/admin/audit',     Icon: ShieldCheck },
   { label: 'System Logs',   href: '/admin/logs',      Icon: ScrollText },
 ];
 

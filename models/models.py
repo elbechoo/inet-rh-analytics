@@ -128,6 +128,45 @@ class Absence(Base):
     employe = relationship("Employe", back_populates="absences")
 
 
+class AuditLog(Base):
+    """Who did what, to whom, and when.
+
+    HR systems hold decisions that affect pay and employment: a rejected leave
+    request, a changed role, a deleted record. When an employee disputes one,
+    "the system says so" is not an answer — there has to be a record of which
+    account made the change and at what time. Several jurisdictions require it,
+    and it is the difference between an HR tool and an HR system of record.
+
+    Append-only by convention: rows are written, never updated or deleted. The
+    before/after values are stored as text so any field can be captured without
+    a schema change per entity.
+    """
+    __tablename__ = "AuditLog"
+
+    audit_id      = Column(Integer, primary_key=True, index=True)
+    date_action   = Column(DateTime, default=func.now(), nullable=False, index=True)
+
+    # Who. user_id rather than employe_id: the actor is an account, and the
+    # account may be deleted later — so the username is denormalised here to
+    # keep the trail readable after the fact.
+    user_id       = Column(Integer, ForeignKey("Utilisateur.user_id"), index=True)
+    username      = Column(String(100))
+    role          = Column(String(20))
+
+    # What. e.g. "conge.valider", "employe.delete", "user.role_change"
+    action        = Column(String(60), nullable=False, index=True)
+    entite        = Column(String(40))          # Conge / Employe / Utilisateur
+    entite_id     = Column(Integer, index=True)
+
+    # To whom — the employee affected, when different from the actor.
+    cible_employe_id = Column(Integer, index=True)
+
+    ancienne_valeur = Column(String(500))
+    nouvelle_valeur = Column(String(500))
+    detail          = Column(String(500))
+    adresse_ip      = Column(String(45))        # 45 chars covers IPv6
+
+
 class JourFerie(Base):
     """Public holidays.
 

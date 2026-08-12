@@ -1,5 +1,5 @@
 # api/routes/admin.py
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from config.database import get_db
 from models.models import Utilisateur, Employe, Departement
@@ -57,29 +57,51 @@ def get_all_users(db: Session = Depends(get_db), _: dict = Depends(require_admin
     ]
 
 @router.put("/users/{user_id}/role")
-def update_user_role(user_id: int, data: UserRoleUpdate, db: Session = Depends(get_db), _: dict = Depends(require_admin)):
+def update_user_role(user_id: int, data: UserRoleUpdate, request: Request, db: Session = Depends(get_db), current: dict = Depends(require_admin)):
     user = db.query(Utilisateur).filter(Utilisateur.user_id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     if data.role not in ["employe", "rh", "admin"]:
         raise HTTPException(status_code=400, detail="Rôle invalide")
+    ancien = user.role
     user.role = data.role
     db.commit()
+
+    # Granting admin is the single most consequential action in the system.
+    from services import audit_service
+    audit_service.record(
+        action=audit_service.ROLE_CHANGE, actor=current,
+        entite="Utilisateur", entite_id=user_id,
+        cible_employe_id=user.employe_id,
+        ancienne_valeur=ancien, nouvelle_valeur=data.role,
+        request=request,
+    )
     return {"message": "Rôle mis à jour", "role": data.role}
 
 @router.put("/users/{user_id}/statut")
-def update_user_statut(user_id: int, data: UserStatusUpdate, db: Session = Depends(get_db), _: dict = Depends(require_admin)):
+def update_user_statut(user_id: int, data: UserStatusUpdate, request: Request, db: Session = Depends(get_db), current: dict = Depends(require_admin)):
     user = db.query(Utilisateur).filter(Utilisateur.user_id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     employe = db.query(Employe).filter(Employe.employe_id == user.employe_id).first()
+    ancien = employe.statut if employe else None
     if employe:
         employe.statut = data.statut
     db.commit()
+
+    # Deactivating an account ends someone's access — record who did it.
+    from services import audit_service
+    audit_service.record(
+        action=audit_service.STATUS_CHANGE, actor=current,
+        entite="Utilisateur", entite_id=user_id,
+        cible_employe_id=user.employe_id,
+        ancienne_valeur=ancien, nouvelle_valeur=data.statut,
+        request=request,
+    )
     return {"message": "Statut mis à jour"}
 
 @router.put("/users/{user_id}/reset-password")
-def reset_password(user_id: int, data: ResetPassword, db: Session = Depends(get_db), _: dict = Depends(require_admin)):
+def reset_password(user_id: int, data: ResetPassword, request: Request, db: Session = Depends(get_db), current: dict = Depends(require_admin)):
     if len(data.new_password) < 8:
         raise HTTPException(status_code=400, detail="Password must be at least 8 characters")
     user = db.query(Utilisateur).filter(Utilisateur.user_id == user_id).first()
@@ -88,6 +110,17 @@ def reset_password(user_id: int, data: ResetPassword, db: Session = Depends(get_
     from services.employe_service import hash_password
     user.mot_de_passe = hash_password(data.new_password)
     db.commit()
+
+    # Only that an admin reset it, never the password itself — an audit trail
+    # containing credentials would be worse than no audit trail.
+    from services import audit_service
+    audit_service.record(
+        action=audit_service.PASSWORD_RESET, actor=current,
+        entite="Utilisateur", entite_id=user_id,
+        cible_employe_id=user.employe_id,
+        detail="password reset by administrator",
+        request=request,
+    )
     return {"message": "Password reset successfully"}
 
 # ─── DEPARTEMENTS ──────────────────────────────────────────
@@ -171,7 +204,46 @@ def get_admin_stats(db: Session = Depends(get_db), _: dict = Depends(require_adm
         "nb_alertes_non_lues": nb_alertes,
     }
 
-# ─── LOGS ──────────────────────────────────────────────────
+# ─── AUDIT TRAIL ───────────────────────────────────────────
+
+@router.get("/audit")
+def get_audit_trail(
+    action: Optional[str] = None,
+    employe_id: Optional[int] = None,
+    jours: int = 90,
+    limit: int = 200,
+    db: Session = Depends(get_db),
+    _: dict = Depends(require_admin),
+):
+    """Who did what, and when.
+
+    Distinct from /logs: that reads application log files (technical diagnostics,
+    rotated and eventually deleted). This is the business record of decisions —
+    approvals, role changes, deletions — and is kept in the database.
+    """
+    from datetime import date, timedelta
+    from services import audit_service
+    depuis = date.today() - timedelta(days=max(1, min(jours, 3650)))
+    return audit_service.query(
+        db, action=action, employe_id=employe_id, depuis=depuis, limit=limit
+    )
+
+
+@router.get("/audit/actions")
+def get_audit_actions(db: Session = Depends(get_db), _: dict = Depends(require_admin)):
+    """Distinct action types present in the trail, for filtering."""
+    from sqlalchemy import func
+    from models.models import AuditLog
+    rows = (
+        db.query(AuditLog.action, func.count(AuditLog.audit_id))
+        .group_by(AuditLog.action)
+        .order_by(func.count(AuditLog.audit_id).desc())
+        .all()
+    )
+    return [{"action": a, "count": c} for a, c in rows]
+
+
+# ─── APPLICATION LOGS ──────────────────────────────────────
 
 @router.get("/logs")
 def get_logs(source: Optional[str] = None, _: dict = Depends(require_admin)):

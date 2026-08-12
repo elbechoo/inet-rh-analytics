@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from api.deps import require_hr_or_admin, require_self_or_hr
 from sqlalchemy.orm import Session
 from config.database import get_db
@@ -62,15 +62,34 @@ def demander_conge(
 def valider_conge(
     conge_id : int,
     data     : CongeValidation,
-    db       : Session = Depends(get_db)
+    request  : Request,
+    db       : Session = Depends(get_db),
+    current  : dict = Depends(require_hr_or_admin),
 ):
     """Valider ou refuser un congé (RH)"""
     try:
-        return conge_service.valider_conge(
+        result = conge_service.valider_conge(
             db, conge_id, data.rh_id, data.approuve, data.commentaire
         )
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+    # A rejected leave request is the decision employees dispute most often, so
+    # who decided it and when has to be on record.
+    from repositories import conge_repo
+    from services import audit_service
+    conge = conge_repo.get_conge_by_id(db, conge_id)
+    audit_service.record(
+        action=audit_service.LEAVE_APPROVE if data.approuve else audit_service.LEAVE_REJECT,
+        actor=current,
+        entite="Conge",
+        entite_id=conge_id,
+        cible_employe_id=getattr(conge, "employe_id", None),
+        nouvelle_valeur="Approuvé" if data.approuve else "Refusé",
+        detail=data.commentaire,
+        request=request,
+    )
+    return result
 
 
 @router.delete("/annuler/{conge_id}/{employe_id}", dependencies=[Depends(require_self_or_hr)])

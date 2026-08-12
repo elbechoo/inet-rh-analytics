@@ -40,11 +40,18 @@ PUBLIC_PATHS = {"/", "/health", "/auth/login", "/auth/logout",
 
 
 def test_every_endpoint_requires_authentication(app):
-    """Authentication is enforced at the router level so that adding a route
-    cannot accidentally publish it."""
+    """Authentication is enforced on every route so that adding one cannot
+    accidentally publish it.
+
+    Covers /admin too. Those routes declare their guard as a function parameter
+    (`_: dict = Depends(require_admin)`) rather than in the decorator, which is
+    easy to miss when skimming — and /admin/users/{id}/role can change anyone's
+    role, so an unguarded one there would be the worst hole in the system.
+    Inspecting the resolved dependency tree catches both styles.
+    """
     unguarded = []
     for route in _routes(app):
-        if route.path in PUBLIC_PATHS or route.path.startswith("/admin"):
+        if route.path in PUBLIC_PATHS:
             continue
         deps = _dependency_names(route)
         if not deps & {"get_current_user", "require_hr_or_admin",
