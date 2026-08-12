@@ -1,0 +1,9 @@
+# Development and test dependencies.
+#
+# Deliberately separate from requirements-api.txt: the runtime image should not
+# ship a test runner. CI installs this on top of the runtime requirements.
+#
+#   pip install -r requirements-api.txt -r requirements-dev.txt
+
+pytest==8.3.4
+httpx==0.28.1          # FastAPI TestClient transport

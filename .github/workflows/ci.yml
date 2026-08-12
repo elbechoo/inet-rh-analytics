@@ -1,0 +1,108 @@
+name: CI
+
+# Runs on every push and pull request. Three of the bugs found while building
+# this would have been caught here: a file truncated mid-write, a .gitignore
+# rule that silently dropped a page from the repo, and a frontend build that
+# baked in the wrong API address.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend:
+    name: Backend
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: inet
+          POSTGRES_PASSWORD: ci-test-password
+          POSTGRES_DB: inet_rh_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+        ports:
+          - 5432:5432
+
+    env:
+      DB_ENGINE: postgres
+      DB_SERVER: localhost
+      DB_PORT: "5432"
+      DB_DATABASE: inet_rh_test
+      DB_USER: inet
+      DB_PASSWORD: ci-test-password
+      # Throwaway value for CI only. Never a real secret — the app refuses to
+      # boot without one, so the pipeline has to supply something.
+      SECRET_KEY: ci-only-not-a-real-secret-000000000000000000
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-api.txt -r requirements-dev.txt
+
+      - name: Every module imports cleanly
+        # Catches truncated files and broken imports before anything else runs.
+        run: |
+          python -c "import compileall, sys; sys.exit(0 if compileall.compile_dir('.', quiet=1, rx=__import__('re').compile(r'(venv|node_modules|migrations/versions)')) else 1)"
+
+      - name: Application starts
+        # A route with a missing dependency or a bad decorator fails here.
+        run: python -c "from api.main import app; print(f'{len(app.routes)} routes registered')"
+
+      - name: Tests
+        run: pytest tests/ -v
+
+  frontend:
+    name: Frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend-next
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend-next/package-lock.json
+
+      - run: npm ci
+
+      - name: Type check and build
+        # Next.js resolves the /api rewrite at build time, so this also proves
+        # the proxy target is configurable rather than hardcoded.
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: http://api:8000
+
+  docker:
+    name: Docker images build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: API image
+        run: docker build -f Dockerfile.api -t inet-api:ci .
+
+      - name: Frontend image
+        run: |
+          docker build -f frontend-next/Dockerfile \
+            --build-arg NEXT_PUBLIC_API_URL=http://api:8000 \
+            -t inet-frontend:ci frontend-next

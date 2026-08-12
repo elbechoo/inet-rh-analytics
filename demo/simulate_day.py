@@ -75,6 +75,80 @@ def get_profile(employe_id: int) -> dict:
     return PROFILES["normal"]
 
 
+# ─────────────────────────────────────────────────────────────
+# BEHAVIOURAL DRIFT
+# ─────────────────────────────────────────────────────────────
+# A fixed profile per employee means nobody's behaviour ever changes, so the
+# question HR actually cares about — "who is getting worse?" — has no answer in
+# the data, and no model can learn it. Real workforces do not behave that way:
+# disengagement builds over months and shows up in attendance well before a
+# resignation.
+#
+# A minority of employees therefore enter a decline phase at some point in their
+# history, during which their absence probability ramps up. A few recover. The
+# pattern is deterministic per employee so re-running the seeder reproduces it.
+DRIFT_SHARE      = 0.22   # share of employees who drift at some point
+RECOVERY_SHARE   = 0.35   # of those, the share who recover afterwards
+DRIFT_RAMP_DAYS  = 150    # how long the decline takes to reach full strength
+DRIFT_PEAK_MULT  = 3.2    # absence probability multiplier at the worst point
+
+
+def _drift_plan(employe_id: int) -> dict | None:
+    """When (if ever) this employee's attendance starts to deteriorate."""
+    rng = random.Random(employe_id * 104729 + 17)
+    if rng.random() >= DRIFT_SHARE:
+        return None
+    return {
+        # Offset in days from the start of the simulated period.
+        "start_offset": rng.randint(120, 900),
+        "recovers": rng.random() < RECOVERY_SHARE,
+        "recovery_after": rng.randint(120, 260),
+        "peak": DRIFT_PEAK_MULT * rng.uniform(0.7, 1.3),
+    }
+
+
+# Anchor for drift timing. Set once per process by the seeder so every day of a
+# backfill shares the same reference; defaults to a fixed date otherwise.
+_DRIFT_EPOCH: date | None = None
+
+
+def set_drift_epoch(d: date) -> None:
+    global _DRIFT_EPOCH
+    _DRIFT_EPOCH = d
+
+
+def drift_multiplier(employe_id: int, target_date: date) -> float:
+    """How much this employee's absence tendency is elevated on this date.
+
+    1.0 means unchanged. Rises gradually through the decline phase rather than
+    stepping, so the trend is visible in a rolling window — which is exactly the
+    signal the deterioration model is meant to pick up.
+    """
+    plan = _drift_plan(employe_id)
+    if plan is None:
+        return 1.0
+
+    epoch = _DRIFT_EPOCH or date(target_date.year - 3, 1, 1)
+    day = (target_date - epoch).days
+    start = plan["start_offset"]
+    if day < start:
+        return 1.0
+
+    since = day - start
+    if plan["recovers"] and since > plan["recovery_after"]:
+        # Improvement is faster than decline — a resolved problem, not a slow fade.
+        fade = (since - plan["recovery_after"]) / 90.0
+        if fade >= 1.0:
+            return 1.0
+        peak_at_recovery = 1.0 + (plan["peak"] - 1.0) * min(
+            plan["recovery_after"] / DRIFT_RAMP_DAYS, 1.0
+        )
+        return 1.0 + (peak_at_recovery - 1.0) * (1.0 - fade)
+
+    ramp = min(since / DRIFT_RAMP_DAYS, 1.0)
+    return 1.0 + (plan["peak"] - 1.0) * ramp
+
+
 # ─────────────────────────────────────────
 # SEASONAL HELPERS
 # ─────────────────────────────────────────
@@ -222,8 +296,11 @@ def simulate_day_entrees(db: Session, target_date: date) -> dict:
             continue
 
         profile     = get_profile(emp.employe_id)
-        prob_absent = min(profile["prob_absent"] * abs_mult, 0.40)
-        prob_late   = profile["prob_late"]
+        drift       = drift_multiplier(emp.employe_id, target_date)
+        prob_absent = min(profile["prob_absent"] * abs_mult * drift, 0.40)
+        # Lateness drifts too, but less sharply — disengagement shows up as
+        # absence first and punctuality second.
+        prob_late   = min(profile["prob_late"] * (1.0 + (drift - 1.0) * 0.45), 0.60)
         r           = random.random()
 
         if r < prob_absent:

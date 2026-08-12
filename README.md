@@ -129,9 +129,42 @@ Predicts which employees are at risk of increasing absenteeism, and explains why
 
 **How it works.** Features are built from attendance history — absence rate, lateness frequency, how absences cluster around weekends, deviation from the employee's own department. A random forest produces a probability; the explanation layer compares each feature against the department median and reports the ones that actually drive the score.
 
-**Honesty about the numbers.** The model ships alongside a rule-based baseline and is measured against it with a temporal split — training on the past, testing on the future, never randomly shuffled. On the first version the baseline *beat* the model, which showed the target was largely a restatement of its own inputs. The target was redesigned to predict *deterioration* (an employee getting worse relative to their own history) rather than a level.
+**Benchmarked on real data.** Results below are from the UCI *Absenteeism at
+Work* dataset — a Brazilian courier company, 740 absence records across 36
+employees — not from generated data. The task: given what is known when someone
+calls in, will this absence cost a full working day or more?
 
-**The data here is generated.** Demo figures come from a simulator, not a real workforce, so no accuracy number in this repository should be read as a claim about production performance.
+| Method | F1 | Precision | Recall | AUC |
+|---|---|---|---|---|
+| Majority class | 0.0 | 0.0 | 0.0 | 50.0 |
+| Rule (medical reason code) | 55.5 | 68.9 | 48.2 | 67.7 |
+| Logistic regression | 59.3 | 68.1 | 55.0 | 78.5 |
+| **Random forest** | **70.8** | 69.0 | 74.9 | 80.2 |
+| Gradient boosting | 69.2 | 68.1 | 71.8 | 82.8 |
+
+**+15.3 F1 points over the best hand-written rule.**
+
+**Why the split is grouped by employee.** Absences are very unevenly
+distributed — one employee accounts for 113 of the 740 rows. Split at random
+and the same person appears in training and test, so the model learns *that
+individual's* habits and scores well by recognising them. Splitting by employee
+means every person in the test set is unseen, which is the situation the model
+faces in production.
+
+The difference is measurable: the same random forest scores **77.0** on a random
+split and **70.8** grouped. Those 6 points are memorisation, not skill. Both
+numbers are printed by `python -m ai.benchmark_uci` so the gap is visible rather
+than hidden.
+
+**The model does not get to assume it is useful.** Every deployment trains on
+its own data, scores against the rule-based baseline on a held-out temporal
+split, and the model is only promoted to serving if it wins by at least 5 F1
+points. Otherwise the rule serves and the system says so — `GET /ai/strategy`
+reports which is active and why. On data where behaviour is stable, the rule is
+the correct answer, and pretending otherwise would be dishonest.
+
+**The bundled demo data is generated**, so figures produced from it are
+illustrative only. The benchmark above is the one to judge the model on.
 
 ---
 

@@ -117,13 +117,23 @@ def marquer_alerte_lue(
 # ============================================
 @router.get("/prediction-absenteisme", dependencies=HR_ONLY)
 def prediction_absenteisme(db: Session = Depends(get_db)):
-    return predire_absenteisme(db)
+    # Routed through the gate: serves the ML model only where it has been shown
+    # to beat the rule-based baseline on this database, and the rule otherwise.
+    # Calling predire_absenteisme directly would serve the v1 model regardless
+    # of whether it is any good — and on stable-behaviour data it is not.
+    from ai.model_gate import predict as gated_predict
+    return gated_predict(db)
 
 
 # Alias pour utils.py
 @router.get("/employes-a-risque", dependencies=HR_ONLY)
 def employes_a_risque(db: Session = Depends(get_db)):
-    return predire_absenteisme(db)
+    # Routed through the gate: serves the ML model only where it has been shown
+    # to beat the rule-based baseline on this database, and the rule otherwise.
+    # Calling predire_absenteisme directly would serve the v1 model regardless
+    # of whether it is any good — and on stable-behaviour data it is not.
+    from ai.model_gate import predict as gated_predict
+    return gated_predict(db)
 
 
 @router.post("/entrainer-modele", dependencies=HR_ONLY)
@@ -149,6 +159,26 @@ def model_info_v2():
     if not m:
         return {"trained": False, "available": model_available()}
     return {"trained": True, "available": model_available(), **m}
+
+
+@router.post("/entrainer-gate", dependencies=HR_ONLY)
+def entrainer_gate(db: Session = Depends(get_db)):
+    """Train and decide whether the model is worth using on THIS database.
+
+    Checks there is enough history to answer the question, trains, scores
+    against the rule-based baseline on a held-out temporal split, and only
+    promotes the model if it wins by a margin. A verdict of "baseline" is a
+    valid outcome, not a failure.
+    """
+    from ai.model_gate import train_and_gate
+    return train_and_gate(db)
+
+
+@router.get("/strategy", dependencies=HR_ONLY)
+def risk_strategy(db: Session = Depends(get_db)):
+    """Which predictor is serving risk scores, and why."""
+    from ai.model_gate import check_data_sufficiency, read_gate
+    return {**read_gate(), "current_data": check_data_sufficiency(db)}
 
 
 @router.get("/model-info", dependencies=HR_ONLY)
@@ -194,7 +224,8 @@ def retards_frequents(seuil: int = 3, db: Session = Depends(get_db)):
 @router.get("/prediction/{employe_id}", dependencies=HR_ONLY)
 def prediction_employe(employe_id: int, db: Session = Depends(get_db)):
     """Prédiction absentéisme pour un employé spécifique"""
-    tous = predire_absenteisme(db)
+    from ai.model_gate import predict as gated_predict
+    tous = gated_predict(db)
     for emp in tous:
         if emp["employe_id"] == employe_id:
             return emp

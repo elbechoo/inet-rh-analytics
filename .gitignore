@@ -72,3 +72,8 @@ soutenance/
 # what models/models.py and fix_schema.sql already define. No data in it, just
 # bulk nobody reads.
 script.sql
+
+# Third-party datasets. Downloaded by the user from the source cited in
+# scripts/import_absenteeism_dataset.py — not ours to redistribute.
+Absenteeism_at_work.csv
+absenteeism+at+work/

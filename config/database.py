@@ -74,9 +74,40 @@ _engine_kwargs = dict(
 if DB_ENGINE != "postgres":
     _engine_kwargs["fast_executemany"] = True
 
-engine = create_engine(CONNECTION_STRING, **_engine_kwargs)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
+
+# The engine is built on first use rather than at import.
+#
+# create_engine() eagerly imports the DBAPI driver, so building it at module
+# level meant importing *any* model required pyodbc or psycopg to be installed
+# — which made the business logic impossible to unit test, and broke tooling
+# that only needs the schema. PEP 562 module __getattr__ keeps
+# `from config.database import engine, SessionLocal` working unchanged while
+# deferring the connection until something actually asks for it.
+_engine = None
+_SessionLocal = None
+
+
+def _get_engine():
+    global _engine
+    if _engine is None:
+        _engine = create_engine(CONNECTION_STRING, **_engine_kwargs)
+    return _engine
+
+
+def _get_sessionmaker():
+    global _SessionLocal
+    if _SessionLocal is None:
+        _SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=_get_engine())
+    return _SessionLocal
+
+
+def __getattr__(name):
+    if name == "engine":
+        return _get_engine()
+    if name == "SessionLocal":
+        return _get_sessionmaker()
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
 # ============================================================================
@@ -87,8 +118,11 @@ Base = declarative_base()
 # config/tenants.json present there is exactly one tenant and the behaviour is
 # identical to before.
 # ============================================================================
-from fastapi import HTTPException, Request          # noqa: E402
 from config import tenants                          # noqa: E402
+
+# fastapi is imported lazily inside get_db(): this module is also used by
+# scripts, the ETL and the test suite, none of which should need the web
+# framework installed just to open a database session.
 
 # One engine (and connection pool) per tenant, built on first use and kept for
 # the process lifetime. Creating an engine per request would exhaust the pool.
@@ -109,8 +143,10 @@ def session_factory_for(tenant_key: str):
     if database == DB_DATABASE:
         # The default tenant reuses the module-level engine rather than opening
         # a second pool against the same database.
-        _sessions[key] = SessionLocal
-        _engines[key] = engine
+        # Note: PEP 562 module __getattr__ does not apply to name lookups from
+        # inside the module itself, so call the accessors directly here.
+        _sessions[key] = _get_sessionmaker()
+        _engines[key] = _get_engine()
     else:
         eng = create_engine(build_url(database), **_engine_kwargs)
         _engines[key] = eng
@@ -123,7 +159,7 @@ def engine_for(tenant_key: str):
     return _engines[(tenant_key or tenants.DEFAULT_TENANT).strip().lower()]
 
 
-def get_db(request: Request = None):
+def get_db(request=None):
     """Yield a session bound to the requesting client's database.
 
     `request` is optional so that scripts, the scheduler and tests can still
@@ -133,6 +169,7 @@ def get_db(request: Request = None):
     try:
         factory = session_factory_for(key)
     except KeyError:
+        from fastapi import HTTPException
         # An unrecognised subdomain must not silently fall back to another
         # client's data — refuse the request instead.
         raise HTTPException(status_code=404, detail="Unknown workspace")
