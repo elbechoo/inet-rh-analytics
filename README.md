@@ -4,7 +4,7 @@
 
 **Attendance, leave and absenteeism analytics for Tunisian companies**
 
-*Final year project (PFE) — iNET · 2025–2026*
+*Built at iNET · 2025–2026*
 
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.136-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
@@ -235,5 +235,5 @@ The two audit scripts are read-only by default and report before they change any
 ## Project info
 
 **Author** — Hechem Zenati
-**Context** — Final year project (PFE) at iNET, 2025–2026
+**Context** — built at iNET, 2025–2026
 **Status** — functional; demo data is simulated

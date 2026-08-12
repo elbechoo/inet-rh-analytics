@@ -77,3 +77,6 @@ script.sql
 # scripts/import_absenteeism_dataset.py — not ours to redistribute.
 Absenteeism_at_work.csv
 absenteeism+at+work/
+
+# Academic report. Kept locally; the repository is the software.
+iNET-RH-Rapport-PFE-FINAL.docx
