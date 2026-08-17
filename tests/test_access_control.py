@@ -55,7 +55,8 @@ def test_every_endpoint_requires_authentication(app):
             continue
         deps = _dependency_names(route)
         if not deps & {"get_current_user", "require_hr_or_admin",
-                       "require_admin", "require_self_or_hr"}:
+                       "require_admin", "require_self_or_hr",
+                       "require_self_manager_or_hr"}:
             unguarded.append(f"{list(route.methods)} {route.path}")
     assert not unguarded, "endpoints with no authentication: " + ", ".join(unguarded)
 
@@ -68,7 +69,11 @@ def test_routes_with_an_employee_id_check_ownership(app):
         if "{employe_id}" not in route.path:
             continue
         deps = _dependency_names(route)
-        if not deps & {"require_self_or_hr", "require_hr_or_admin", "require_admin"}:
+        # require_self_manager_or_hr is also an ownership check — it allows the
+        # record's owner, that person's manager, or HR. Anything not in this set
+        # is genuinely unguarded.
+        if not deps & {"require_self_or_hr", "require_self_manager_or_hr",
+                       "require_hr_or_admin", "require_admin"}:
             missing.append(f"{list(route.methods)} {route.path}")
     assert not missing, "no ownership check on: " + ", ".join(missing)
 

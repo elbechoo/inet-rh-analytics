@@ -74,6 +74,32 @@ def get_current_user(
     user = db.query(Utilisateur).filter(Utilisateur.user_id == user_id).first()
     if not user:
         raise exc
+
+    # Was this session ended before the token expired? Logout, a password reset
+    # or an administrator killing a compromised session all set a revocation
+    # point; anything issued before it is refused even though the signature and
+    # expiry are still valid.
+    try:
+        from models.models import TokenRevoke
+        rev = db.query(TokenRevoke).filter(TokenRevoke.user_id == user_id).first()
+        if rev and rev.revoked_from:
+            issued_at = payload.get("iat")
+            if issued_at is not None:
+                from datetime import datetime, timezone
+                issued = datetime.fromtimestamp(int(issued_at), tz=timezone.utc)
+                cutoff = rev.revoked_from
+                if cutoff.tzinfo is None:
+                    cutoff = cutoff.replace(tzinfo=timezone.utc)
+                if issued < cutoff:
+                    raise exc
+    except HTTPException:
+        raise
+    except Exception:
+        # The table may not exist yet on an older database. Failing open here is
+        # the same security posture as before revocation existed, and is better
+        # than locking every user out of a working system.
+        pass
+
     return {
         "user_id": user.user_id,
         "role": user.role,
@@ -92,6 +118,39 @@ def require_hr_or_admin(current: dict = Depends(get_current_user)):
     if current["role"] not in ("rh", "admin"):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="HR or Admin access required")
     return current
+
+
+def require_self_manager_or_hr(
+    employe_id: int,
+    current: dict = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Own record, or a record belonging to someone who reports to you.
+
+    Wider than require_self_or_hr by exactly one step: a manager can see their
+    own team. Used for team views and approvals, never for payslips or
+    documents — a manager having people report to them does not entitle them to
+    read those.
+
+    Only direct reports, not the whole subtree. Skip-level access is a policy
+    decision a company should opt into, not something the code assumes.
+    """
+    if current["role"] in ("rh", "admin"):
+        return current
+
+    own = current.get("employe_id")
+    if own == employe_id:
+        return current
+
+    from models.models import Employe
+    target = db.query(Employe).filter(Employe.employe_id == employe_id).first()
+    if target and target.manager_id == own:
+        return current
+
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="You may only access your own records or those of your team",
+    )
 
 
 def require_self_or_hr(employe_id: int, current: dict = Depends(get_current_user)):

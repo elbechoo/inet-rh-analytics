@@ -37,11 +37,19 @@ class Employe(Base):
     type_contrat      = Column(String(50))
     statut            = Column(String(20), default="Actif")
     departement_id    = Column(Integer, ForeignKey("Departement.departement_id"), nullable=False)
+
+    # Reporting line. Self-referential and nullable: the top of the hierarchy
+    # reports to nobody, and an employee may legitimately have no manager yet.
+    # Without this, a leave request can only be approved by "some HR person" —
+    # real approval flows go to the requester's own manager first.
+    manager_id        = Column(Integer, ForeignKey("Employe.employe_id"), index=True)
+
     date_creation     = Column(DateTime, default=func.now())
     date_modification = Column(DateTime, default=func.now())
 
     # Relations
     departement       = relationship("Departement", back_populates="employes")
+    manager           = relationship("Employe", remote_side=[employe_id], backref="subordonnes")
     utilisateur       = relationship("Utilisateur", back_populates="employe", uselist=False)
     pointages         = relationship("Pointage", back_populates="employe")
     pointage_logs     = relationship("PointageLog", back_populates="employe")
@@ -126,6 +134,26 @@ class Absence(Base):
 
     # Relations
     employe = relationship("Employe", back_populates="absences")
+
+
+class TokenRevoke(Base):
+    """Sessions ended before their token would have expired.
+
+    A JWT is valid until it expires — the server does not store it, so deleting
+    the cookie on logout only stops *this* browser from sending it. A token
+    already copied elsewhere keeps working for the rest of its eight hours.
+
+    Rather than store every issued token, this records the moment a user's
+    sessions were invalidated. Any token issued before that instant is refused.
+    One row per user, updated on logout, so the table stays small and the check
+    is a single indexed lookup.
+    """
+    __tablename__ = "TokenRevoke"
+
+    user_id      = Column(Integer, ForeignKey("Utilisateur.user_id"), primary_key=True)
+    revoked_from = Column(DateTime, nullable=False)   # tokens issued before this are dead
+    raison       = Column(String(120))
+    date_maj     = Column(DateTime, default=func.now(), onupdate=func.now())
 
 
 class AuditLog(Base):

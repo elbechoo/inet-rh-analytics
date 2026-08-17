@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
-from api.deps import require_hr_or_admin, require_self_or_hr
+from api.deps import get_current_user, require_hr_or_admin, require_self_or_hr
 from sqlalchemy.orm import Session
 from config.database import get_db
 from services import conge_service
@@ -58,15 +58,36 @@ def demander_conge(
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.put("/valider/{conge_id}", dependencies=[Depends(require_hr_or_admin)])
+@router.put("/valider/{conge_id}")
 def valider_conge(
     conge_id : int,
     data     : CongeValidation,
     request  : Request,
     db       : Session = Depends(get_db),
-    current  : dict = Depends(require_hr_or_admin),
+    current  : dict = Depends(get_current_user),
 ):
-    """Valider ou refuser un congé (RH)"""
+    """Approve or reject a leave request.
+
+    HR and admins may decide any request. A manager may decide requests from
+    their own direct reports — which is how approval actually works in a
+    company, and the reason manager_id exists. Everyone else is refused.
+    """
+    from repositories import conge_repo as _repo
+    demande = _repo.get_conge_by_id(db, conge_id)
+    if not demande:
+        raise HTTPException(status_code=404, detail="Demande introuvable")
+
+    if current["role"] not in ("rh", "admin"):
+        from models.models import Employe
+        demandeur = db.query(Employe).filter(
+            Employe.employe_id == demande.employe_id
+        ).first()
+        if not demandeur or demandeur.manager_id != current.get("employe_id"):
+            raise HTTPException(
+                status_code=403,
+                detail="You may only decide leave requests from your own team",
+            )
+
     try:
         result = conge_service.valider_conge(
             db, conge_id, data.rh_id, data.approuve, data.commentaire

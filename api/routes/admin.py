@@ -109,6 +109,20 @@ def reset_password(user_id: int, data: ResetPassword, request: Request, db: Sess
         raise HTTPException(status_code=404, detail="User not found")
     from services.employe_service import hash_password
     user.mot_de_passe = hash_password(data.new_password)
+
+    # Kill every existing session for this account. A password reset is usually
+    # a response to compromise — leaving the attacker's token valid for the rest
+    # of its eight hours would defeat the point of resetting it.
+    from datetime import datetime, timezone
+    from models.models import TokenRevoke
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
+    rev = db.query(TokenRevoke).filter(TokenRevoke.user_id == user_id).first()
+    if rev:
+        rev.revoked_from = now
+        rev.raison = "password reset"
+    else:
+        db.add(TokenRevoke(user_id=user_id, revoked_from=now, raison="password reset"))
+
     db.commit()
 
     # Only that an admin reset it, never the password itself — an audit trail

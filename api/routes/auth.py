@@ -35,11 +35,15 @@ def create_access_token(user_id: int, role: str, tenant: str) -> str:
     # without this a token issued by Agency A would be accepted on Agency B's
     # subdomain and resolve to whichever user happens to hold the same id there
     # — possibly an administrator.
+    now = datetime.now(timezone.utc)
     payload = {
         "sub": str(user_id),
         "role": role,
         "tenant": tenant,
-        "exp": datetime.now(timezone.utc) + timedelta(hours=ACCESS_TOKEN_EXPIRE_HOURS),
+        # Issued-at is what makes revocation possible: on logout we record a
+        # cutoff time and refuse anything minted before it.
+        "iat": now,
+        "exp": now + timedelta(hours=ACCESS_TOKEN_EXPIRE_HOURS),
     }
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
@@ -73,7 +77,43 @@ def login(request: Request, data: LoginRequest, response: Response, db: Session 
 
 
 @router.post("/logout")
-def logout(response: Response):
-    """Clear the auth cookie server-side so the session truly ends."""
+def logout(
+    response: Response,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    """End the session properly.
+
+    Clearing the cookie only stops this browser from sending the token. A copy
+    taken elsewhere would stay valid until it expired, so we also record a
+    revocation point: every token issued to this user before now is refused.
+
+    Deliberately tolerant of an unauthenticated call — logging out twice, or
+    with an already-expired token, should succeed quietly rather than error.
+    """
     response.delete_cookie(key=COOKIE_NAME, path="/")
+
+    try:
+        from datetime import datetime, timezone
+        from api.deps import _extract_token, SECRET_KEY, ALGORITHM
+        from models.models import TokenRevoke
+
+        token = request.cookies.get(COOKIE_NAME)
+        if token:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM],
+                                 options={"verify_exp": False})
+            uid = int(payload.get("sub"))
+            now = datetime.now(timezone.utc).replace(tzinfo=None)
+            row = db.query(TokenRevoke).filter(TokenRevoke.user_id == uid).first()
+            if row:
+                row.revoked_from = now
+                row.raison = "logout"
+            else:
+                db.add(TokenRevoke(user_id=uid, revoked_from=now, raison="logout"))
+            db.commit()
+    except Exception:
+        # Never fail a logout. The cookie is already cleared, which is the part
+        # the user can observe.
+        pass
+
     return {"message": "Logged out"}

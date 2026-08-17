@@ -150,6 +150,33 @@ def main() -> None:
         db.commit()
         print(f"  {created} employees with accounts and leave balances")
 
+        # ── Reporting lines ──
+        # One manager per department (the longest-serving there), all reporting
+        # to the company head. Two levels is enough to exercise the approval
+        # flow without inventing an org chart nobody asked for.
+        everyone = db.query(Employe).order_by(Employe.date_embauche).all()
+        head = everyone[0]
+        managers = {}
+        for dept in depts:
+            in_dept = [e for e in everyone
+                       if e.departement_id == dept.departement_id and e.employe_id != head.employe_id]
+            if in_dept:
+                managers[dept.departement_id] = in_dept[0]
+
+        links = 0
+        for e in everyone:
+            if e.employe_id == head.employe_id:
+                continue                                  # the top reports to nobody
+            mgr = managers.get(e.departement_id)
+            if mgr and mgr.employe_id != e.employe_id:
+                e.manager_id = mgr.employe_id
+                links += 1
+            else:
+                e.manager_id = head.employe_id            # dept heads report to the top
+                links += 1
+        db.commit()
+        print(f"  {len(managers)} managers, {links} reporting lines")
+
         admin = db.query(Utilisateur).filter(Utilisateur.role == "admin").first()
         hr = db.query(Utilisateur).filter(Utilisateur.role == "rh").first()
         print("\nSign in with:")

@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException, Request
-from api.deps import require_hr_or_admin, require_self_or_hr
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from api.deps import require_hr_or_admin, require_self_or_hr, require_self_manager_or_hr
 from sqlalchemy.orm import Session
 from config.database import get_db
 from services import employe_service
@@ -104,9 +104,66 @@ def get_absences_employe(employe_id: int, db: Session = Depends(get_db)):
 # ============================================
 
 @router.get("/")
-def get_all_employes(db: Session = Depends(get_db)):
-    """Récupérer tous les employés actifs"""
-    return employe_service.get_all_employes(db)
+def get_all_employes(
+    q: Optional[str] = None,
+    limit: int = Query(default=500, ge=1, le=1000),
+    offset: int = Query(default=0, ge=0),
+    db: Session = Depends(get_db),
+):
+    """Active employees.
+
+    Paginated because this is the busiest read in the app — the top bar calls it
+    on every page load to fill its search box. Unbounded, a 5,000-employee
+    client would ship several megabytes of JSON on every navigation and stall
+    the browser parsing it.
+
+    `limit` defaults high enough that existing callers keep working unchanged,
+    and is capped so no request can ask for the whole table.
+    """
+    from models.models import Employe
+
+    query = db.query(Employe).filter(Employe.statut == "Actif")
+    if q:
+        # Server-side search, so a large workforce does not have to be shipped
+        # to the client just to filter it there.
+        like = f"%{q.strip()}%"
+        query = query.filter(
+            (Employe.nom.ilike(like))
+            | (Employe.prenom.ilike(like))
+            | (Employe.matricule.ilike(like))
+            | (Employe.poste.ilike(like))
+        )
+
+    rows = query.order_by(Employe.nom, Employe.prenom).offset(offset).limit(limit).all()
+    return [{
+        "employe_id": e.employe_id,
+        "matricule": e.matricule,
+        "nom": e.nom,
+        "prenom": e.prenom,
+        "poste": e.poste,
+        "type_contrat": e.type_contrat,
+        "statut": e.statut,
+        "adresse_mail": e.adresse_mail,
+        "date_embauche": str(e.date_embauche) if e.date_embauche else None,
+        "departement_id": e.departement_id,
+        "manager_id": e.manager_id,
+    } for e in rows]
+
+
+@router.get("/count")
+def count_employes(q: Optional[str] = None, db: Session = Depends(get_db)):
+    """Total matching employees, so a client can paginate properly."""
+    from models.models import Employe
+    query = db.query(Employe).filter(Employe.statut == "Actif")
+    if q:
+        like = f"%{q.strip()}%"
+        query = query.filter(
+            (Employe.nom.ilike(like))
+            | (Employe.prenom.ilike(like))
+            | (Employe.matricule.ilike(like))
+            | (Employe.poste.ilike(like))
+        )
+    return {"total": query.count()}
 
 
 @router.post("/", dependencies=[Depends(require_hr_or_admin)])
@@ -130,6 +187,55 @@ def create_employe(data: EmployeCreate, request: Request, db: Session = Depends(
         request=request,
     )
     return result
+
+
+@router.get("/{employe_id}/equipe", dependencies=[Depends(require_self_manager_or_hr)])
+def get_equipe(employe_id: int, db: Session = Depends(get_db)):
+    """The people who report directly to this employee.
+
+    Returns identity and role only — no salary, documents or risk scores.
+    Managing someone is not a reason to see their personnel file; approving
+    their leave is a different permission from reading their records.
+    """
+    from models.models import Employe
+    rows = (
+        db.query(Employe)
+        .filter(Employe.manager_id == employe_id, Employe.statut == "Actif")
+        .order_by(Employe.nom)
+        .all()
+    )
+    return [{
+        "employe_id": e.employe_id,
+        "matricule": e.matricule,
+        "nom": e.nom,
+        "prenom": e.prenom,
+        "poste": e.poste,
+        "adresse_mail": e.adresse_mail,
+        "departement_id": e.departement_id,
+    } for e in rows]
+
+
+@router.get("/{employe_id}/hierarchie", dependencies=[Depends(require_self_or_hr)])
+def get_hierarchie(employe_id: int, db: Session = Depends(get_db)):
+    """The reporting line upwards, from this employee to the top.
+
+    Walks manager_id with a visited set: a badly entered hierarchy can contain a
+    cycle (A reports to B, B reports to A), and an unguarded walk would loop
+    forever and hang the request.
+    """
+    from models.models import Employe
+    chain, seen, current_id = [], set(), employe_id
+    while current_id and current_id not in seen and len(chain) < 20:
+        seen.add(current_id)
+        e = db.query(Employe).filter(Employe.employe_id == current_id).first()
+        if not e:
+            break
+        chain.append({
+            "employe_id": e.employe_id,
+            "nom": e.nom, "prenom": e.prenom, "poste": e.poste,
+        })
+        current_id = e.manager_id
+    return chain
 
 
 @router.get("/{employe_id}", dependencies=[Depends(require_self_or_hr)])
