@@ -39,7 +39,9 @@ def _short(value, limit: int = 500) -> str | None:
     if isinstance(value, (date, datetime)):
         return value.isoformat()
     s = str(value)
-    return s if len(s) <= limit else s[: limit - 1] + "..."
+    # limit - 3 because the marker is three characters. The column is exactly
+    # `limit` wide, so going one over fails the insert rather than truncating.
+    return s if len(s) <= limit else s[: limit - 3] + "..."
 
 
 def record(
