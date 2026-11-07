@@ -10,7 +10,7 @@ import {
 } from 'recharts';
 import { AnimatedNumber, Reveal, useRipple } from '@/app/components/motion';
 
-/* Report palette — the logo azure leads, the mark's navy is the second series. */
+/* Report palette - the logo azure leads, the mark's navy is the second series. */
 const BLUE = '#0FA3E0', TEAL = '#12A594', SKY = '#17557A', AMBER = '#F59E0B', RED = '#DC2626';
 const SERIES = [BLUE, TEAL, SKY, '#45B9E9', AMBER, '#0B87BE'];
 
@@ -95,13 +95,13 @@ export default function HRDashboard() {
 
   const deptPie = useMemo(() => deptStats
     .filter((d: any) => d.nb_employes > 0)
-    .map((d: any) => ({ name: d.departement || d.nom_departement || '—', value: d.nb_employes }))
+    .map((d: any) => ({ name: d.departement || d.nom_departement || '-', value: d.nb_employes }))
     .sort((a, b) => b.value - a.value).slice(0, 6), [deptStats]);
 
   const deptBar = useMemo(() => deptStats
     .filter((d: any) => d.nb_employes > 0)
     .map((d: any) => ({
-      dept: String(d.departement || d.nom_departement || '—').slice(0, 14),
+      dept: String(d.departement || d.nom_departement || '-').slice(0, 14),
       absence: Number(d.taux_absenteisme ?? 0),
       late: Number(d.taux_retard ?? 0),
     }))
@@ -314,7 +314,7 @@ export default function HRDashboard() {
               {risk.slice(0, 6).map((r: any) => {
                 const critical = r.niveau === 'Critique';
                 const tone = critical ? RED : AMBER;
-                const reason = (r.raisons && r.raisons[0]?.text) || r.explication || '—';
+                const reason = (r.raisons && r.raisons[0]?.text) || r.explication || '-';
                 return (
                   <tr key={r.employe_id}>
                     <td style={{ fontWeight: 600, color: 'var(--ink)' }}>{r.nom}</td>

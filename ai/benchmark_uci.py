@@ -1,6 +1,6 @@
 """Benchmark on the UCI 'Absenteeism at Work' dataset.
 
-Real data — a Brazilian courier company, 2007–2010, 740 absence records across
+Real data - a Brazilian courier company, 2007-2010, 740 absence records across
 36 employees. Published and independent, so a result here is not a restatement
 of assumptions baked into our own simulator.
 
@@ -8,8 +8,8 @@ of assumptions baked into our own simulator.
 
 Task
 ----
-Given what is known when an employee calls in — the stated reason, the day,
-the season, their tenure, commute, workload — will this absence cost a full
+Given what is known when an employee calls in - the stated reason, the day,
+the season, their tenure, commute, workload - will this absence cost a full
 working day or more (>= 8 hours)? Roughly 37% of records do, so the classes are
 reasonably balanced and accuracy is not trivially gamed.
 
@@ -22,7 +22,7 @@ habits and scores brilliantly on them. It looks like prediction; it is
 recall.
 
 Splitting by employee instead means every person in the test set is someone the
-model has never seen — which is the situation it actually faces in production,
+model has never seen - which is the situation it actually faces in production,
 when HR asks about a new hire. This script reports both so the gap is visible,
 because that gap is the honest measure of how much of a score is memorisation.
 """
@@ -66,7 +66,7 @@ def load(path: str) -> pd.DataFrame:
 def rule_baseline(X: pd.DataFrame) -> np.ndarray:
     """The rule an HR manager would use without any model.
 
-    Reasons 1–14 are ICD medical diagnoses — genuine illness, which tends to
+    Reasons 1-14 are ICD medical diagnoses - genuine illness, which tends to
     take a person out for a full day. Reasons 15+ are administrative or routine
     (dental, physiotherapy, consultation) and usually cost a few hours.
     Anything logged as a disciplinary failure is recorded as zero hours.
@@ -138,7 +138,7 @@ def main() -> None:
     y = (df["Absenteeism time in hours"] >= TARGET_HOURS).astype(int)
     groups = df["ID"]
 
-    print(f"UCI Absenteeism at Work — {len(df)} records, {groups.nunique()} employees")
+    print(f"UCI Absenteeism at Work - {len(df)} records, {groups.nunique()} employees")
     print(f"Target: absence >= {TARGET_HOURS}h    positives: {y.sum()} ({y.mean()*100:.1f}%)")
     print(f"Records per employee: min {groups.value_counts().min()}, "
           f"max {groups.value_counts().max()}\n")
@@ -154,8 +154,8 @@ def main() -> None:
     ]
 
     for strategy, blurb in [
-        ("grouped", "GROUPED BY EMPLOYEE — every test employee is unseen (honest)"),
-        ("random", "RANDOM SPLIT — same employees in train and test (leaky)"),
+        ("grouped", "GROUPED BY EMPLOYEE - every test employee is unseen (honest)"),
+        ("random", "RANDOM SPLIT - same employees in train and test (leaky)"),
     ]:
         print("=" * 74)
         print(blurb)

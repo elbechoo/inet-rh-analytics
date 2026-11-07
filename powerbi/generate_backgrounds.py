@@ -1,5 +1,5 @@
 """
-iNET RH — Power BI Background Generator
+iNET RH - Power BI Background Generator
 Generates 4 PNG background images (1280x720) for the 4 dashboard pages.
 
 Run from the powerbi/ folder:
@@ -9,7 +9,7 @@ Output: powerbi/backgrounds/page1_executive_overview.png  ... page4_...png
 
 In Power BI Desktop:
     1. Select the page
-    2. Format pane → Canvas background → Image → Browse → pick the PNG
+    2. Format pane -> Canvas background -> Image -> Browse -> pick the PNG
     3. Image fit: Fit   Transparency: 0%
     4. Then drag your visuals on top of the white boxes.
 """
@@ -135,7 +135,7 @@ def kpi_card(draw, fonts, x, y, w, h, label: str, color: tuple):
                  fill=(min(r + 180, 255), min(g + 180, 255), min(b + 180, 255)))
 
     # Hint text
-    draw.text((x + 16, y + h - 18), "← drag measure here",
+    draw.text((x + 16, y + h - 18), "<- drag measure here",
               font=fonts["small"], fill=(190, 200, 215))
 
     # Icon circle (top right)
@@ -291,7 +291,7 @@ def page2(fonts) -> Image.Image:
 
     # Employee table
     chart_area(draw, fonts, 20, 660, 1240, 50,
-               "Employee Attendance Detail — Table: nom_complet · nom_departement · Nb Présents · Nb Retards · Moy Minutes Retard · Taux Présence %",
+               "Employee Attendance Detail - Table: nom_complet · nom_departement · Nb Présents · Nb Retards · Moy Minutes Retard · Taux Présence %",
                "", INDIGO)
 
     return img
@@ -329,7 +329,7 @@ def page3(fonts) -> Image.Image:
                "Line chart · X: annee · Y: count(conge_id) · Legend: statut",
                YELLOW)
     chart_area(draw, fonts, 465, 465, 795, 240,
-               "Training Sessions Detail — Table: titre · type_formation · annee · Taux Participation Formation % · Score Moy Formation",
+               "Training Sessions Detail - Table: titre · type_formation · annee · Taux Participation Formation % · Score Moy Formation",
                "Table visual", GREEN)
 
     return img
@@ -340,7 +340,7 @@ def page4(fonts) -> Image.Image:
     img, draw = new_page()
     header(draw, fonts, "AI Alerts & Missions")
 
-    # KPI row — 5 cards
+    # KPI row - 5 cards
     ky, kh, kw, gap = 80, 108, 232, 11
     kpis = [("Critical Alerts", RED), ("At-Risk Employees", YELLOW),
             ("Total Missions", INDIGO), ("Intl Missions", PURPLE),

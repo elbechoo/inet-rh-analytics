@@ -1,6 +1,6 @@
 'use client';
 /* ============================================================================
-   Explainable AI — at-risk employees with the reasons behind each score.
+   Explainable AI - at-risk employees with the reasons behind each score.
 
    The model already knows *why* it flagged someone (feature importances +
    how far each value sits from the company baseline). This surfaces that,
@@ -58,7 +58,7 @@ export default function RiskPanel({ limit = 6 }: { limit?: number }) {
         <div>
           <div className="t-section" style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
             <Brain size={15} style={{ color: 'var(--brand-400)' }} />
-            Absenteeism risk — explained
+            Absenteeism risk - explained
           </div>
           <div className="t-meta" style={{ marginTop: 2 }}>
             Each score shows the factors the model actually weighted
@@ -173,7 +173,7 @@ export default function RiskPanel({ limit = 6 }: { limit?: number }) {
                       </>
                     ) : (
                       <div className="t-meta">
-                        No single dominant factor — risk comes from a combination of weaker signals.
+                        No single dominant factor - risk comes from a combination of weaker signals.
                       </div>
                     )}
 

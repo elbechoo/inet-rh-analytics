@@ -48,7 +48,7 @@ def inscrire_employe(
     """Enrol someone on a training session.
 
     The employee id arrives in the body, not the path, so the generic guard does
-    not apply. HR may enrol anyone; an employee may only enrol themselves — the
+    not apply. HR may enrol anyone; an employee may only enrol themselves - the
     id they send is ignored and replaced with their own.
     """
     employe_id = data.employe_id

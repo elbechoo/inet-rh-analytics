@@ -107,7 +107,7 @@ export default function AlertesIA() {
         ))}
       </div>
 
-      {/* Explainable AI — at-risk employees with reasons */}
+      {/* Explainable AI - at-risk employees with reasons */}
       <RiskPanel />
 
       {/* Filter tabs */}

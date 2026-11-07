@@ -77,7 +77,7 @@ def generer_pdf(db: Session, document_id: int):
         c.setFont("Helvetica-Bold", 20)
         c.drawString(2*cm, height - 50, "iNET")
         c.setFont("Helvetica", 10)
-        c.drawString(2*cm, height - 65, "Informatique.Net — Gestion RH")
+        c.drawString(2*cm, height - 65, "Informatique.Net - Gestion RH")
 
         # Title
         c.setFillColorRGB(0, 0.157, 0.306)
@@ -100,9 +100,9 @@ def generer_pdf(db: Session, document_id: int):
             "",
             f"   Nom et Prénom   :  {employe.prenom} {employe.nom}",
             f"   Matricule        :  {employe.matricule}",
-            f"   Poste            :  {employe.poste or '—'}",
-            f"   Type de contrat  :  {employe.type_contrat or '—'}",
-            f"   Date d'embauche  :  {employe.date_embauche or '—'}",
+            f"   Poste            :  {employe.poste or '-'}",
+            f"   Type de contrat  :  {employe.type_contrat or '-'}",
+            f"   Date d'embauche  :  {employe.date_embauche or '-'}",
             "",
             "est bien employé(e) au sein de notre société.",
             "",
@@ -120,14 +120,14 @@ def generer_pdf(db: Session, document_id: int):
         y -= 40
         c.drawRightString(width - 2*cm, y, "Signature & Cachet")
         y -= 15
-        c.drawRightString(width - 2*cm, y, "Direction RH — iNET")
+        c.drawRightString(width - 2*cm, y, "Direction RH - iNET")
 
         # Footer
         c.setFillColorRGB(0, 0.157, 0.306)
         c.rect(0, 0, width, 30, fill=True, stroke=False)
         c.setFillColorRGB(1, 1, 1)
         c.setFont("Helvetica", 8)
-        c.drawCentredString(width/2, 10, "iNET — Informatique.Net © 2025 | document généré automatiquement")
+        c.drawCentredString(width/2, 10, "iNET - Informatique.Net © 2025 | document généré automatiquement")
 
         c.save()
         return filename

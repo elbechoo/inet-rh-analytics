@@ -145,7 +145,7 @@ export default function MesDemandesPage() {
                 <div style={{ fontWeight: 600, color: '#0C2436', fontSize: '0.88rem', marginBottom: 3 }}>
                   <span style={{ color: '#9DB3C2', fontWeight: 400, marginRight: 6 }}>#{c.conge_id}</span>{c.type_conge}
                 </div>
-                <div style={{ fontSize: '0.75rem', color: '#9DB3C2' }}>{c.date_debut} — {c.date_fin} · {c.nb_jours} day(s)</div>
+                <div style={{ fontSize: '0.75rem', color: '#9DB3C2' }}>{c.date_debut} - {c.date_fin} · {c.nb_jours} day(s)</div>
               </div>
               <span style={{ background: sb[c.statut] || 'rgba(12,36,54,0.04)', color: sc[c.statut] || '#6B879B', padding: '3px 12px', borderRadius: 20, fontSize: '0.70rem', fontWeight: 700 }}>
                 {sl[c.statut] || c.statut}

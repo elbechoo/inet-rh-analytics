@@ -18,7 +18,7 @@ from datetime import datetime, timedelta
 
 router = APIRouter()
 
-# /ai exposes confidential HR analytics — risk scores, anomaly detection, model
+# /ai exposes confidential HR analytics - risk scores, anomaly detection, model
 # internals. Everything here is HR/admin except the personal alerts feed, which
 # an employee needs for their own notification bell and which filters to their
 # own record internally.
@@ -120,7 +120,7 @@ def prediction_absenteisme(db: Session = Depends(get_db)):
     # Routed through the gate: serves the ML model only where it has been shown
     # to beat the rule-based baseline on this database, and the rule otherwise.
     # Calling predire_absenteisme directly would serve the v1 model regardless
-    # of whether it is any good — and on stable-behaviour data it is not.
+    # of whether it is any good - and on stable-behaviour data it is not.
     from ai.model_gate import predict as gated_predict
     return gated_predict(db)
 
@@ -131,7 +131,7 @@ def employes_a_risque(db: Session = Depends(get_db)):
     # Routed through the gate: serves the ML model only where it has been shown
     # to beat the rule-based baseline on this database, and the rule otherwise.
     # Calling predire_absenteisme directly would serve the v1 model regardless
-    # of whether it is any good — and on stable-behaviour data it is not.
+    # of whether it is any good - and on stable-behaviour data it is not.
     from ai.model_gate import predict as gated_predict
     return gated_predict(db)
 
@@ -142,7 +142,7 @@ def entrainer(db: Session = Depends(get_db)):
 
 
 # ============================================
-# Model v2 — deterioration ("who is getting worse")
+# Model v2 - deterioration ("who is getting worse")
 # ============================================
 @router.post("/entrainer-modele-v2", dependencies=HR_ONLY)
 def entrainer_v2(db: Session = Depends(get_db)):

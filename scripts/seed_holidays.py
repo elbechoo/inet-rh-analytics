@@ -6,7 +6,7 @@
     python scripts/seed_holidays.py --list             # show what is stored
 
 Islamic dates are official announcements where known and estimates beyond that.
-Confirm each year with the Journal Officiel and correct any date that differs —
+Confirm each year with the Journal Officiel and correct any date that differs -
 re-running without --overwrite will not undo your corrections.
 """
 import argparse
@@ -30,7 +30,7 @@ def main() -> None:
     args = ap.parse_args()
 
     # The JourFerie table is new, and this script may run before the API has
-    # ever booted. create_all only adds what is missing — existing tables and
+    # ever booted. create_all only adds what is missing - existing tables and
     # their data are untouched.
     Base.metadata.create_all(bind=engine)
 
@@ -39,7 +39,7 @@ def main() -> None:
         if args.list:
             rows = db.query(JourFerie).order_by(JourFerie.date_ferie).all()
             if not rows:
-                print("no holidays stored — run without --list to seed")
+                print("no holidays stored - run without --list to seed")
                 return
             print(f"{len(rows)} holidays stored:\n")
             current_year = None
@@ -52,10 +52,10 @@ def main() -> None:
             return
 
         res = seed(db, args.y_from, args.y_to, overwrite=args.overwrite)
-        print(f"holidays {args.y_from}–{args.y_to}: "
+        print(f"holidays {args.y_from}-{args.y_to}: "
               f"{res['created']} created, {res['updated']} updated, {res['skipped']} left as-is")
         print("\nLeave deduction and absence detection now skip these dates.")
-        print("Confirm the Islamic dates each year — they are set by moon sighting.")
+        print("Confirm the Islamic dates each year - they are set by moon sighting.")
     finally:
         db.close()
 

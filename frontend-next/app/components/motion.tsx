@@ -1,5 +1,5 @@
 'use client';
-/* Interaction primitives — the things that make a UI feel alive:
+/* Interaction primitives - the things that make a UI feel alive:
    numbers that count up, sections that reveal as you scroll, buttons that
    ripple under the cursor, and values that flash when they change. */
 import { useEffect, useRef, useState } from 'react';
@@ -40,7 +40,7 @@ export function AnimatedNumber({
 
 /* ── Reveal on scroll ────────────────────────────────────
    Sections animate in as they enter the viewport instead of all firing at
-   once on load — the page stays alive while you scroll it. */
+   once on load - the page stays alive while you scroll it. */
 export function Reveal({
   children, delay = 0, y = 16, className = '', style,
 }: {
@@ -97,7 +97,7 @@ export function useRipple() {
 }
 
 /* ── Flash on change ─────────────────────────────────────
-   Briefly highlights a value when it updates — useful for live counters. */
+   Briefly highlights a value when it updates - useful for live counters. */
 export function useFlashOnChange<T>(value: T) {
   const [flash, setFlash] = useState(false);
   const first = useRef(true);

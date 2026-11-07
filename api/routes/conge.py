@@ -69,7 +69,7 @@ def valider_conge(
     """Approve or reject a leave request.
 
     HR and admins may decide any request. A manager may decide requests from
-    their own direct reports — which is how approval actually works in a
+    their own direct reports - which is how approval actually works in a
     company, and the reason manager_id exists. Everyone else is refused.
     """
     from repositories import conge_repo as _repo
@@ -134,7 +134,7 @@ def get_stats(db: Session = Depends(get_db)):
 
 @router.get("/stats/par-type")
 def get_stats_par_type(db: Session = Depends(get_db)):
-    """Leave count grouped by type — used by HR dashboard chart."""
+    """Leave count grouped by type - used by HR dashboard chart."""
     from models.models import Conge
     from sqlalchemy import func
     rows = (

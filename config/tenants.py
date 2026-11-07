@@ -1,4 +1,4 @@
-"""Tenant registry — one database per client.
+"""Tenant registry - one database per client.
 
 Each agency gets its own database. Nothing is shared, so no query can leak
 across clients even if a filter is forgotten: there is simply nothing to leak
@@ -16,7 +16,7 @@ Configure with a JSON file, path in TENANTS_FILE (default: config/tenants.json):
       "agencyb": {"database": "inet_agencyb", "name": "Agency B"}
     }
 
-If the file is absent, the app runs exactly as before against DB_DATABASE —
+If the file is absent, the app runs exactly as before against DB_DATABASE -
 so an existing single-client install is unaffected.
 """
 import json

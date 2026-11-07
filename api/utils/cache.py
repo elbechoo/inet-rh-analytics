@@ -1,5 +1,5 @@
 """
-api/utils/cache.py — minimal in-process TTL cache for read-heavy endpoints.
+api/utils/cache.py - minimal in-process TTL cache for read-heavy endpoints.
 
 The dashboards aggregate ~200 k pointage rows on every render. The underlying
 data only changes when the simulation or the ETL runs (twice a day plus an

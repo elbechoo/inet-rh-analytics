@@ -1,11 +1,11 @@
 """
-iNET RH — Scheduler
+iNET RH - Scheduler
 Planification complète:
-  07:00 → Simulation Entrées
-  18:00 → Simulation Sorties + Congés (end-of-day)
-  23:00 → ETL Pipeline
-  00:00 → Email Digest
-  Dimanche 02:00 → Auto Retraining Modèle IA
+  07:00 -> Simulation Entrées
+  18:00 -> Simulation Sorties + Congés (end-of-day)
+  23:00 -> ETL Pipeline
+  00:00 -> Email Digest
+  Dimanche 02:00 -> Auto Retraining Modèle IA
 """
 import sys
 import os
@@ -20,7 +20,7 @@ import logging
 
 # logs/ is gitignored and not present in the container image, so it will not
 # exist on a fresh clone or deployment. Create it rather than crashing at
-# import time, and fall back to console-only if it is not writable — a
+# import time, and fall back to console-only if it is not writable - a
 # read-only filesystem must not stop the scheduler from running.
 _handlers = [logging.StreamHandler()]
 try:
@@ -38,11 +38,11 @@ logger = logging.getLogger(__name__)
 
 
 # ─────────────────────────────────────────
-# JOB 1 — SIMULATION ENTRÉES (07:00)
+# JOB 1 - SIMULATION ENTRÉES (07:00)
 # ─────────────────────────────────────────
 def job_simulate_entrees():
     logger.info("=" * 50)
-    logger.info(f"📍 JOB: Simulation Entrées — {datetime.now().strftime('%d/%m/%Y %H:%M')}")
+    logger.info(f"📍 JOB: Simulation Entrées - {datetime.now().strftime('%d/%m/%Y %H:%M')}")
     logger.info("=" * 50)
     try:
         from demo.simulate_day import simulate_entrees
@@ -53,11 +53,11 @@ def job_simulate_entrees():
 
 
 # ─────────────────────────────────────────
-# JOB 2 — SIMULATION SORTIES + CONGÉS (17:00)
+# JOB 2 - SIMULATION SORTIES + CONGÉS (17:00)
 # ─────────────────────────────────────────
 def job_simulate_sorties():
     logger.info("=" * 50)
-    logger.info(f"📍 JOB: Simulation Sorties + Congés — {datetime.now().strftime('%d/%m/%Y %H:%M')}")
+    logger.info(f"📍 JOB: Simulation Sorties + Congés - {datetime.now().strftime('%d/%m/%Y %H:%M')}")
     logger.info("=" * 50)
     try:
         from demo.simulate_day import simulate_sorties_et_conges
@@ -68,11 +68,11 @@ def job_simulate_sorties():
 
 
 # ─────────────────────────────────────────
-# JOB 3 — ETL PIPELINE (23:00)
+# JOB 3 - ETL PIPELINE (23:00)
 # ─────────────────────────────────────────
 def job_run_etl():
     logger.info("=" * 50)
-    logger.info(f"⚙️  JOB: ETL Pipeline — {datetime.now().strftime('%d/%m/%Y %H:%M')}")
+    logger.info(f"⚙️  JOB: ETL Pipeline - {datetime.now().strftime('%d/%m/%Y %H:%M')}")
     logger.info("=" * 50)
     start = datetime.now()
     try:
@@ -84,7 +84,7 @@ def job_run_etl():
         logger.error(f"❌ Erreur ETL: {e}")
         try:
             send_email(
-                subject   = "🔴 iNET RH — ERREUR ETL Pipeline",
+                subject   = "🔴 iNET RH - ERREUR ETL Pipeline",
                 html_body = f"""
                 <h2>❌ Le pipeline ETL a échoué</h2>
                 <p><b>Date:</b> {datetime.now().strftime('%d/%m/%Y %H:%M')}</p>
@@ -97,11 +97,11 @@ def job_run_etl():
 
 
 # ─────────────────────────────────────────
-# JOB 4 — AUTO RETRAINING (Dimanche 02:00)
+# JOB 4 - AUTO RETRAINING (Dimanche 02:00)
 # ─────────────────────────────────────────
 def job_retrain_model():
     logger.info("=" * 50)
-    logger.info(f"🤖 JOB: Auto Retraining — {datetime.now().strftime('%d/%m/%Y %H:%M')}")
+    logger.info(f"🤖 JOB: Auto Retraining - {datetime.now().strftime('%d/%m/%Y %H:%M')}")
     logger.info("=" * 50)
 
     try:
@@ -119,8 +119,8 @@ def job_retrain_model():
 
         if os.path.exists(MODEL_PATH):
             try:
-                # On garde juste la trace — pas besoin de recharger
-                logger.info("📦 Ancien modèle détecté — sera remplacé")
+                # On garde juste la trace - pas besoin de recharger
+                logger.info("📦 Ancien modèle détecté - sera remplacé")
                 old_accuracy = "inconnu"
             except Exception:
                 pass
@@ -129,19 +129,19 @@ def job_retrain_model():
         logger.info("🔄 Réentraînement en cours...")
         result = entrainer_modele(db)
 
-        # v2 (deterioration model) — trained here so predictions never retrain
+        # v2 (deterioration model) - trained here so predictions never retrain
         # on a user request. Failures are logged but must not break the legacy job.
         try:
             from ai.risk_model import train_risk_model
             v2 = train_risk_model(db)
             if v2.get("status") == "success":
                 logger.info(
-                    "✅ v2 retrained — F1 %.1f vs baseline %.1f (uplift %+.1f) on %d rows",
+                    "✅ v2 retrained - F1 %.1f vs baseline %.1f (uplift %+.1f) on %d rows",
                     v2.get("f1", 0), v2.get("baseline_f1", 0),
                     v2.get("uplift_f1", 0), v2.get("n_rows_total", 0),
                 )
                 if not v2.get("beats_baseline"):
-                    logger.warning("⚠️  v2 does NOT beat the rule-based baseline — review features/target")
+                    logger.warning("⚠️  v2 does NOT beat the rule-based baseline - review features/target")
             else:
                 logger.warning("⚠️  v2 retraining skipped: %s", v2.get("error"))
         except Exception as e:
@@ -152,7 +152,7 @@ def job_retrain_model():
         if "error" in result:
             logger.error(f"❌ Erreur retraining: {result['error']}")
             send_email(
-                subject   = "🔴 iNET RH — Erreur Retraining Modèle IA",
+                subject   = "🔴 iNET RH - Erreur Retraining Modèle IA",
                 html_body = f"""
                 <h2>❌ Le réentraînement a échoué</h2>
                 <p><b>Date:</b> {datetime.now().strftime('%d/%m/%Y %H:%M')}</p>
@@ -172,9 +172,9 @@ def job_retrain_model():
 
         # Email de confirmation
         send_email(
-            subject   = f"🤖 iNET RH — Modèle IA Réentraîné | Accuracy: {new_accuracy}%",
+            subject   = f"🤖 iNET RH - Modèle IA Réentraîné | Accuracy: {new_accuracy}%",
             html_body = f"""
-            <h2>🤖 Réentraînement Automatique — Modèle Absentéisme</h2>
+            <h2>🤖 Réentraînement Automatique - Modèle Absentéisme</h2>
             <p><b>Date:</b> {datetime.now().strftime('%d/%m/%Y %H:%M')}</p>
             <hr>
             <table style="border-collapse:collapse; width:100%">
@@ -200,11 +200,11 @@ def job_retrain_model():
 
 
 # ─────────────────────────────────────────
-# JOB 5 — EMAIL DIGEST (00:00)
+# JOB 5 - EMAIL DIGEST (00:00)
 # ─────────────────────────────────────────
 def job_send_email():
     logger.info("=" * 50)
-    logger.info(f"📧 JOB: Email Digest — {datetime.now().strftime('%d/%m/%Y %H:%M')}")
+    logger.info(f"📧 JOB: Email Digest - {datetime.now().strftime('%d/%m/%Y %H:%M')}")
     logger.info("=" * 50)
     try:
         data    = get_daily_data()
@@ -214,7 +214,7 @@ def job_send_email():
         nb_alertes  = len(data["alertes"])
         nb_conges   = len(data["conges"])
         nb_absences = len(data["absences_today"])
-        logger.info(f"   → {nb_alertes} alertes, {nb_conges} congés, {nb_absences} absences")
+        logger.info(f"   -> {nb_alertes} alertes, {nb_conges} congés, {nb_absences} absences")
 
         success = send_email(subject=subject, html_body=html)
         if success:
@@ -231,7 +231,7 @@ def job_send_email():
 def run_scheduler():
     scheduler = BlockingScheduler(timezone="Africa/Tunis")
 
-    # 07:00 — Entrées
+    # 07:00 - Entrées
     scheduler.add_job(
         func    = job_simulate_entrees,
         trigger = CronTrigger(hour=7, minute=0),
@@ -240,7 +240,7 @@ def run_scheduler():
         replace_existing = True,
     )
 
-    # 18:00 — Sorties + Congés (end-of-day)
+    # 18:00 - Sorties + Congés (end-of-day)
     scheduler.add_job(
         func    = job_simulate_sorties,
         trigger = CronTrigger(hour=18, minute=0),
@@ -249,7 +249,7 @@ def run_scheduler():
         replace_existing = True,
     )
 
-    # 23:00 — ETL
+    # 23:00 - ETL
     scheduler.add_job(
         func    = job_run_etl,
         trigger = CronTrigger(hour=23, minute=0),
@@ -258,7 +258,7 @@ def run_scheduler():
         replace_existing = True,
     )
 
-    # Dimanche 02:00 — Retraining
+    # Dimanche 02:00 - Retraining
     scheduler.add_job(
         func    = job_retrain_model,
         trigger = CronTrigger(day_of_week="sun", hour=2, minute=0),
@@ -267,7 +267,7 @@ def run_scheduler():
         replace_existing = True,
     )
 
-    # 00:00 — Email
+    # 00:00 - Email
     scheduler.add_job(
         func    = job_send_email,
         trigger = CronTrigger(hour=0, minute=0),
@@ -277,11 +277,11 @@ def run_scheduler():
     )
 
     logger.info("Scheduler started:")
-    logger.info("   Simulation Entries  → Mon-Fri 07:00")
-    logger.info("   Simulation Exits    → Mon-Fri 18:00")
-    logger.info("   ETL Pipeline        → 23:00")
-    logger.info("   Auto Retraining     → Sunday 02:00")
-    logger.info("   Email Digest        → 00:00")
+    logger.info("   Simulation Entries  -> Mon-Fri 07:00")
+    logger.info("   Simulation Exits    -> Mon-Fri 18:00")
+    logger.info("   ETL Pipeline        -> 23:00")
+    logger.info("   Auto Retraining     -> Sunday 02:00")
+    logger.info("   Email Digest        -> 00:00")
     logger.info("   Press Ctrl+C to stop")
 
     try:
@@ -297,7 +297,7 @@ def run_scheduler():
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description="iNET RH — Scheduler Complet")
+    parser = argparse.ArgumentParser(description="iNET RH - Scheduler Complet")
     parser.add_argument("--now-entrees", action="store_true", help="Simulate entries now")
     parser.add_argument("--now-sorties", action="store_true", help="Simulate exits now")
     parser.add_argument("--now-all-sim", action="store_true", help="Simulate entries + exits now")
@@ -310,30 +310,30 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.now_entrees:
-        logger.info("Test mode — Entries")
+        logger.info("Test mode - Entries")
         job_simulate_entrees()
     elif args.now_sorties:
-        logger.info("Test mode — Exits")
+        logger.info("Test mode - Exits")
         job_simulate_sorties()
     elif args.now_all_sim:
-        logger.info("Test mode — Entries + Exits")
+        logger.info("Test mode - Entries + Exits")
         job_simulate_entrees()
         job_simulate_sorties()
     elif args.now_etl:
-        logger.info("Test mode — ETL")
+        logger.info("Test mode - ETL")
         job_run_etl()
     elif args.now_email:
-        logger.info("Test mode — Email")
+        logger.info("Test mode - Email")
         job_send_email()
     elif args.now_retrain:
-        logger.info("Test mode — Retraining")
+        logger.info("Test mode - Retraining")
         job_retrain_model()
     elif args.now_seed:
-        logger.info(f"Test mode — Seeding {args.seed_days} days of history")
+        logger.info(f"Test mode - Seeding {args.seed_days} days of history")
         from scripts.seed_history import seed_history
         seed_history(args.seed_days)
     elif args.now_all:
-        logger.info("Test mode — ALL")
+        logger.info("Test mode - ALL")
         job_simulate_entrees()
         job_simulate_sorties()
         job_run_etl()

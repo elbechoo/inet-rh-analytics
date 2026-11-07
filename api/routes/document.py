@@ -66,7 +66,7 @@ def download_document(
     """Download a document's PDF.
 
     Keyed by document_id rather than employe_id, so the generic ownership guard
-    cannot be used — the owner has to be resolved from the record itself. HR and
+    cannot be used - the owner has to be resolved from the record itself. HR and
     admins may download anything; an employee only their own payslips,
     certificates and contracts.
     """

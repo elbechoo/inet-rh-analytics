@@ -104,7 +104,7 @@ export default function AdminLogs() {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginLeft: 8 }}>
             <ScrollText size={12} color="#9DB3C2" />
-            <span style={{ fontSize: '0.72rem', color: '#9DB3C2', fontFamily: 'monospace' }}>iNET RH — system logs</span>
+            <span style={{ fontSize: '0.72rem', color: '#9DB3C2', fontFamily: 'monospace' }}>iNET RH - system logs</span>
           </div>
         </div>
 

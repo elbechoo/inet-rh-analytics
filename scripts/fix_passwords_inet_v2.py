@@ -62,7 +62,7 @@ for username, password, role in accounts:
     )
     rows = cursor.rowcount
     status = "✅ OK" if rows > 0 else "❌ NOT FOUND"
-    print(f"  {status} — [{role}] {username}")
+    print(f"  {status} - [{role}] {username}")
 
 # ============================================
 # Reset TOUS les employés
@@ -78,7 +78,7 @@ print(f"  ✅ {cursor.rowcount} employés mis à jour")
 conn.commit()
 
 # ============================================
-# Vérification finale — test login
+# Vérification finale - test login
 # ============================================
 print("\n🔍 Vérification finale...\n")
 test_accounts = ["riadh.abbes", "nadia.khaldi", "ahmad.amri"]
@@ -91,9 +91,9 @@ for username in test_accounts:
     if row:
         hashed_db, role = row
         ok = verify_password("inet123", hashed_db)
-        print(f"  {'✅' if ok else '❌'} {username} [{role}] — login {'OK' if ok else 'FAIL'}")
+        print(f"  {'✅' if ok else '❌'} {username} [{role}] - login {'OK' if ok else 'FAIL'}")
     else:
-        print(f"  ❌ {username} — NOT FOUND in DB")
+        print(f"  ❌ {username} - NOT FOUND in DB")
 
 cursor.close()
 conn.close()

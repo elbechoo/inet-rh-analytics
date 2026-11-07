@@ -2,7 +2,7 @@
 /* The day as one rotation.
    07:00 sits at the top and the day sweeps clockwise to 19:00. The bright arc
    is elapsed time, the puck is now, and every dot is one arrival placed at its
-   clock angle — pushed inward the later it was. The core repeats the logo:
+   clock angle - pushed inward the later it was. The core repeats the logo:
    light periwinkle disc, white figure. */
 import { useEffect, useMemo, useRef, useState } from 'react';
 
@@ -24,7 +24,7 @@ export default function DayRing({
   present, total, arrivals = [], departments = [],
   dayStart = 7, dayEnd = 19, size = 560,
 }: Props) {
-  const [t, setT] = useState(0);              // 0→1 entrance progress
+  const [t, setT] = useState(0);              // 0->1 entrance progress
   const [scrub, setScrub] = useState<number | null>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
 
@@ -162,7 +162,7 @@ export default function DayRing({
         <circle cx={C} cy={C} r={R - 104} fill="none" stroke="#FFFFFF" strokeOpacity={0.3} strokeWidth={1.5} />
       </svg>
 
-      {/* core readout — white type on the light disc, exactly like the mark */}
+      {/* core readout - white type on the light disc, exactly like the mark */}
       <div style={{
         position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
         alignItems: 'center', justifyContent: 'center', pointerEvents: 'none',

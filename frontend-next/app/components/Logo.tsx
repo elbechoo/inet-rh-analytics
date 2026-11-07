@@ -1,5 +1,5 @@
 'use client';
-/* iNET brand mark — the real one:
+/* iNET brand mark - the real one:
    a solid azure square, "iNET" set in white, with the leading "i" in deep navy. */
 
 export function LogoMark({ size = 40, radius = 8 }: { size?: number; radius?: number }) {

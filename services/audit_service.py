@@ -10,7 +10,7 @@ Two rules shape the design:
 
 * **The trail is written in its own transaction.** If it shared the caller's
   session, a later rollback would erase the record of an action that partly
-  happened — exactly the case you most want a record of.
+  happened - exactly the case you most want a record of.
 """
 import logging
 from datetime import date, datetime
@@ -39,7 +39,7 @@ def _short(value, limit: int = 500) -> str | None:
     if isinstance(value, (date, datetime)):
         return value.isoformat()
     s = str(value)
-    return s if len(s) <= limit else s[: limit - 1] + "…"
+    return s if len(s) <= limit else s[: limit - 1] + "..."
 
 
 def record(

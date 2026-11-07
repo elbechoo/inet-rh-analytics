@@ -1,5 +1,5 @@
 """
-Unit tests for core business logic — no database required.
+Unit tests for core business logic - no database required.
 Run with: pytest tests/ -v
 """
 import sys
@@ -30,28 +30,28 @@ class TestCalculerJoursOuvrables:
         assert calculer_jours_ouvrables(d, d) == 0
 
     def test_full_week(self):
-        # Mon 8 Jan → Fri 12 Jan 2024 = 5 working days
+        # Mon 8 Jan -> Fri 12 Jan 2024 = 5 working days
         assert calculer_jours_ouvrables(date(2024, 1, 8), date(2024, 1, 12)) == 5
 
     def test_includes_weekend_in_range(self):
-        # Mon 8 Jan → Mon 15 Jan 2024 = 6 working days (2 weekends excluded = Sat+Sun)
+        # Mon 8 Jan -> Mon 15 Jan 2024 = 6 working days (2 weekends excluded = Sat+Sun)
         assert calculer_jours_ouvrables(date(2024, 1, 8), date(2024, 1, 15)) == 6
 
     def test_month_with_31_days(self):
-        # Wed 29 Jan → Fri 31 Jan 2025 = 3 working days
+        # Wed 29 Jan -> Fri 31 Jan 2025 = 3 working days
         # This test caught the old day+1 overflow bug
         assert calculer_jours_ouvrables(date(2025, 1, 29), date(2025, 1, 31)) == 3
 
     def test_cross_month_boundary(self):
-        # Fri 31 Jan → Mon 3 Feb 2025 = 2 working days (Fri + Mon)
+        # Fri 31 Jan -> Mon 3 Feb 2025 = 2 working days (Fri + Mon)
         assert calculer_jours_ouvrables(date(2025, 1, 31), date(2025, 2, 3)) == 2
 
     def test_cross_year_boundary(self):
-        # Mon 30 Dec 2024 → Wed 1 Jan 2025 = 3 working days
+        # Mon 30 Dec 2024 -> Wed 1 Jan 2025 = 3 working days
         assert calculer_jours_ouvrables(date(2024, 12, 30), date(2025, 1, 1)) == 3
 
     def test_long_period(self):
-        # Full year 2024 — 262 working days (2024 is a leap year)
+        # Full year 2024 - 262 working days (2024 is a leap year)
         result = calculer_jours_ouvrables(date(2024, 1, 1), date(2024, 12, 31))
         assert 260 <= result <= 264  # allow ±2 for public holiday edge cases
 

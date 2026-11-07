@@ -93,7 +93,7 @@ export default function AdminDashboard() {
               <card.Icon size={22} style={{ color: card.color }} />
             </div>
             <div>
-              <div style={{ fontSize: '2rem', fontWeight: 700, color: card.color, lineHeight: 1 }}>{card.value ?? '—'}</div>
+              <div style={{ fontSize: '2rem', fontWeight: 700, color: card.color, lineHeight: 1 }}>{card.value ?? '-'}</div>
               <div style={{ fontSize: '0.75rem', color: '#6B879B', marginTop: 3, fontWeight: 500 }}>{card.label}</div>
             </div>
           </div>
@@ -153,7 +153,7 @@ export default function AdminDashboard() {
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                     <Users size={12} color="#9DB3C2" />
-                    <span style={{ fontSize: '0.75rem', color: '#6B879B' }}>{d.nb_employes ?? '—'} employees</span>
+                    <span style={{ fontSize: '0.75rem', color: '#6B879B' }}>{d.nb_employes ?? '-'} employees</span>
                   </div>
                 </div>
               ))}

@@ -1,5 +1,5 @@
-# iNET RH — Intelligent HR Management System
-> Final Year Project (PFE) — Complete Technical Documentation
+# iNET RH - Intelligent HR Management System
+> Final Year Project (PFE) - Complete Technical Documentation
 
 ---
 
@@ -8,8 +8,8 @@
 2. [Architecture](#2-architecture)
 3. [Tech Stack](#3-tech-stack)
 4. [Database Schema](#4-database-schema)
-5. [Backend — API Routes](#5-backend--api-routes)
-6. [Frontend — Pages](#6-frontend--pages)
+5. [Backend - API Routes](#5-backend--api-routes)
+6. [Frontend - Pages](#6-frontend--pages)
 7. [Authentication & Security](#7-authentication--security)
 8. [AI Model](#8-ai-model)
 9. [ETL Pipeline](#9-etl-pipeline)
@@ -24,7 +24,7 @@
 
 ## 1. Project Overview
 
-**iNET RH** is a full-stack intelligent HR management platform built as a PFE (final year project). It manages the complete employee lifecycle — from daily attendance tracking to AI-powered absenteeism risk prediction — and exposes everything through a modern web interface and Power BI dashboards.
+**iNET RH** is a full-stack intelligent HR management platform built as a PFE (final year project). It manages the complete employee lifecycle - from daily attendance tracking to AI-powered absenteeism risk prediction - and exposes everything through a modern web interface and Power BI dashboards.
 
 ### Key Capabilities
 - Role-based access: **Admin**, **HR Manager**, **Employee**
@@ -39,7 +39,7 @@
 - APScheduler automating all jobs (simulation, ETL, email, AI retraining)
 - Power BI dashboards connected to live SQL Server views
 - 17 unit tests covering core business logic (no database required)
-- 10 years of historical data (2016–2026) seeded with seasonal patterns
+- 10 years of historical data (2016-2026) seeded with seasonal patterns
 
 ---
 
@@ -60,7 +60,7 @@
 │                        API LAYER                                │
 │                                                                 │
 │   ┌─────────────────────────────────────────────────────────┐  │
-│   │              FastAPI 0.136  —  Port 8000                │  │
+│   │              FastAPI 0.136  -  Port 8000                │  │
 │   │                                                         │  │
 │   │  /auth  /employes  /pointages  /conges  /absences       │  │
 │   │  /formations  /missions  /documents  /ai  /admin        │  │
@@ -71,7 +71,7 @@
 │                      DATA LAYER                                 │
 │                                                                 │
 │   ┌──────────────────────────────────────────────────────────┐ │
-│   │         SQL Server — GestionRH_Intelligente              │ │
+│   │         SQL Server - GestionRH_Intelligente              │ │
 │   │         Windows Authentication (trusted_connection)      │ │
 │   │                                                          │ │
 │   │  16 tables · 200k+ pointage records · 10 years history   │ │
@@ -84,7 +84,7 @@
 │  APScheduler (Africa/Tunis timezone)                            │
 │  ├── 07:00  Simulate morning entries (by employee profile)      │
 │  ├── 18:00  Simulate exits + leave requests (seasonal)          │
-│  ├── 23:00  ETL → KPI tables + Kimball star schema (Dim/Fact)   │
+│  ├── 23:00  ETL -> KPI tables + Kimball star schema (Dim/Fact)   │
 │  ├── 00:00  Email digest (HTML report)                          │
 │  └── Sun 02:00  AI model retrain (Random Forest)               │
 └─────────────────────────────────────────────────────────────────┘
@@ -150,12 +150,12 @@ Employe ───────┤──── Utilisateur (1:1)
               ├──── SoldeConge (leave balance, 1:1)
               └──── AlerteIA (AI-generated alerts)
 
-DW_KPI_Employe   (ETL output — per employee KPIs)
-DW_KPI_Mensuel   (ETL output — monthly global KPIs)
-AdminEmploye     (admin→employee assignment)
+DW_KPI_Employe   (ETL output - per employee KPIs)
+DW_KPI_Mensuel   (ETL output - monthly global KPIs)
+AdminEmploye     (admin->employee assignment)
 ```
 
-### Data Warehouse — Kimball Star Schema
+### Data Warehouse - Kimball Star Schema
 
 Created by `powerbi/star_schema.sql`, populated by `etl/load_star.py`. Four fact tables and four dimensions; the three core dimensions (Date, Employee, Department) are **conformed** across every fact.
 
@@ -169,13 +169,13 @@ Dim_Formation ─┴──── Fact_Formation   (grain: 1 row / employee / tra
 
 | Table | Type | Key | Notes |
 |---|---|---|---|
-| `Dim_Date` | Dimension | `date_id` (YYYYMMDD) | Calendar 2015–2027: year, quarter, month, ISO week, day, weekend flag, season |
+| `Dim_Date` | Dimension | `date_id` (YYYYMMDD) | Calendar 2015-2027: year, quarter, month, ISO week, day, weekend flag, season |
 | `Dim_Departement` | Dimension (SCD-1) | `departement_sk` IDENTITY | NK `departement_id`, name, sub-department |
 | `Dim_Employe` | Dimension (SCD-1) | `employe_sk` IDENTITY | NK `employe_id`, full name, post, contract, seniority, department |
 | `Dim_Formation` | Dimension (SCD-1) | `formation_sk` IDENTITY | NK `formation_id`, title, organiser, type, dates, duration |
 | `Fact_Pointage` | Fact | `pointage_sk` IDENTITY | FKs to all dims; measures: `heure_entree_decimal`, `duree_travail`, `retard_minutes`; flags `est_present`, `est_retard`, `sortie_manquante` |
 | `Fact_Absence` | Fact | `absence_sk` IDENTITY | FKs; `motif`, `est_justifiee`, `nb_absences`=1 |
-| `Fact_Conge` | Fact | `conge_sk` IDENTITY | `date_debut_id` + `date_fin_id` → `Dim_Date`; `type_conge`, `statut`, `nb_jours` |
+| `Fact_Conge` | Fact | `conge_sk` IDENTITY | `date_debut_id` + `date_fin_id` -> `Dim_Date`; `type_conge`, `statut`, `nb_jours` |
 | `Fact_Formation` | Fact | `presence_sk` IDENTITY | FKs to Dim_Date / Employe / Departement / Formation; `est_present`, `score`, `nb_participations`=1 |
 
 ### Key Columns
@@ -190,9 +190,9 @@ Dim_Formation ─┴──── Fact_Formation   (grain: 1 row / employee / tra
 | poste | String(100) | Job title |
 | type_contrat | String(50) | CDI / CDD / etc. |
 | statut | String(20) | Actif / Inactif |
-| departement_id | FK | → Departement |
+| departement_id | FK | -> Departement |
 
-**Pointage** — CHECK constraint: statut ∈ {`Présent`, `En retard`, `Sortie manquante`}
+**Pointage** - CHECK constraint: statut ∈ {`Présent`, `En retard`, `Sortie manquante`}
 | Column | Type | Notes |
 |---|---|---|
 | date_pointage | Date | |
@@ -202,17 +202,17 @@ Dim_Formation ─┴──── Fact_Formation   (grain: 1 row / employee / tra
 | retard_minutes | Integer | Minutes late |
 | statut | String(30) | Constrained |
 
-**Utilisateur** — roles: `employe` / `rh` / `admin`
+**Utilisateur** - roles: `employe` / `rh` / `admin`
 
-**AlerteIA** — levels: `Critique` / `Moyen` / `Info`
+**AlerteIA** - levels: `Critique` / `Moyen` / `Info`
 
-**Mission** — CHECK: statut ∈ {`En attente`, `Approuvée`, `Refusée`}
+**Mission** - CHECK: statut ∈ {`En attente`, `Approuvée`, `Refusée`}
 
-**Document** — CHECK: statut ∈ {`En attente`, `Approuvé`, `Refusé`}
+**Document** - CHECK: statut ∈ {`En attente`, `Approuvé`, `Refusé`}
 
 ---
 
-## 5. Backend — API Routes
+## 5. Backend - API Routes
 
 Base URL: `http://localhost:8000`
 
@@ -296,20 +296,20 @@ Base URL: `http://localhost:8000`
 
 ---
 
-## 6. Frontend — Pages
+## 6. Frontend - Pages
 
 All pages use inline styles (no Tailwind classes), indigo palette (`#6366f1` / `#4f46e5`), dark navy sidebar (`#0f172a`), and `lucide-react` icons. Authentication via `authFetch()` which injects `Authorization: Bearer <token>`.
 
 ### Login
 | Route | File | Description |
 |---|---|---|
-| `/` | `app/page.js` | Login form — stores JWT in `localStorage` as `inet_token` |
+| `/` | `app/page.js` | Login form - stores JWT in `localStorage` as `inet_token` |
 
 ### Admin Portal
 | Route | File | Description |
 |---|---|---|
 | `/admin/dashboard` | `admin/dashboard/page.tsx` | Platform stats, user counts, system health |
-| `/admin/users` | `admin/users/page.tsx` | User management — roles, enable/disable, password reset |
+| `/admin/users` | `admin/users/page.tsx` | User management - roles, enable/disable, password reset |
 | `/admin/depts` | `admin/depts/page.tsx` | Department CRUD with modal |
 | `/admin/config` | `admin/config/page.tsx` | AI thresholds, HR parameters, scheduler config, email |
 | `/admin/logs` | `admin/logs/page.tsx` | Terminal-style log viewer with auto-refresh |
@@ -322,8 +322,8 @@ All pages use inline styles (no Tailwind classes), indigo palette (`#6366f1` / `
 | `/hr/pointage` | `hr/pointage/page.tsx` | Daily attendance table, manual entry |
 | `/hr/absences` | `hr/absences/page.tsx` | Absence list, justification management |
 | `/hr/validations` | `hr/validations/page.tsx` | Leave + mission approval queue |
-| `/hr/alertes` | `hr/alertes/page.tsx` | AI alerts — Critique/Moyen, mark as read |
-| `/hr/stats` | `hr/stats/page.tsx` | Charts — evolution, department KPIs, lateness |
+| `/hr/alertes` | `hr/alertes/page.tsx` | AI alerts - Critique/Moyen, mark as read |
+| `/hr/stats` | `hr/stats/page.tsx` | Charts - evolution, department KPIs, lateness |
 | `/hr/formations` | `hr/formations/page.tsx` | Manage training sessions and attendance |
 | `/hr/formations-perso` | `hr/formations-perso/page.tsx` | HR manager's own training history |
 | `/hr/demandes` | `hr/demandes/page.tsx` | Document requests queue |
@@ -340,10 +340,10 @@ All pages use inline styles (no Tailwind classes), indigo palette (`#6366f1` / `
 ### Shared Components
 | File | Description |
 |---|---|
-| `components/Sidebar.tsx` | HR sidebar — navigation with icons |
+| `components/Sidebar.tsx` | HR sidebar - navigation with icons |
 | `components/AdminSidebar.tsx` | Admin sidebar |
 | `components/EmployeeSidebar.tsx` | Employee sidebar |
-| `lib/api.ts` | `authFetch()` — wraps `fetch()` with Bearer token injection |
+| `lib/api.ts` | `authFetch()` - wraps `fetch()` with Bearer token injection |
 
 ---
 
@@ -355,8 +355,8 @@ All pages use inline styles (no Tailwind classes), indigo palette (`#6366f1` / `
 2. Server: bcrypt.verify(password, hash)
 3. Server: create JWT {sub: str(user_id), role, exp: +8h}
 4. Client: stores token in localStorage as "inet_token"
-5. Client: all requests use authFetch() → Authorization: Bearer <token>
-6. Server: HTTPBearer extracts token → jwt.decode() → user lookup
+5. Client: all requests use authFetch() -> Authorization: Bearer <token>
+6. Server: HTTPBearer extracts token -> jwt.decode() -> user lookup
 ```
 
 ### Role Guards (FastAPI dependencies)
@@ -380,7 +380,7 @@ All pages use inline styles (no Tailwind classes), indigo palette (`#6366f1` / `
 
 **Algorithm:** Random Forest Classifier (scikit-learn)
 
-**Task:** Binary classification — is this employee at absenteeism risk? (`a_risque = 0/1`)
+**Task:** Binary classification - is this employee at absenteeism risk? (`a_risque = 0/1`)
 
 ### Input Features (9)
 | Feature | Description |
@@ -395,12 +395,12 @@ All pages use inline styles (no Tailwind classes), indigo palette (`#6366f1` / `
 | `taux_absence` | Absence rate (absences / total days) |
 | `taux_retard` | Lateness rate (late / total days) |
 
-### Target Label — Temporal Validation (primary)
+### Target Label - Temporal Validation (primary)
 
 To avoid the circular-labelling problem (labels derived from the same data used as features), the model uses a **temporal split**:
 
-- **Features** are computed from the historical period **2016–2023** (`get_employe_features_periode`).
-- **Labels** are derived from the *later* period **2024–2025**: an employee is labelled `a_risque = 1` if their absence rate in 2024–2025 is at or above the 75th percentile.
+- **Features** are computed from the historical period **2016-2023** (`get_employe_features_periode`).
+- **Labels** are derived from the *later* period **2024-2025**: an employee is labelled `a_risque = 1` if their absence rate in 2024-2025 is at or above the 75th percentile.
 - Only employees present in both periods are kept (inner join on `employe_id`).
 
 The model therefore learns to predict *future* risk from *past* behaviour, not to restate the present.
@@ -411,9 +411,9 @@ The model therefore learns to predict *future* risk from *past* behaviour, not t
 
 The training routine (`_fit_and_evaluate`) reports three independent signals:
 
-1. **Hold-out split (80/20, stratified)** → accuracy, precision, recall, F1.
-2. **5-fold stratified cross-validation** (when ≥ 25 samples and ≥ 5 per class) → mean ± standard deviation of F1 and accuracy, proving the result is not a lucky split.
-3. **Rule-based baseline** (`_rule_based_f1`) → F1 of a naive "flag everyone above the 75th absence-rate percentile" rule. The Random Forest is meaningful only if it beats this baseline.
+1. **Hold-out split (80/20, stratified)** -> accuracy, precision, recall, F1.
+2. **5-fold stratified cross-validation** (when ≥ 25 samples and ≥ 5 per class) -> mean ± standard deviation of F1 and accuracy, proving the result is not a lucky split.
+3. **Rule-based baseline** (`_rule_based_f1`) -> F1 of a naive "flag everyone above the 75th absence-rate percentile" rule. The Random Forest is meaningful only if it beats this baseline.
 
 Feature importances are extracted from the trained forest. All of the above is written to `ai/models/model_metrics.json` and exposed through `GET /ai/model-info`.
 
@@ -428,7 +428,7 @@ RandomForestClassifier(
 ```
 
 ### Output
-- `probabilite`: 0–100% risk score
+- `probabilite`: 0-100% risk score
 - `niveau`: `Critique` (>70%) or `Moyen`
 - Saved as `ai/models/absenteeism_model.pkl` + `ai/models/scaler.pkl`
 - Metrics + feature importances saved as `ai/models/model_metrics.json`
@@ -451,20 +451,20 @@ A separate **Isolation Forest** (`ai/anomaly_detector.py`) flags abnormal attend
 
 ### Steps
 ```
-Extract  →  Transform  →  Load (KPI tables)  →  Load (star schema)
+Extract  ->  Transform  ->  Load (KPI tables)  ->  Load (star schema)
 ```
 
-1. **Extract** (`etl/extract.py`) — reads raw `Pointage`, `Absence`, `Conge`, `Employe` from OLTP tables
-2. **Transform** (`etl/transform.py`) — calculates KPIs per employee:
+1. **Extract** (`etl/extract.py`) - reads raw `Pointage`, `Absence`, `Conge`, `Employe` from OLTP tables
+2. **Transform** (`etl/transform.py`) - calculates KPIs per employee:
    - `taux_presence`, `taux_absence`, `taux_retard`
    - `nb_pointages`, `nb_presents`, `nb_retards`, `nb_absences`
    - `total_heures`, `moy_heures_jour`, `total_retard_min`
    - `nb_conges`, `jours_conges`
-3. **Load — KPI tables** (`etl/load.py`) — upserts into:
-   - `DW_KPI_Employe` — one row per employee
-   - `DW_KPI_Mensuel` — one row per month × department
-4. **Load — star schema** (`etl/load_star.py`, `run_star_etl()`) — idempotent full refresh of the Kimball model:
-   - `Dim_Date` (generated calendar 2015–2027, skipped if already up to date)
+3. **Load - KPI tables** (`etl/load.py`) - upserts into:
+   - `DW_KPI_Employe` - one row per employee
+   - `DW_KPI_Mensuel` - one row per month × department
+4. **Load - star schema** (`etl/load_star.py`, `run_star_etl()`) - idempotent full refresh of the Kimball model:
+   - `Dim_Date` (generated calendar 2015-2027, skipped if already up to date)
    - `Dim_Departement`, `Dim_Employe`, `Dim_Formation` (truncate-and-reload, SCD type 1)
    - `Fact_Pointage`, `Fact_Absence`, `Fact_Conge`, `Fact_Formation` (joined to dimensions by surrogate key)
 
@@ -486,30 +486,30 @@ Assigned deterministically from `employe_id` (same employee always same profile)
 
 | Profile | % of Staff | Absent Rate | Late Rate | Entry Time |
 |---|---|---|---|---|
-| Punctual | 30% | 2% | 3% | 7:45–8:05 |
-| Normal | 40% | 7% | 12% | 7:55–8:15 |
-| Often Late | 20% | 5% | 35% | 8:15–9:30 |
-| High Absentee | 10% | 20% | 8% | 8:00–8:30 |
+| Punctual | 30% | 2% | 3% | 7:45-8:05 |
+| Normal | 40% | 7% | 12% | 7:55-8:15 |
+| Often Late | 20% | 5% | 35% | 8:15-9:30 |
+| High Absentee | 10% | 20% | 8% | 8:00-8:30 |
 
 ### Seasonal Patterns
 | Season | Effect |
 |---|---|
-| Winter (Dec–Jan) | +40% absence rate, illness motifs (sick leave) |
-| Summer (Jun–Aug) | 18% leave requests per day (vs 4% normal), weighted toward Annuel |
-| Ramadan (auto-detected) | Shifted hours: arrive 9:00–9:30, leave 15:30–16:30 |
+| Winter (Dec-Jan) | +40% absence rate, illness motifs (sick leave) |
+| Summer (Jun-Aug) | 18% leave requests per day (vs 4% normal), weighted toward Annuel |
+| Ramadan (auto-detected) | Shifted hours: arrive 9:00-9:30, leave 15:30-16:30 |
 
-**Ramadan periods detected:** 2024 (Mar 11–Apr 9), 2025 (Mar 1–29), 2026 (Feb 17–Mar 17)
+**Ramadan periods detected:** 2024 (Mar 11-Apr 9), 2025 (Mar 1-29), 2026 (Feb 17-Mar 17)
 
 ### Historical Backfill
 ```powershell
 # Seed 2016 to today (2,701 workdays, ~200k records)
 .\venv\Scripts\python.exe scripts/seed_history.py --start-year 2016
 
-# Seed extras: formations, missions, documents (2016–now)
+# Seed extras: formations, missions, documents (2016-now)
 .\venv\Scripts\python.exe scripts/seed_extras.py --start-year 2016
 ```
 
-**Results seeded (2016–2026):**
+**Results seeded (2016-2026):**
 - Pointage records: ~200,000
 - Absences: ~13,300
 - Leave requests: ~14,600
@@ -526,9 +526,9 @@ Assigned deterministically from `employe_id` (same employee always same profile)
 
 | Time | Job | Description |
 |---|---|---|
-| Mon–Fri 07:00 | `job_simulate_entrees` | Simulate morning entries for all active employees |
-| Mon–Fri 18:00 | `job_simulate_sorties` | Simulate exits + generate leave requests |
-| Daily 23:00 | `job_run_etl` | ETL pipeline → update data warehouse |
+| Mon-Fri 07:00 | `job_simulate_entrees` | Simulate morning entries for all active employees |
+| Mon-Fri 18:00 | `job_simulate_sorties` | Simulate exits + generate leave requests |
+| Daily 23:00 | `job_run_etl` | ETL pipeline -> update data warehouse |
 | Daily 00:00 | `job_send_email` | Build and send HTML daily digest email |
 | Sunday 02:00 | `job_retrain_model` | Retrain Random Forest + send accuracy report |
 
@@ -554,7 +554,7 @@ python notifications/scheduler.py --now-seed --seed-days 90   # last 90 days
 
 ### Setup
 1. Run `powerbi/views.sql` in SSMS against `GestionRH_Intelligente`
-2. Power BI Desktop → **Get Data → SQL Server** → `localhost` / `GestionRH_Intelligente`
+2. Power BI Desktop -> **Get Data -> SQL Server** -> `localhost` / `GestionRH_Intelligente`
 3. Import all `vw_PBI_*` views
 4. Set relationships: all views connect to `vw_PBI_Employe` on `employe_id`
 5. Create `_Measures` table and paste DAX from `powerbi/dax_measures.md`
@@ -586,14 +586,14 @@ python notifications/scheduler.py --now-seed --seed-days 90   # last 90 days
 
 ## 13. Testing & Quality
 
-**Location:** `tests/test_business_logic.py` — run with `pytest tests/ -v`
+**Location:** `tests/test_business_logic.py` - run with `pytest tests/ -v`
 
 17 unit tests covering core business logic, with **no database dependency** (pure functions and mocked log objects):
 
 | Test class | Count | What it covers |
 |---|---|---|
 | `TestCalculerJoursOuvrables` | 8 | Working-day computation for leave: same day, weekends, full week, 31-day months (regression for the date-overflow bug), month/year boundaries, full-year range |
-| `TestDeterminerTypePointage` | 6 | Punch-type state machine: ENTREE → DEBUT_PAUSE → FIN_PAUSE → SORTIE, and duplicate (`DOUBLON`) detection within 2 minutes / after a full day |
+| `TestDeterminerTypePointage` | 6 | Punch-type state machine: ENTREE -> DEBUT_PAUSE -> FIN_PAUSE -> SORTIE, and duplicate (`DOUBLON`) detection within 2 minutes / after a full day |
 | `TestAIFeatures` | 3 | KPI feature maths: absence-rate computation, zero-pointage edge case, zero-lateness case |
 
 All 17 tests pass. The suite acts as a regression guard for the two bugs fixed during the audit (the leave date-arithmetic overflow and the duplicate punch-type function).
@@ -620,7 +620,7 @@ GestionRH/
 │       └── formation.py        # /formations/*
 │
 ├── models/
-│   └── models.py               # SQLAlchemy ORM — 16 tables
+│   └── models.py               # SQLAlchemy ORM - 16 tables
 │
 ├── services/                   # Business logic layer
 │   ├── employe_service.py
@@ -659,14 +659,14 @@ GestionRH/
 │   └── simulate_day.py         # Employee simulation (profiles + seasonal patterns)
 │
 ├── scripts/                    # One-shot utility scripts
-│   ├── seed_history.py         # Backfill pointage/absence 2016→now
+│   ├── seed_history.py         # Backfill pointage/absence 2016->now
 │   ├── seed_extras.py          # Backfill formations/missions/documents
 │   ├── clean_database.py       # Wipe simulation data
 │   ├── process_pointages.py    # Recalculate pointage stats
 │   └── update_departments.py   # Sync department data
 │
 ├── notifications/
-│   ├── scheduler.py            # APScheduler — 5 cron jobs
+│   ├── scheduler.py            # APScheduler - 5 cron jobs
 │   ├── digest_builder.py       # Build daily HTML email
 │   ├── email_sender.py         # SMTP email sending
 │   └── env.example             # Email config template
@@ -726,7 +726,7 @@ cd frontend-next
 npm run dev        # starts on http://localhost:3000
 ```
 
-### Scheduler (optional — runs background jobs)
+### Scheduler (optional - runs background jobs)
 ```powershell
 .\venv\Scripts\python.exe notifications/scheduler.py
 ```
@@ -761,4 +761,4 @@ sqlcmd -S localhost -d GestionRH_Intelligente -E -i powerbi/views.sql
 
 ---
 
-*iNET RH — PFE 2025/2026 — Hachem Zenati*
+*iNET RH - PFE 2025/2026 - Hachem Zenati*

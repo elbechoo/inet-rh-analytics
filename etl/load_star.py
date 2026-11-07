@@ -1,5 +1,5 @@
 """
-ETL — Star Schema Loader (Kimball methodology)
+ETL - Star Schema Loader (Kimball methodology)
 Populates: Dim_Date, Dim_Departement, Dim_Employe,
            Fact_Pointage, Fact_Absence, Fact_Conge
 """
@@ -37,7 +37,7 @@ NOMS_JOUR = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"]
 # ──────────────────────────────────────────────
 
 def load_dim_date(annee_debut: int = 2015, annee_fin: int = 2027):
-    logger.info("Dim_Date — generating calendar rows...")
+    logger.info("Dim_Date - generating calendar rows...")
 
     rows = []
     current = date(annee_debut, 1, 1)
@@ -71,7 +71,7 @@ def load_dim_date(annee_debut: int = 2015, annee_fin: int = 2027):
         conn.commit()
 
     df.to_sql("Dim_Date", engine, if_exists="append", index=False)
-    logger.info(f"Dim_Date — {len(df)} rows loaded.")
+    logger.info(f"Dim_Date - {len(df)} rows loaded.")
 
 
 # ──────────────────────────────────────────────
@@ -79,7 +79,7 @@ def load_dim_date(annee_debut: int = 2015, annee_fin: int = 2027):
 # ──────────────────────────────────────────────
 
 def load_dim_departement():
-    logger.info("Dim_Departement — loading...")
+    logger.info("Dim_Departement - loading...")
 
     query = """
         SELECT departement_id,
@@ -105,7 +105,7 @@ def load_dim_departement():
         conn.commit()
 
     df.to_sql("Dim_Departement", engine, if_exists="append", index=False)
-    logger.info(f"Dim_Departement — {len(df)} rows loaded.")
+    logger.info(f"Dim_Departement - {len(df)} rows loaded.")
 
 
 # ──────────────────────────────────────────────
@@ -113,7 +113,7 @@ def load_dim_departement():
 # ──────────────────────────────────────────────
 
 def load_dim_employe():
-    logger.info("Dim_Employe — loading...")
+    logger.info("Dim_Employe - loading...")
 
     query = """
         SELECT e.employe_id,
@@ -133,7 +133,7 @@ def load_dim_employe():
     df["date_chargement"] = pd.Timestamp.now()
 
     df.to_sql("Dim_Employe", engine, if_exists="append", index=False)
-    logger.info(f"Dim_Employe — {len(df)} rows loaded.")
+    logger.info(f"Dim_Employe - {len(df)} rows loaded.")
 
 
 # ──────────────────────────────────────────────
@@ -141,7 +141,7 @@ def load_dim_employe():
 # ──────────────────────────────────────────────
 
 def load_fact_pointage():
-    logger.info("Fact_Pointage — loading...")
+    logger.info("Fact_Pointage - loading...")
 
     query = """
         SELECT p.pointage_id,
@@ -183,7 +183,7 @@ def load_fact_pointage():
         "est_present", "est_retard", "sortie_manquante",
     ]
     df[cols].to_sql("Fact_Pointage", engine, if_exists="append", index=False)
-    logger.info(f"Fact_Pointage — {len(df)} rows loaded.")
+    logger.info(f"Fact_Pointage - {len(df)} rows loaded.")
 
 
 # ──────────────────────────────────────────────
@@ -191,7 +191,7 @@ def load_fact_pointage():
 # ──────────────────────────────────────────────
 
 def load_fact_absence():
-    logger.info("Fact_Absence — loading...")
+    logger.info("Fact_Absence - loading...")
 
     query = """
         SELECT a.absence_id,
@@ -217,7 +217,7 @@ def load_fact_absence():
         "motif", "est_justifiee", "nb_absences",
     ]
     df[cols].to_sql("Fact_Absence", engine, if_exists="append", index=False)
-    logger.info(f"Fact_Absence — {len(df)} rows loaded.")
+    logger.info(f"Fact_Absence - {len(df)} rows loaded.")
 
 
 # ──────────────────────────────────────────────
@@ -225,7 +225,7 @@ def load_fact_absence():
 # ──────────────────────────────────────────────
 
 def load_fact_conge():
-    logger.info("Fact_Conge — loading...")
+    logger.info("Fact_Conge - loading...")
 
     query = """
         SELECT c.conge_id,
@@ -253,7 +253,7 @@ def load_fact_conge():
         "conge_id", "type_conge", "statut", "nb_jours",
     ]
     df[cols].to_sql("Fact_Conge", engine, if_exists="append", index=False)
-    logger.info(f"Fact_Conge — {len(df)} rows loaded.")
+    logger.info(f"Fact_Conge - {len(df)} rows loaded.")
 
 
 # ──────────────────────────────────────────────
@@ -261,7 +261,7 @@ def load_fact_conge():
 # ──────────────────────────────────────────────
 
 def load_dim_formation():
-    logger.info("Dim_Formation — loading...")
+    logger.info("Dim_Formation - loading...")
 
     query = """
         SELECT formation_id,
@@ -277,7 +277,7 @@ def load_dim_formation():
     df["date_chargement"] = pd.Timestamp.now()
 
     df.to_sql("Dim_Formation", engine, if_exists="append", index=False)
-    logger.info(f"Dim_Formation — {len(df)} rows loaded.")
+    logger.info(f"Dim_Formation - {len(df)} rows loaded.")
 
 
 # ──────────────────────────────────────────────
@@ -287,7 +287,7 @@ def load_dim_formation():
 # ──────────────────────────────────────────────
 
 def load_fact_formation():
-    logger.info("Fact_Formation — loading...")
+    logger.info("Fact_Formation - loading...")
 
     query = """
         SELECT pf.presence_id,
@@ -318,7 +318,7 @@ def load_fact_formation():
         "presence_id", "est_present", "score", "nb_participations",
     ]
     df[cols].to_sql("Fact_Formation", engine, if_exists="append", index=False)
-    logger.info(f"Fact_Formation — {len(df)} rows loaded.")
+    logger.info(f"Fact_Formation - {len(df)} rows loaded.")
 
 
 # ──────────────────────────────────────────────
@@ -326,9 +326,9 @@ def load_fact_formation():
 # ──────────────────────────────────────────────
 
 def run_star_etl():
-    """Full star schema refresh — idempotent, safe to re-run."""
+    """Full star schema refresh - idempotent, safe to re-run."""
     logger.info("=" * 50)
-    logger.info("STAR SCHEMA ETL — START")
+    logger.info("STAR SCHEMA ETL - START")
     logger.info("=" * 50)
 
     load_dim_date()
@@ -341,7 +341,7 @@ def run_star_etl():
     load_fact_formation()
 
     logger.info("=" * 50)
-    logger.info("STAR SCHEMA ETL — COMPLETE")
+    logger.info("STAR SCHEMA ETL - COMPLETE")
     logger.info("=" * 50)
 
 

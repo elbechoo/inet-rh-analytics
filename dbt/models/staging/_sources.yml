@@ -1,0 +1,113 @@
+version: 2
+
+sources:
+  - name: hr_app
+    description: >
+      The operational HR database written by the iNET RH application. Read-only
+      from here - nothing in dbt writes back to it.
+    database: "{{ env_var('DB_DATABASE', 'inet_rh') }}"
+    schema: public
+
+    # SQLAlchemy created these tables with capitalised names, so Postgres stored
+    # them case-sensitively and every reference has to be quoted.
+    quoting:
+      identifier: true
+
+    tables:
+      - name: Employe
+        description: One row per employee, current state (no history kept).
+        columns:
+          - name: employe_id
+            description: Primary key.
+            tests: [unique, not_null]
+          - name: matricule
+            description: Payroll reference, unique per employee.
+            tests: [unique, not_null]
+          - name: departement_id
+            tests:
+              - not_null
+              - relationships:
+                  arguments:
+                    to: source('hr_app', 'Departement')
+                    field: departement_id
+          - name: manager_id
+            description: >
+              Self-reference to the employee this person reports to. Null at the
+              top of the hierarchy, so not_null would be wrong here.
+            tests:
+              - relationships:
+                  arguments:
+                    to: source('hr_app', 'Employe')
+                    field: employe_id
+          - name: statut
+            tests:
+              - accepted_values:
+                  arguments:
+                    values: ["Actif", "Inactif"]
+
+      - name: Departement
+        columns:
+          - name: departement_id
+            tests: [unique, not_null]
+
+      - name: Pointage
+        description: One row per employee per worked day, already consolidated.
+        columns:
+          - name: pointage_id
+            tests: [unique, not_null]
+          - name: employe_id
+            tests:
+              - not_null
+              - relationships:
+                  arguments:
+                    to: source('hr_app', 'Employe')
+                    field: employe_id
+          - name: date_pointage
+            tests: [not_null]
+
+      - name: Absence
+        description: One row per absence event.
+        columns:
+          - name: absence_id
+            tests: [unique, not_null]
+          - name: employe_id
+            tests:
+              - not_null
+              - relationships:
+                  arguments:
+                    to: source('hr_app', 'Employe')
+                    field: employe_id
+          - name: date_absence
+            tests: [not_null]
+
+      - name: Conge
+        description: One row per leave request, whatever its status.
+        columns:
+          - name: conge_id
+            tests: [unique, not_null]
+          - name: employe_id
+            tests:
+              - not_null
+              - relationships:
+                  arguments:
+                    to: source('hr_app', 'Employe')
+                    field: employe_id
+          - name: statut
+            tests:
+              - accepted_values:
+                  arguments:
+                    values: ["En attente", "Approuve", "Approuvé", "Refuse", "Refusé", "Annule", "Annulé"]
+
+      - name: JourFerie
+        description: >
+          Public holiday calendar. Small, but it drives every working-day
+          calculation in the warehouse - if it is empty or wrong, attendance
+          rates and leave balances are both wrong.
+        columns:
+          - name: date_ferie
+            tests: [unique, not_null]
+          - name: type_ferie
+            tests:
+              - accepted_values:
+                  arguments:
+                    values: ["civil", "religieux", "entreprise"]

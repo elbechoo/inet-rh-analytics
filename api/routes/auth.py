@@ -34,7 +34,7 @@ def create_access_token(user_id: int, role: str, tenant: str) -> str:
     # The tenant is signed into the token. Each client has its own database, so
     # without this a token issued by Agency A would be accepted on Agency B's
     # subdomain and resolve to whichever user happens to hold the same id there
-    # — possibly an administrator.
+    # - possibly an administrator.
     now = datetime.now(timezone.utc)
     payload = {
         "sub": str(user_id),
@@ -88,7 +88,7 @@ def logout(
     taken elsewhere would stay valid until it expired, so we also record a
     revocation point: every token issued to this user before now is refused.
 
-    Deliberately tolerant of an unauthenticated call — logging out twice, or
+    Deliberately tolerant of an unauthenticated call - logging out twice, or
     with an already-expired token, should succeed quietly rather than error.
     """
     response.delete_cookie(key=COOKIE_NAME, path="/")

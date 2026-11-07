@@ -73,7 +73,7 @@ REASONS = {
     28: ("Consultation dentaire", True),
 }
 
-# The dataset covers Jul 2007 → Jul 2010. We map it onto recent years so the
+# The dataset covers Jul 2007 -> Jul 2010. We map it onto recent years so the
 # records sit inside the window the dashboards and the model actually query.
 BASE_YEAR = date.today().year - 3
 
@@ -104,14 +104,14 @@ def to_int(v, default=0):
 def approx_date(month: int, weekday_code: int, seq: int) -> date:
     """Build a plausible date from the dataset's month + day-of-week columns.
 
-    The dataset gives month (1-12) and day of week (2=Mon … 6=Fri) but no year
+    The dataset gives month (1-12) and day of week (2=Mon ... 6=Fri) but no year
     or day number, so we spread records deterministically across the month and
     land them on the stated weekday.
     """
     if not 1 <= month <= 12:
         month = ((seq % 12) + 1)
     year = BASE_YEAR + (seq // 240)          # roll forward roughly per year of data
-    target_wd = max(0, min(4, weekday_code - 2))   # 2→Mon … 6→Fri
+    target_wd = max(0, min(4, weekday_code - 2))   # 2->Mon ... 6->Fri
     d = date(year, month, 1)
     while d.weekday() != target_wd:
         d += timedelta(days=1)
@@ -136,7 +136,7 @@ def main() -> None:
 
     rows = parse_rows(args.file)
     if not rows:
-        print("no rows parsed — is this the right file?")
+        print("no rows parsed - is this the right file?")
         sys.exit(1)
 
     by_emp = defaultdict(list)
@@ -222,7 +222,7 @@ def main() -> None:
             db.commit()
 
         print(f"\nimported: {created_emp} employees, {created_abs} absence records")
-        print("These are real absences from real people — the model now has "
+        print("These are real absences from real people - the model now has "
               "genuine behaviour to learn from.")
         print("\nNext: retrain and check whether it beats the baseline on real data:")
         print("   curl -X POST http://localhost:8000/ai/entrainer-modele-v2")

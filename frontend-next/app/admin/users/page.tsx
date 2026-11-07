@@ -218,7 +218,7 @@ export default function AdminUsers() {
         {totalPages > 1 && (
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 20px', borderTop: '1px solid rgba(12,36,54,0.04)' }}>
             <span style={{ fontSize: '0.78rem', color: '#6B879B' }}>
-              {filtered.length} users — page {page} / {totalPages}
+              {filtered.length} users - page {page} / {totalPages}
             </span>
             <div style={{ display: 'flex', gap: 6 }}>
               <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} style={{

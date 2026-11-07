@@ -1,5 +1,5 @@
 -- =============================================================
--- iNET RH — Power BI Views
+-- iNET RH - Power BI Views
 -- Run once against GestionRH_Intelligente
 -- All views are idempotent (DROP + CREATE)
 -- =============================================================
@@ -8,7 +8,7 @@ USE GestionRH_Intelligente;
 GO
 
 -- =============================================================
--- 1. vw_PBI_Employe  (dimension — used by all pages)
+-- 1. vw_PBI_Employe  (dimension - used by all pages)
 -- =============================================================
 IF OBJECT_ID('vw_PBI_Employe', 'V') IS NOT NULL DROP VIEW vw_PBI_Employe;
 GO

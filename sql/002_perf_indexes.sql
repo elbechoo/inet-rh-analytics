@@ -1,5 +1,5 @@
 -- =============================================================
--- 002_perf_indexes.sql — hot-column indexes for the OLTP database
+-- 002_perf_indexes.sql - hot-column indexes for the OLTP database
 -- =============================================================
 -- Run once against GestionRH_Intelligente. Idempotent: every CREATE
 -- INDEX is guarded by an IF NOT EXISTS check so re-running is safe.

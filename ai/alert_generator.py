@@ -1,15 +1,15 @@
 """
-ai/alert_generator.py — composes the AI alerts shown on the HR dashboard.
+ai/alert_generator.py - composes the AI alerts shown on the HR dashboard.
 
 Improvements over the previous version:
   * messages are in **English** (the rest of the UI is English-only, so the
     French strings used to leak into a clean interface);
   * the same employee never receives duplicate active alerts of the same
-    type — before writing, we drop the previous *unread* alert of the same
+    type - before writing, we drop the previous *unread* alert of the same
     (employe_id, type_alerte) tuple so the bell shows a single, current
     line per situation instead of a growing list of identical entries;
-  * messages are **actionable** — they end with the HR action that follows
-    from the signal (schedule a meeting, ask for a justification, …) so
+  * messages are **actionable** - they end with the HR action that follows
+    from the signal (schedule a meeting, ask for a justification, ...) so
     the manager opens the alert and already knows what to do;
   * an upper bound per category prevents one busy day from filling the
     dashboard with 200 anomaly lines;
@@ -65,7 +65,7 @@ def _excluded_employee_ids(db: Session) -> set[int]:
     """Set of employe_id values that must be skipped by every alert path.
 
     Matching is case-insensitive and substring-based so a poste like
-    'Senior Director — Operations' is still caught by 'Director'.
+    'Senior Director - Operations' is still caught by 'Director'.
     """
     rows = db.query(Employe.employe_id, Employe.poste).all()
     keys = [k.upper() for k in EXECUTIVE_POSTES]
@@ -95,7 +95,7 @@ def _employee_display(db: Session, employe_id: int, fallback: str = "") -> str:
 
 
 def _upsert(db: Session, employe_id: int, type_alerte: str, niveau: str, message: str):
-    """Replace the unread alert of the same (employee, type) — never duplicate."""
+    """Replace the unread alert of the same (employee, type) - never duplicate."""
     existing = db.query(AlerteIA).filter(
         and_(
             AlerteIA.employe_id == employe_id,
@@ -115,7 +115,7 @@ def _upsert(db: Session, employe_id: int, type_alerte: str, niveau: str, message
 
 
 # ──────────────────────────────────────────────────────────────────────
-# public API — unchanged signatures so the schedulers keep working
+# public API - unchanged signatures so the schedulers keep working
 # ──────────────────────────────────────────────────────────────────────
 def generer_toutes_alertes(db: Session):
     """Regenerate the AI alerts and return a summary dict."""
@@ -144,7 +144,7 @@ def generer_toutes_alertes(db: Session):
             else:
                 driver = ""
             msg = (
-                f"{name} — absenteeism risk {prob:.1f}% "
+                f"{name} - absenteeism risk {prob:.1f}% "
                 f"({nb_abs} absence{'s' if nb_abs > 1 else ''}, "
                 f"{nb_ret} late{'s' if nb_ret > 1 else ''}). "
                 f"{driver}"
@@ -170,9 +170,9 @@ def generer_toutes_alertes(db: Session):
                 "Pointage très tôt le matin"         : "very early-morning punch",
                 "Comportement de pointage inhabituel": "unusual punch pattern",
             }.get(anom.get("type_anomalie"), "abnormal punch pattern")
-            hour = anom.get("heure", "—")
+            hour = anom.get("heure", "-")
             msg = (
-                f"{name} — {type_label} at {hour}h. "
+                f"{name} - {type_label} at {hour}h. "
                 "Review the punch log and contact the employee if it persists."
             )
             _upsert(db, anom["employe_id"], "Punch anomaly", anom["niveau"], msg)
@@ -187,7 +187,7 @@ def generer_toutes_alertes(db: Session):
         for emp in sans_pointage[:MAX_NO_PUNCH_ALERTS]:
             name = _employee_display(db, emp["employe_id"], fallback=emp.get("nom", ""))
             msg = (
-                f"{name} — no punch recorded today. "
+                f"{name} - no punch recorded today. "
                 "Confirm presence, otherwise log an unjustified absence."
             )
             _upsert(db, emp["employe_id"], "No punch today", "Critique", msg)
@@ -204,7 +204,7 @@ def generer_toutes_alertes(db: Session):
             name   = _employee_display(db, emp["employe_id"], fallback=emp.get("nom", ""))
             nb_ret = int(emp.get("nb_retards", 0))
             msg = (
-                f"{name} — {nb_ret} late arrival{'s' if nb_ret > 1 else ''} this month. "
+                f"{name} - {nb_ret} late arrival{'s' if nb_ret > 1 else ''} this month. "
                 "Consider a formal reminder of the company schedule."
             )
             _upsert(db, emp["employe_id"], "Frequent lateness", emp["niveau"], msg)
@@ -217,7 +217,7 @@ def generer_toutes_alertes(db: Session):
 
 
 # ──────────────────────────────────────────────────────────────────────
-# Reader helpers — signatures unchanged so the routes keep working.
+# Reader helpers - signatures unchanged so the routes keep working.
 # ──────────────────────────────────────────────────────────────────────
 def get_alertes(db: Session, non_lues_seulement: bool = False):
     query = db.query(AlerteIA)

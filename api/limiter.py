@@ -1,7 +1,7 @@
 """Shared rate limiter .
 
 Uses slowapi (a Starlette/FastAPI wrapper around the `limits` library) to cap
-how often sensitive endpoints — chiefly /auth/login — can be hit from one
+how often sensitive endpoints - chiefly /auth/login - can be hit from one
 client, blocking password brute-force attacks.
 
 Install:  pip install slowapi

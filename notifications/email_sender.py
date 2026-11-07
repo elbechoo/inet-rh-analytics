@@ -13,7 +13,7 @@ load_dotenv()
 logger = logging.getLogger(__name__)
 
 # ============================================
-# Config Gmail — à mettre dans .env
+# Config Gmail - à mettre dans .env
 # ============================================
 GMAIL_USER     = os.getenv("GMAIL_USER")      # ex: inetRH@gmail.com
 GMAIL_PASSWORD = os.getenv("GMAIL_PASSWORD")  # App Password (16 chars)
@@ -46,7 +46,7 @@ def send_email(subject: str, html_body: str, to_email: str = None):
         return True
 
     except smtplib.SMTPAuthenticationError:
-        logger.error("❌ Authentification Gmail échouée — vérifier App Password")
+        logger.error("❌ Authentification Gmail échouée - vérifier App Password")
         return False
     except Exception as e:
         logger.error(f"❌ Erreur envoi email: {e}")

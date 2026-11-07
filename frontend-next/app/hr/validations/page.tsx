@@ -142,7 +142,7 @@ export default function Validations() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {tab === 'conges' && (conges.length === 0 ? <EmptyState /> : conges.map(c =>
           <ActionRow key={c.conge_id} id={c.conge_id} title={c.type_conge}
-            sub={`${c.date_debut} — ${c.date_fin} · ${c.nb_jours} day(s)`}
+            sub={`${c.date_debut} - ${c.date_fin} · ${c.nb_jours} day(s)`}
             onApprove={() => validerConge(c.conge_id, true)}
             onReject={() => validerConge(c.conge_id, false)}
           />
@@ -156,7 +156,7 @@ export default function Validations() {
         ))}
         {tab === 'missions' && (missions.length === 0 ? <EmptyState /> : missions.map(m =>
           <ActionRow key={m.mission_id} id={m.mission_id} title={m.lieu}
-            sub={`${m.date_debut} — ${m.date_fin} · ${m.type_mission}`}
+            sub={`${m.date_debut} - ${m.date_fin} · ${m.type_mission}`}
             onApprove={() => validerMission(m.mission_id, true)}
             onReject={() => validerMission(m.mission_id, false)}
           />

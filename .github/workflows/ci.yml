@@ -38,7 +38,7 @@ jobs:
       DB_DATABASE: inet_rh_test
       DB_USER: inet
       DB_PASSWORD: ci-test-password
-      # Throwaway value for CI only. Never a real secret — the app refuses to
+      # Throwaway value for CI only. Never a real secret - the app refuses to
       # boot without one, so the pipeline has to supply something.
       SECRET_KEY: ci-only-not-a-real-secret-000000000000000000
 

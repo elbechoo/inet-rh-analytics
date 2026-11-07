@@ -23,7 +23,16 @@ COPY . .
 
 EXPOSE 8000
 
-# Run DB migrations (if any) then start the API. `|| true` keeps the container
-# starting even before the first migration exists; the app also create_all()s
-# the ORM tables on startup.
-CMD ["sh", "-c", "alembic upgrade head || true; uvicorn api.main:app --host 0.0.0.0 --port 8000"]
+# Run DB migrations, then start the API.
+#
+# This used to end the migration step with `|| true`, so the container would
+# boot before the first migration existed. The cost of that convenience: a
+# failed or absent migration looked exactly like a successful one. Combined
+# with create_all(), which adds missing tables but never alters existing ones,
+# the deployed schema drifted behind the ORM models for months without a single
+# error - a column added to the models simply never reached the database, and
+# nothing noticed until dbt introspected the real column list.
+#
+# Now a failed migration stops the container. A database the API cannot
+# correctly serve should be loud, not silently half-migrated.
+CMD ["sh", "-c", "alembic upgrade head && uvicorn api.main:app --host 0.0.0.0 --port 8000"]

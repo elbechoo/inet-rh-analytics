@@ -1,7 +1,7 @@
 """
-iNET RH — Historical Data Seeder
+iNET RH - Historical Data Seeder
 Backfills realistic attendance, absence, and leave data.
-Fully idempotent — skips dates that already have pointage records.
+Fully idempotent - skips dates that already have pointage records.
 
 Usage:
     python scripts/seed_history.py                     # default: 365 days
@@ -48,8 +48,8 @@ def seed_history(start: date) -> None:
     total_workdays_estimated = int(total_calendar * 5 / 7)
 
     logger.info("=" * 60)
-    logger.info("iNET RH — HISTORICAL DATA SEEDER")
-    logger.info(f"Period    : {start} → {today - timedelta(days=1)}")
+    logger.info("iNET RH - HISTORICAL DATA SEEDER")
+    logger.info(f"Period    : {start} -> {today - timedelta(days=1)}")
     logger.info(f"Calendar  : {total_calendar} days (~{total_workdays_estimated} workdays)")
     logger.info("=" * 60)
 
@@ -79,7 +79,7 @@ def seed_history(start: date) -> None:
             # Progress every 60 workdays (~3 months)
             if total_workdays > 0 and total_workdays % 60 == 0:
                 pct = int(total_workdays / total_workdays_estimated * 100)
-                logger.info(f"  [{pct:3d}%] {current}  —  {total_workdays} workdays done")
+                logger.info(f"  [{pct:3d}%] {current}  -  {total_workdays} workdays done")
 
             current += timedelta(days=1)
 
@@ -94,7 +94,7 @@ def seed_history(start: date) -> None:
         logger.info("=" * 60)
 
     except KeyboardInterrupt:
-        logger.info("Seeder interrupted — partial data already committed to DB.")
+        logger.info("Seeder interrupted - partial data already committed to DB.")
     finally:
         db.close()
 

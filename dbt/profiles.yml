@@ -1,0 +1,35 @@
+# Connection profile.
+#
+# Credentials come from the environment, never from this file - it is committed
+# to the repository. The defaults match the Postgres container in
+# docker-compose.yml, so `dbt run` works out of the box against the local stack.
+#
+# Copy to ~/.dbt/profiles.yml, or point dbt here:
+#   dbt run --profiles-dir .
+
+inet_rh:
+  target: dev
+
+  outputs:
+    dev:
+      type: postgres
+      host: "{{ env_var('DB_SERVER', 'localhost') }}"
+      port: "{{ env_var('DB_PORT', '5432') | int }}"
+      user: "{{ env_var('DB_USER', 'inet') }}"
+      password: "{{ env_var('DB_PASSWORD') }}"
+      dbname: "{{ env_var('DB_DATABASE', 'inet_rh') }}"
+      schema: analytics
+      threads: 4
+      keepalives_idle: 0
+
+    # Same database, separate schema, so a full build can be validated without
+    # overwriting what Power BI is connected to.
+    ci:
+      type: postgres
+      host: "{{ env_var('DB_SERVER', 'localhost') }}"
+      port: "{{ env_var('DB_PORT', '5432') | int }}"
+      user: "{{ env_var('DB_USER', 'inet') }}"
+      password: "{{ env_var('DB_PASSWORD') }}"
+      dbname: "{{ env_var('DB_DATABASE', 'inet_rh') }}"
+      schema: analytics_ci
+      threads: 4

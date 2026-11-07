@@ -43,7 +43,7 @@ def main() -> None:
         )
 
         if not phantom:
-            print(f"Clean — none of your {total_absences} absences fall on a public holiday.")
+            print(f"Clean - none of your {total_absences} absences fall on a public holiday.")
             return
 
         by_date = Counter(a.date_absence for a in phantom)
@@ -56,7 +56,7 @@ def main() -> None:
             print(f"  {d}   {by_date[d]:>6}     {feries[d]}")
 
         print(f"\n{len(by_date)} holidays affected.")
-        print("These are not real absences — nobody was expected at work.")
+        print("These are not real absences - nobody was expected at work.")
 
         if not args.purge:
             print("\nRun again with --purge to delete them.")
@@ -65,7 +65,7 @@ def main() -> None:
         if not args.yes:
             print(f"\nAbout to DELETE {len(phantom)} absence rows. Back up your database first.")
             if input("Type 'delete' to confirm: ").strip().lower() != "delete":
-                print("Cancelled — nothing was changed.")
+                print("Cancelled - nothing was changed.")
                 return
 
         for a in phantom:

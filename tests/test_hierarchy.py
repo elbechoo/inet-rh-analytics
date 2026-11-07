@@ -23,7 +23,7 @@ def _deps(route) -> set[str]:
 
 def test_employee_model_has_a_reporting_line():
     # backref attributes are created when the mappers are configured, which
-    # SQLAlchemy defers until first use — force it before asserting.
+    # SQLAlchemy defers until first use - force it before asserting.
     from sqlalchemy.orm import configure_mappers
     from models.models import Employe
     configure_mappers()
@@ -35,7 +35,7 @@ def test_employee_model_has_a_reporting_line():
 
 def test_manager_id_is_nullable():
     """The top of the hierarchy reports to nobody, and a new hire may not have a
-    manager assigned yet — a non-nullable column would make both impossible."""
+    manager assigned yet - a non-nullable column would make both impossible."""
     from models.models import Employe
     assert Employe.__table__.c.manager_id.nullable is True
 
@@ -83,7 +83,7 @@ def test_listing_limit_is_capped(app):
         elif hasattr(constraint, "lt"):
             upper = constraint.lt - 1
 
-    assert upper is not None, "limit has no upper bound — a caller could request everything"
+    assert upper is not None, "limit has no upper bound - a caller could request everything"
     assert upper <= 1000
 
 
@@ -101,7 +101,7 @@ def test_tokens_carry_an_issued_at_claim():
     import inspect
     from api.routes import auth
     src = inspect.getsource(auth.create_access_token)
-    assert '"iat"' in src, "token has no iat claim — revocation cannot work"
+    assert '"iat"' in src, "token has no iat claim - revocation cannot work"
 
 
 def test_logout_records_a_revocation_point():

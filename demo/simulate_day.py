@@ -1,8 +1,8 @@
 """
-iNET RH — Enhanced Demo Simulator
+iNET RH - Enhanced Demo Simulator
 Employee profiles + seasonal patterns for realistic simulation.
-  - 07:00 → Morning entries
-  - 18:00 → Evening exits + leave requests
+  - 07:00 -> Morning entries
+  - 18:00 -> Evening exits + leave requests
 """
 import sys
 import os
@@ -23,37 +23,37 @@ logger = logging.getLogger(__name__)
 # ─────────────────────────────────────────
 # EMPLOYEE PROFILES
 # ─────────────────────────────────────────
-# Deterministically assigned per employee — same employee always same profile.
+# Deterministically assigned per employee - same employee always same profile.
 # Distribution: 30% punctual, 40% normal, 20% often-late, 10% high-absentee
 
 PROFILES = {
     "punctual": {
         "prob_absent":       0.02,
         "prob_late":         0.03,
-        "entry_ontime_min": -15,  "entry_ontime_max":  5,   # 7:45 → 8:05
-        "entry_late_min":    10,  "entry_late_max":   30,   # 8:10 → 8:30
-        "exit_min":           0,  "exit_max":         20,   # 17:00 → 17:20
+        "entry_ontime_min": -15,  "entry_ontime_max":  5,   # 7:45 -> 8:05
+        "entry_late_min":    10,  "entry_late_max":   30,   # 8:10 -> 8:30
+        "exit_min":           0,  "exit_max":         20,   # 17:00 -> 17:20
     },
     "normal": {
         "prob_absent":       0.07,
         "prob_late":         0.12,
-        "entry_ontime_min":  -5,  "entry_ontime_max": 15,   # 7:55 → 8:15
-        "entry_late_min":    20,  "entry_late_max":   60,   # 8:20 → 9:00
-        "exit_min":           0,  "exit_max":         45,   # 17:00 → 17:45
+        "entry_ontime_min":  -5,  "entry_ontime_max": 15,   # 7:55 -> 8:15
+        "entry_late_min":    20,  "entry_late_max":   60,   # 8:20 -> 9:00
+        "exit_min":           0,  "exit_max":         45,   # 17:00 -> 17:45
     },
     "often_late": {
         "prob_absent":       0.05,
         "prob_late":         0.35,
-        "entry_ontime_min":  15,  "entry_ontime_max": 30,   # 8:15 → 8:30
-        "entry_late_min":    30,  "entry_late_max":   90,   # 8:30 → 9:30
-        "exit_min":           0,  "exit_max":         60,   # 17:00 → 18:00
+        "entry_ontime_min":  15,  "entry_ontime_max": 30,   # 8:15 -> 8:30
+        "entry_late_min":    30,  "entry_late_max":   90,   # 8:30 -> 9:30
+        "exit_min":           0,  "exit_max":         60,   # 17:00 -> 18:00
     },
     "high_absentee": {
         "prob_absent":       0.20,
         "prob_late":         0.08,
-        "entry_ontime_min":   0,  "entry_ontime_max": 30,   # 8:00 → 8:30
-        "entry_late_min":     5,  "entry_late_max":   40,   # 8:05 → 8:40
-        "exit_min":         -30,  "exit_max":         30,   # 16:30 → 17:30
+        "entry_ontime_min":   0,  "entry_ontime_max": 30,   # 8:00 -> 8:30
+        "entry_late_min":     5,  "entry_late_max":   40,   # 8:05 -> 8:40
+        "exit_min":         -30,  "exit_max":         30,   # 16:30 -> 17:30
     },
 }
 
@@ -79,7 +79,7 @@ def get_profile(employe_id: int) -> dict:
 # BEHAVIOURAL DRIFT
 # ─────────────────────────────────────────────────────────────
 # A fixed profile per employee means nobody's behaviour ever changes, so the
-# question HR actually cares about — "who is getting worse?" — has no answer in
+# question HR actually cares about - "who is getting worse?" - has no answer in
 # the data, and no model can learn it. Real workforces do not behave that way:
 # disengagement builds over months and shows up in attendance well before a
 # resignation.
@@ -121,7 +121,7 @@ def drift_multiplier(employe_id: int, target_date: date) -> float:
     """How much this employee's absence tendency is elevated on this date.
 
     1.0 means unchanged. Rises gradually through the decline phase rather than
-    stepping, so the trend is visible in a rolling window — which is exactly the
+    stepping, so the trend is visible in a rolling window - which is exactly the
     signal the deterioration model is meant to pick up.
     """
     plan = _drift_plan(employe_id)
@@ -136,7 +136,7 @@ def drift_multiplier(employe_id: int, target_date: date) -> float:
 
     since = day - start
     if plan["recovers"] and since > plan["recovery_after"]:
-        # Improvement is faster than decline — a resolved problem, not a slow fade.
+        # Improvement is faster than decline - a resolved problem, not a slow fade.
         fade = (since - plan["recovery_after"]) / 90.0
         if fade >= 1.0:
             return 1.0
@@ -255,7 +255,7 @@ _FERIES_CACHE: set | None = None
 def _is_ferie(db: Session, d: date) -> bool:
     """Is this a non-working public holiday?
 
-    The whole calendar is loaded once per process — the seeder calls this for
+    The whole calendar is loaded once per process - the seeder calls this for
     every day of every year, and one query per day would dominate its runtime.
     Returns False if the calendar has not been seeded, so simulation still
     works on a database without holidays.
@@ -272,7 +272,7 @@ def _is_ferie(db: Session, d: date) -> bool:
 
 
 # ─────────────────────────────────────────
-# CORE SIMULATION — ENTRIES
+# CORE SIMULATION - ENTRIES
 # ─────────────────────────────────────────
 def simulate_day_entrees(db: Session, target_date: date) -> dict:
     """Simulate morning entries for all active employees on target_date."""
@@ -298,13 +298,13 @@ def simulate_day_entrees(db: Session, target_date: date) -> dict:
         profile     = get_profile(emp.employe_id)
         drift       = drift_multiplier(emp.employe_id, target_date)
         prob_absent = min(profile["prob_absent"] * abs_mult * drift, 0.40)
-        # Lateness drifts too, but less sharply — disengagement shows up as
+        # Lateness drifts too, but less sharply - disengagement shows up as
         # absence first and punctuality second.
         prob_late   = min(profile["prob_late"] * (1.0 + (drift - 1.0) * 0.45), 0.60)
         r           = random.random()
 
         if r < prob_absent:
-            # ABSENT — only create Absence record, no Pointage row
+            # ABSENT - only create Absence record, no Pointage row
             justifiee = random.random() < 0.30
             if justifiee:
                 motifs = MOTIFS_JUSTIFIED
@@ -381,7 +381,7 @@ def simulate_day_entrees(db: Session, target_date: date) -> dict:
 
 
 # ─────────────────────────────────────────
-# CORE SIMULATION — EXITS
+# CORE SIMULATION - EXITS
 # ─────────────────────────────────────────
 def simulate_day_sorties(db: Session, target_date: date) -> dict:
     """Simulate evening exits and leave requests for target_date."""
@@ -487,13 +487,13 @@ def simulate_day_sorties(db: Session, target_date: date) -> dict:
 # ─────────────────────────────────────────
 def simulate_entrees():
     logger.info("=" * 50)
-    logger.info(f"SIMULATION ENTRIES — {datetime.now().strftime('%d/%m/%Y %H:%M')}")
+    logger.info(f"SIMULATION ENTRIES - {datetime.now().strftime('%d/%m/%Y %H:%M')}")
     logger.info("=" * 50)
     db = SessionLocal()
     try:
         result = simulate_day_entrees(db, date.today())
         if "skipped" in result:
-            logger.info("Weekend — simulation skipped")
+            logger.info("Weekend - simulation skipped")
         else:
             logger.info(
                 f"Entries done: {result['presents']} present, "
@@ -505,13 +505,13 @@ def simulate_entrees():
 
 def simulate_sorties_et_conges():
     logger.info("=" * 50)
-    logger.info(f"SIMULATION EXITS + LEAVE — {datetime.now().strftime('%d/%m/%Y %H:%M')}")
+    logger.info(f"SIMULATION EXITS + LEAVE - {datetime.now().strftime('%d/%m/%Y %H:%M')}")
     logger.info("=" * 50)
     db = SessionLocal()
     try:
         result = simulate_day_sorties(db, date.today())
         if "skipped" in result:
-            logger.info("Weekend — simulation skipped")
+            logger.info("Weekend - simulation skipped")
         else:
             logger.info(
                 f"Exits done: {result['sorties']} normal, "
@@ -529,7 +529,7 @@ def simulate_sorties_et_conges():
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description="iNET RH — Enhanced Simulator")
+    parser = argparse.ArgumentParser(description="iNET RH - Enhanced Simulator")
     parser.add_argument("--entrees", action="store_true", help="Simulate entries only")
     parser.add_argument("--sorties", action="store_true", help="Simulate exits + leave only")
     parser.add_argument("--all",     action="store_true", help="Simulate entries + exits")
@@ -543,13 +543,13 @@ if __name__ == "__main__":
 
     def _run_entrees():
         logger.info("=" * 50)
-        logger.info(f"SIMULATION ENTRIES — {target.strftime('%d/%m/%Y')}")
+        logger.info(f"SIMULATION ENTRIES - {target.strftime('%d/%m/%Y')}")
         logger.info("=" * 50)
         db = SessionLocal()
         try:
             result = simulate_day_entrees(db, target)
             if "skipped" in result:
-                logger.info("Weekend — simulation skipped")
+                logger.info("Weekend - simulation skipped")
             else:
                 logger.info(
                     f"Entries done: {result['presents']} present, "
@@ -560,13 +560,13 @@ if __name__ == "__main__":
 
     def _run_sorties():
         logger.info("=" * 50)
-        logger.info(f"SIMULATION EXITS + LEAVE — {target.strftime('%d/%m/%Y')}")
+        logger.info(f"SIMULATION EXITS + LEAVE - {target.strftime('%d/%m/%Y')}")
         logger.info("=" * 50)
         db = SessionLocal()
         try:
             result = simulate_day_sorties(db, target)
             if "skipped" in result:
-                logger.info("Weekend — simulation skipped")
+                logger.info("Weekend - simulation skipped")
             else:
                 logger.info(
                     f"Exits done: {result['sorties']} normal, "

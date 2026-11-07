@@ -1,7 +1,7 @@
 """
-iNET RH — Extras Historical Seeder
+iNET RH - Extras Historical Seeder
 Seeds Formation + PresenceFormation, Mission, Document from 2016 to today.
-Fully idempotent — checks for existing records before inserting.
+Fully idempotent - checks for existing records before inserting.
 
 Usage:
     python scripts/seed_extras.py
@@ -19,7 +19,7 @@ from datetime import date, timedelta, datetime
 from config.database import SessionLocal
 from models.models import Employe, Formation, PresenceFormation, Mission, Document, SoldeConge, Conge
 
-# logs/ is gitignored and absent from the container image — create it rather
+# logs/ is gitignored and absent from the container image - create it rather
 # than crashing, and fall back to console-only if it is not writable.
 _handlers = [logging.StreamHandler()]
 try:
@@ -362,8 +362,8 @@ def update_solde_conge(db, employes: list) -> int:
 def seed_extras(start_year: int) -> None:
     today = date.today()
     logger.info("=" * 60)
-    logger.info("iNET RH — EXTRAS SEEDER")
-    logger.info(f"Period : {start_year}-01-01 → {today}")
+    logger.info("iNET RH - EXTRAS SEEDER")
+    logger.info(f"Period : {start_year}-01-01 -> {today}")
     logger.info("=" * 60)
 
     db = SessionLocal()
@@ -396,7 +396,7 @@ def seed_extras(start_year: int) -> None:
         logger.info("=" * 60)
 
     except KeyboardInterrupt:
-        logger.info("Seeder interrupted — partial data already committed.")
+        logger.info("Seeder interrupted - partial data already committed.")
     finally:
         db.close()
 

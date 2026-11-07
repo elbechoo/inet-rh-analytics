@@ -161,7 +161,7 @@ export default function AdminDepts() {
                 {d.nb_employes} emp.
               </span>
             </div>
-            <div style={{ fontSize: '0.72rem', color: '#9DB3C2', marginBottom: 16 }}>Created {d.date_creation || '—'}</div>
+            <div style={{ fontSize: '0.72rem', color: '#9DB3C2', marginBottom: 16 }}>Created {d.date_creation || '-'}</div>
             <div style={{ display: 'flex', gap: 8 }}>
               <button onClick={() => openEdit(d)} style={{ flex: 1, padding: '8px', borderRadius: 8, border: '1px solid var(--border)', background: 'rgba(12,36,54,0.04)', color: '#34546A', fontSize: '0.78rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, fontFamily: 'Inter, sans-serif' }}>
                 <Pencil size={12} /> Edit

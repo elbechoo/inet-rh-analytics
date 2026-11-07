@@ -89,7 +89,7 @@ def update_user_statut(user_id: int, data: UserStatusUpdate, request: Request, d
         employe.statut = data.statut
     db.commit()
 
-    # Deactivating an account ends someone's access — record who did it.
+    # Deactivating an account ends someone's access - record who did it.
     from services import audit_service
     audit_service.record(
         action=audit_service.STATUS_CHANGE, actor=current,
@@ -111,7 +111,7 @@ def reset_password(user_id: int, data: ResetPassword, request: Request, db: Sess
     user.mot_de_passe = hash_password(data.new_password)
 
     # Kill every existing session for this account. A password reset is usually
-    # a response to compromise — leaving the attacker's token valid for the rest
+    # a response to compromise - leaving the attacker's token valid for the rest
     # of its eight hours would defeat the point of resetting it.
     from datetime import datetime, timezone
     from models.models import TokenRevoke
@@ -125,7 +125,7 @@ def reset_password(user_id: int, data: ResetPassword, request: Request, db: Sess
 
     db.commit()
 
-    # Only that an admin reset it, never the password itself — an audit trail
+    # Only that an admin reset it, never the password itself - an audit trail
     # containing credentials would be worse than no audit trail.
     from services import audit_service
     audit_service.record(
@@ -192,7 +192,7 @@ def delete_dept(dept_id: int, db: Session = Depends(get_db), _: dict = Depends(r
     if dept.employes:
         raise HTTPException(
             status_code=400,
-            detail=f"Impossible — {len(dept.employes)} employé(s) dans ce département"
+            detail=f"Impossible - {len(dept.employes)} employé(s) dans ce département"
         )
     db.delete(dept)
     db.commit()
@@ -232,8 +232,8 @@ def get_audit_trail(
     """Who did what, and when.
 
     Distinct from /logs: that reads application log files (technical diagnostics,
-    rotated and eventually deleted). This is the business record of decisions —
-    approvals, role changes, deletions — and is kept in the database.
+    rotated and eventually deleted). This is the business record of decisions -
+    approvals, role changes, deletions - and is kept in the database.
     """
     from datetime import date, timedelta
     from services import audit_service

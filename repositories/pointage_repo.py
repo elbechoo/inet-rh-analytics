@@ -106,7 +106,7 @@ def _update_pointage_journalier(db: Session, employe_id: int, today: date):
     heure_fin_pause   = get_time("FIN_PAUSE")
     heure_sortie      = get_time("SORTIE")
 
-    # Calcul durée (entrée→debut_pause) + (fin_pause→sortie)
+    # Calcul durée (entrée->debut_pause) + (fin_pause->sortie)
     duree_totale = timedelta(0)
     if heure_entree and heure_debut_pause:
         d1 = datetime.combine(today, heure_debut_pause) - datetime.combine(today, heure_entree)

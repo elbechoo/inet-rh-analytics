@@ -79,7 +79,7 @@ export default function Absences() {
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ background: 'rgba(12,36,54,0.04)' }}>
-                {/* "Status" column dropped — it duplicated "Justified" (Justifiée / Non justifiée). */}
+                {/* "Status" column dropped - it duplicated "Justified" (Justifiée / Non justifiée). */}
                 {['Employee', 'Date', 'Reason', 'Justified'].map(h => (
                   <th key={h} style={{ padding: '10px 16px', textAlign: 'left', fontSize: '0.66rem', fontWeight: 700, color: '#6B879B', textTransform: 'uppercase', letterSpacing: '0.6px', borderBottom: '1px solid rgba(12,36,54,0.04)' }}>{h}</th>
                 ))}
@@ -93,7 +93,7 @@ export default function Absences() {
                 >
                   <td style={{ padding: '12px 16px', fontSize: '0.82rem', fontWeight: 600, color: '#0C2436', borderTop: '1px solid rgba(12,36,54,0.04)' }}>#{a.employe_id}</td>
                   <td style={{ padding: '12px 16px', fontSize: '0.78rem', color: '#6B879B', borderTop: '1px solid rgba(12,36,54,0.04)' }}>{a.date_absence}</td>
-                  <td style={{ padding: '12px 16px', fontSize: '0.78rem', color: '#34546A', borderTop: '1px solid rgba(12,36,54,0.04)' }}>{a.motif || '—'}</td>
+                  <td style={{ padding: '12px 16px', fontSize: '0.78rem', color: '#34546A', borderTop: '1px solid rgba(12,36,54,0.04)' }}>{a.motif || '-'}</td>
                   <td style={{ padding: '12px 16px', borderTop: '1px solid rgba(12,36,54,0.04)' }}>
                     <span style={{
                       background: a.justifiee ? 'rgba(46,160,67,0.2)'  : 'rgba(248,81,73,0.2)',

@@ -1,4 +1,4 @@
-"""Model selection gate — decides whether the ML model is used at all.
+"""Model selection gate - decides whether the ML model is used at all.
 
 A model trained on one company's data is not automatically useful on another's.
 A client with three years of history and varied attendance behaviour may get a
@@ -96,7 +96,7 @@ def check_data_sufficiency(db: Session) -> dict:
 def train_and_gate(db: Session) -> dict:
     """Train, compare against the baseline, and decide what serves.
 
-    Never raises on a weak result — an inconclusive outcome is a legitimate
+    Never raises on a weak result - an inconclusive outcome is a legitimate
     answer and is recorded as such.
     """
     sufficiency = check_data_sufficiency(db)
@@ -171,7 +171,7 @@ def predict(db: Session, ref_date: date | None = None) -> list[dict]:
                 r["strategy"] = "model"
             return rows
         except Exception:
-            # A missing or corrupt artifact must not take the feature down —
+            # A missing or corrupt artifact must not take the feature down -
             # fall through to the rule.
             pass
 

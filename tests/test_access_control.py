@@ -45,7 +45,7 @@ def test_every_endpoint_requires_authentication(app):
 
     Covers /admin too. Those routes declare their guard as a function parameter
     (`_: dict = Depends(require_admin)`) rather than in the decorator, which is
-    easy to miss when skimming — and /admin/users/{id}/role can change anyone's
+    easy to miss when skimming - and /admin/users/{id}/role can change anyone's
     role, so an unguarded one there would be the worst hole in the system.
     Inspecting the resolved dependency tree catches both styles.
     """
@@ -69,7 +69,7 @@ def test_routes_with_an_employee_id_check_ownership(app):
         if "{employe_id}" not in route.path:
             continue
         deps = _dependency_names(route)
-        # require_self_manager_or_hr is also an ownership check — it allows the
+        # require_self_manager_or_hr is also an ownership check - it allows the
         # record's owner, that person's manager, or HR. Anything not in this set
         # is genuinely unguarded.
         if not deps & {"require_self_or_hr", "require_self_manager_or_hr",
@@ -85,7 +85,7 @@ def test_creating_an_employee_is_restricted(app):
         if route.path == "/employes/" and "POST" in route.methods:
             deps = _dependency_names(route)
             assert deps & {"require_hr_or_admin", "require_admin"}, \
-                "POST /employes/ must be HR/admin only — it can create an admin account"
+                "POST /employes/ must be HR/admin only - it can create an admin account"
             return
     pytest.fail("POST /employes/ not found")
 

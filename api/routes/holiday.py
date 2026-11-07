@@ -12,7 +12,7 @@ from services import holiday_service
 
 router = APIRouter()
 
-# Any authenticated user may read the calendar — employees need it to plan leave.
+# Any authenticated user may read the calendar - employees need it to plan leave.
 # Editing it changes how every leave request is counted, so writes are HR/admin.
 HR_ONLY = [Depends(require_hr_or_admin)]
 
@@ -87,7 +87,7 @@ def create_holiday(data: HolidayIn, db: Session = Depends(get_db)):
 
 @router.put("/{jour_ferie_id}", dependencies=HR_ONLY)
 def update_holiday(jour_ferie_id: int, data: HolidayPatch, db: Session = Depends(get_db)):
-    """Correct a holiday — most often an Islamic date after the official
+    """Correct a holiday - most often an Islamic date after the official
     moon-sighting announcement differs from the stored estimate."""
     j = db.query(JourFerie).filter(JourFerie.jour_ferie_id == jour_ferie_id).first()
     if not j:

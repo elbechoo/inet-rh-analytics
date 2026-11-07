@@ -249,7 +249,7 @@ export default function JoursFeries() {
             No calendar for {year}
           </div>
           <p style={{ color: '#6B879B', fontSize: '0.8rem', maxWidth: 420, margin: '6px auto 18px', lineHeight: 1.6 }}>
-            Without a calendar, public holidays are counted as ordinary working days —
+            Without a calendar, public holidays are counted as ordinary working days -
             leave taken across them is deducted from employees&apos; balances.
           </p>
           <button onClick={seedYear} style={{
@@ -357,7 +357,7 @@ export default function JoursFeries() {
           <Info size={15} style={{ color: '#0B87BE', flexShrink: 0, marginTop: 1 }} />
           <span>
             Religious holidays are set by moon sighting and are usually confirmed only days in advance.
-            Dates shown for future years are estimates — correct them here once the official
+            Dates shown for future years are estimates - correct them here once the official
             announcement is published.
           </span>
         </div>

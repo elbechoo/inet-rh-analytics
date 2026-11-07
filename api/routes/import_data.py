@@ -1,12 +1,12 @@
-"""CSV import — let a company load its own real history.
+"""CSV import - let a company load its own real history.
 
 Most SMEs already keep attendance in Excel, or have a biometric terminal that
 exports CSV. This turns "we have no data yet" into "bring yours": the prospect
 uploads their own file during the demo and sees their own numbers.
 
 Two steps, deliberately:
-  POST /import/preview   → parse, guess the column mapping, report what we found
-  POST /import/commit    → write it, with the mapping the user confirmed
+  POST /import/preview   -> parse, guess the column mapping, report what we found
+  POST /import/commit    -> write it, with the mapping the user confirmed
 
 Nothing is written until the second call, so a bad file can never corrupt the
 database.
@@ -105,12 +105,12 @@ async def _read(file: UploadFile) -> list[dict]:
         except UnicodeDecodeError:
             continue
     else:
-        raise HTTPException(400, "Could not decode the file — save it as UTF-8 CSV")
+        raise HTTPException(400, "Could not decode the file - save it as UTF-8 CSV")
 
     delim = _sniff(text[:4096])
     rows = list(csv.DictReader(io.StringIO(text), delimiter=delim))
     if not rows:
-        raise HTTPException(400, "No rows found — is the first line a header?")
+        raise HTTPException(400, "No rows found - is the first line a header?")
     if len(rows) > MAX_ROWS:
         raise HTTPException(413, f"Too many rows (max {MAX_ROWS:,})")
     return rows
@@ -118,7 +118,7 @@ async def _read(file: UploadFile) -> list[dict]:
 
 @router.post("/preview")
 async def preview(file: UploadFile = File(...), _: dict = Depends(require_hr_or_admin)):
-    """Parse the file, guess the mapping, and report — writes nothing."""
+    """Parse the file, guess the mapping, and report - writes nothing."""
     rows = await _read(file)
     headers = list(rows[0].keys())
     mapping = _guess_mapping(headers)
@@ -215,7 +215,7 @@ async def commit(
                         prenom         = prenom or "",
                         adresse_mail   = f"{(matricule or ident).lower().replace(' ', '.')}@import.local",
                         date_embauche  = d,
-                        poste          = "—",
+                        poste          = "-",
                         type_contrat   = "CDI",
                         statut         = "Actif",
                         departement_id = dept.departement_id if dept else None,
@@ -228,7 +228,7 @@ async def commit(
             t_out = _parse_time(r.get(col_sortie, "")) if col_sortie else None
 
             if not t_in:
-                # No arrival time on a working row → treat as an absence.
+                # No arrival time on a working row -> treat as an absence.
                 if not db.query(Absence).filter(
                     Absence.employe_id == emp.employe_id, Absence.date_absence == d
                 ).first():

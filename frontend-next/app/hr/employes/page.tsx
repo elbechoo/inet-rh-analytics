@@ -203,10 +203,10 @@ export default function GestionEmployes() {
                         <div style={{ fontSize: '0.82rem', fontWeight: 600, color: '#0C2436' }}>{e.prenom} {e.nom}</div>
                       </div>
                     </td>
-                    <td style={{ padding: '12px 16px', fontSize: '0.78rem', color: '#6B879B', borderTop: '1px solid rgba(12,36,54,0.04)' }}>{e.adresse_mail || '—'}</td>
-                    <td style={{ padding: '12px 16px', fontSize: '0.78rem', color: '#34546A', fontWeight: 500, borderTop: '1px solid rgba(12,36,54,0.04)' }}>{e.poste || '—'}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '0.78rem', color: '#6B879B', borderTop: '1px solid rgba(12,36,54,0.04)' }}>{e.adresse_mail || '-'}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '0.78rem', color: '#34546A', fontWeight: 500, borderTop: '1px solid rgba(12,36,54,0.04)' }}>{e.poste || '-'}</td>
                     <td style={{ padding: '12px 16px', borderTop: '1px solid rgba(12,36,54,0.04)' }}>
-                      <span style={{ background: 'rgba(12,36,54,0.04)', color: '#34546A', padding: '3px 10px', borderRadius: 6, fontSize: '0.72rem', fontWeight: 600 }}>{e.type_contrat || '—'}</span>
+                      <span style={{ background: 'rgba(12,36,54,0.04)', color: '#34546A', padding: '3px 10px', borderRadius: 6, fontSize: '0.72rem', fontWeight: 600 }}>{e.type_contrat || '-'}</span>
                     </td>
                     <td style={{ padding: '12px 16px', borderTop: '1px solid rgba(12,36,54,0.04)' }}>
                       {e.statut === 'Actif' ? (
@@ -317,7 +317,7 @@ export default function GestionEmployes() {
                 <Field label="Department *">
                   <Select value={form.departement_id}
                           onChange={v => setForm(f => ({ ...f, departement_id: v }))}
-                          options={[['', '— Select —'], ...depts.map(d => [String(d.departement_id), d.nom_departement] as [string, string])]} />
+                          options={[['', '- Select -'], ...depts.map(d => [String(d.departement_id), d.nom_departement] as [string, string])]} />
                 </Field>
 
                 <Field label="Position">
@@ -328,7 +328,7 @@ export default function GestionEmployes() {
                 <Field label="Contract type">
                   <Select value={form.type_contrat}
                           onChange={v => setForm(f => ({ ...f, type_contrat: v }))}
-                          options={[['CDI', 'CDI — Permanent'], ['CDD', 'CDD — Fixed-term'], ['Stage', 'Stage — Internship']]} />
+                          options={[['CDI', 'CDI - Permanent'], ['CDD', 'CDD - Fixed-term'], ['Stage', 'Stage - Internship']]} />
                 </Field>
 
                 <Field label="Portal role">
@@ -380,7 +380,7 @@ export default function GestionEmployes() {
                   display: 'flex', alignItems: 'center', gap: 7,
                 }}
               >
-                {saving ? 'Saving…' : (<><Plus size={14} /> Create employee</>)}
+                {saving ? 'Saving...' : (<><Plus size={14} /> Create employee</>)}
               </button>
             </div>
           </div>

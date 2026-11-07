@@ -12,7 +12,7 @@ from passlib.context import CryptContext
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def remove_accents(text: str) -> str:
-    """Enlève les accents : é→e, à→a, etc."""
+    """Enlève les accents : é->e, à->a, etc."""
     nfkd = unicodedata.normalize('NFKD', text)
     return ''.join(c for c in nfkd if not unicodedata.combining(c))
 

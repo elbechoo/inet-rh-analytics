@@ -60,7 +60,7 @@ def create_employe(db: Session, employe_data: dict, password: str):
     if existing:
         raise ValueError(f"Matricule {employe_data['matricule']} déjà utilisé")
 
-    # role lives on Utilisateur, not Employe — pop it before passing to the repo
+    # role lives on Utilisateur, not Employe - pop it before passing to the repo
     role = employe_data.pop("role", "employe")
 
     employe = employe_repo.create_employe(db, employe_data)

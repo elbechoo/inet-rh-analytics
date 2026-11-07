@@ -45,7 +45,7 @@ export default function LoginPage() {
   return (
     <div style={{ minHeight: '100vh', display: 'flex' }}>
 
-      {/* left — brand plate, the logo's navy */}
+      {/* left - brand plate, the logo's navy */}
       <div className="hidden lg:flex" style={{
         width: '46%', minWidth: 440, background: 'var(--card)', borderRight: '1px solid var(--border)',
         flexDirection: 'column', justifyContent: 'space-between',
@@ -76,7 +76,7 @@ export default function LoginPage() {
             color: 'var(--ink-2)', maxWidth: 380, marginBottom: 34,
           }}>
             Track attendance, manage leave and anticipate absenteeism from a single
-            platform — with dashboards your management team will actually read.
+            platform - with dashboards your management team will actually read.
           </p>
 
           <div className="stagger" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
@@ -98,7 +98,7 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* right — form */}
+      {/* right - form */}
       <div style={{
         flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
         padding: '40px 32px', background: 'var(--bg)',
@@ -144,7 +144,7 @@ export default function LoginPage() {
 
             <button type="submit" disabled={loading} className="btn-primary" style={{ width: '100%', padding: 12, marginTop: 3 }}>
               {loading
-                ? <><Loader2 size={15} style={{ animation: 'spin .8s linear infinite' }} /> Signing in…</>
+                ? <><Loader2 size={15} style={{ animation: 'spin .8s linear infinite' }} /> Signing in...</>
                 : <>Sign in <ArrowRight size={15} /></>}
             </button>
           </form>

@@ -67,15 +67,15 @@ app.include_router(formation.router, prefix="/formations", tags=["Formations"], 
 # employee still needs their own alerts for the notification bell. The guard is
 # therefore per-route inside ai.py (HR_ONLY on everything except the personal
 # alerts feed, which filters to the caller's own record) rather than blanket
-# here — a blanket HR_ONLY silently emptied every employee's notifications.
+# here - a blanket HR_ONLY silently emptied every employee's notifications.
 app.include_router(ai.router, prefix="/ai", tags=["IA"], dependencies=AUTHED)
 
-# Bring-your-own-data import. HR/admin only — it writes employees and history.
+# Bring-your-own-data import. HR/admin only - it writes employees and history.
 app.include_router(import_data.router, prefix="/import", tags=["Import"], dependencies=HR_ONLY)
 
 # Public-holiday calendar. Read is fine for any authenticated user (employees
 # need to see it when planning leave), but writing changes how every leave
-# request is counted, so edits are HR/admin only — enforced per-route below.
+# request is counted, so edits are HR/admin only - enforced per-route below.
 app.include_router(holiday.router, prefix="/holidays", tags=["Jours fériés"], dependencies=AUTHED)
 
 app.include_router(admin.router, prefix="/admin", tags=["Admin"])

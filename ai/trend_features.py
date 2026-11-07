@@ -216,7 +216,7 @@ def build_deterioration_dataset(
 
     The label deliberately measures *change*, not level: an employee already at a
     high but stable rate is not "deteriorating", while a reliable employee sliding
-    downwards is exactly who HR wants to catch early — and precisely what a
+    downwards is exactly who HR wants to catch early - and precisely what a
     percentile threshold on the current rate cannot surface.
     """
     X = build_trend_features(db, ref_date, window_days)

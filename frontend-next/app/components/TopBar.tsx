@@ -72,7 +72,7 @@ export default function TopBar({ onMenu }: { onMenu?: () => void } = {}) {
 
   useEffect(() => {
     // Scope the bell by role:
-    //   * an employee must see ONLY their own alerts (privacy — Riadh's
+    //   * an employee must see ONLY their own alerts (privacy - Riadh's
     //     absenteeism-risk score is confidential HR data and must not leak
     //     to a colleague viewing their own dashboard);
     //   * an HR manager / administrator keeps the global feed.
@@ -143,7 +143,7 @@ export default function TopBar({ onMenu }: { onMenu?: () => void } = {}) {
       flexShrink: 0, position: 'sticky', top: 0, zIndex: 40,
     }}>
 
-      {/* Drawer toggle — hidden above 900px by the .mobile-navbtn rule. */}
+      {/* Drawer toggle - hidden above 900px by the .mobile-navbtn rule. */}
       {onMenu && (
         <button className="mobile-navbtn" onClick={onMenu} aria-label="Open menu">
           <Menu size={17} />
@@ -283,7 +283,7 @@ export default function TopBar({ onMenu }: { onMenu?: () => void } = {}) {
                 {alertes.length === 0 ? (
                   <div style={{ padding: '28px 16px', textAlign: 'center' }}>
                     <CheckCircle2 size={26} color="#3fb950" style={{ margin: '0 auto 8px', display: 'block' }} />
-                    <div style={{ fontSize: '0.78rem', color: '#9DB3C2' }}>All clear — no alerts</div>
+                    <div style={{ fontSize: '0.78rem', color: '#9DB3C2' }}>All clear - no alerts</div>
                   </div>
                 ) : alertes.map((a: any, i: number) => {
                   const nc = NIV_CFG[a.niveau] || NIV_CFG.Info;

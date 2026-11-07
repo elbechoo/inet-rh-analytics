@@ -119,7 +119,7 @@ export default function MonPointage() {
                 </div>
                 <div style={{ fontSize: '0.65rem', color: '#9DB3C2', fontWeight: 500 }}>{label}</div>
                 <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#0C2436', marginTop: 2 }}>
-                  {log ? log.heure?.slice(0, 5) : '—'}
+                  {log ? log.heure?.slice(0, 5) : '-'}
                 </div>
               </div>
             );
@@ -183,11 +183,11 @@ export default function MonPointage() {
                     onMouseLeave={ev => (ev.currentTarget.style.background = 'transparent')}
                   >
                     <td style={{ padding: '9px 14px', fontSize: '0.78rem', fontWeight: 600, color: '#0C2436', borderTop: '1px solid rgba(12,36,54,0.04)' }}>{p.date_pointage}</td>
-                    <td style={{ padding: '9px 14px', fontSize: '0.78rem', color: '#34546A', borderTop: '1px solid rgba(12,36,54,0.04)' }}>{p.heure_entree || '—'}</td>
-                    <td style={{ padding: '9px 14px', fontSize: '0.78rem', color: '#6B879B', borderTop: '1px solid rgba(12,36,54,0.04)' }}>{p.heure_debut_pause || '—'}</td>
-                    <td style={{ padding: '9px 14px', fontSize: '0.78rem', color: '#6B879B', borderTop: '1px solid rgba(12,36,54,0.04)' }}>{p.heure_fin_pause || '—'}</td>
-                    <td style={{ padding: '9px 14px', fontSize: '0.78rem', color: '#34546A', borderTop: '1px solid rgba(12,36,54,0.04)' }}>{p.heure_sortie || '—'}</td>
-                    <td style={{ padding: '9px 14px', fontSize: '0.78rem', color: '#34546A', borderTop: '1px solid rgba(12,36,54,0.04)' }}>{p.duree_travail ? `${p.duree_travail}h` : '—'}</td>
+                    <td style={{ padding: '9px 14px', fontSize: '0.78rem', color: '#34546A', borderTop: '1px solid rgba(12,36,54,0.04)' }}>{p.heure_entree || '-'}</td>
+                    <td style={{ padding: '9px 14px', fontSize: '0.78rem', color: '#6B879B', borderTop: '1px solid rgba(12,36,54,0.04)' }}>{p.heure_debut_pause || '-'}</td>
+                    <td style={{ padding: '9px 14px', fontSize: '0.78rem', color: '#6B879B', borderTop: '1px solid rgba(12,36,54,0.04)' }}>{p.heure_fin_pause || '-'}</td>
+                    <td style={{ padding: '9px 14px', fontSize: '0.78rem', color: '#34546A', borderTop: '1px solid rgba(12,36,54,0.04)' }}>{p.heure_sortie || '-'}</td>
+                    <td style={{ padding: '9px 14px', fontSize: '0.78rem', color: '#34546A', borderTop: '1px solid rgba(12,36,54,0.04)' }}>{p.duree_travail ? `${p.duree_travail}h` : '-'}</td>
                     <td style={{ padding: '9px 14px', borderTop: '1px solid rgba(12,36,54,0.04)' }}>
                       <span style={{ background: s.bg, color: s.color, padding: '3px 10px', borderRadius: 20, fontSize: '0.70rem', fontWeight: 700 }}>{p.statut}</span>
                     </td>

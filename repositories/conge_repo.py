@@ -62,7 +62,7 @@ def create_conge(db: Session, employe_id: int, conge_data: dict):
 def valider_conge(db: Session, conge_id: int, rh_id: int, approuve: bool, commentaire: str = ""):
     """
     Valider ou refuser un congé
-    Si approuvé → déduire du solde
+    Si approuvé -> déduire du solde
     """
     conge = get_conge_by_id(db, conge_id)
     if not conge:
@@ -74,7 +74,7 @@ def valider_conge(db: Session, conge_id: int, rh_id: int, approuve: bool, commen
     if commentaire:
         conge.commentaire = commentaire
 
-    # Si approuvé → déduire du solde de congé
+    # Si approuvé -> déduire du solde de congé
     if approuve:
         _deduire_solde(db, conge.employe_id, conge.nb_jours)
 
@@ -130,7 +130,7 @@ def _calculer_jours_ouvrables(date_debut: date, date_fin: date, db: Session = No
     """
     Calculer le nombre de jours ouvrables entre deux dates.
 
-    Exclut les week-ends et, si une session est fournie, les jours fériés —
+    Exclut les week-ends et, si une session est fournie, les jours fériés -
     sinon un congé qui couvre l'Aïd serait décompté du solde de l'employé.
     Le paramètre `db` est optionnel pour rester compatible avec les appels
     existants et les tests unitaires.
@@ -141,7 +141,7 @@ def _calculer_jours_ouvrables(date_debut: date, date_fin: date, db: Session = No
             from services.holiday_service import holiday_dates
             feries = holiday_dates(db, date_debut, date_fin)
         except Exception:
-            feries = set()      # jours fériés non configurés — on ignore
+            feries = set()      # jours fériés non configurés - on ignore
 
     nb_jours = 0
     current = date_debut

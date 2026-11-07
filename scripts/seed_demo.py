@@ -9,7 +9,7 @@ show. Run scripts/seed_history.py afterwards to backfill attendance.
     python scripts/seed_demo.py --password Demo1234!
 
 EVERY NAME HERE IS INVENTED. That is deliberate: a public demo must never carry
-real employment records — absences, lateness and AI risk scores are personal
+real employment records - absences, lateness and AI risk scores are personal
 data, and publishing a real workforce's would be a data-protection problem and
 an embarrassing thing for a prospect to discover.
 
@@ -27,7 +27,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config.database import SessionLocal, engine, Base
 from models.models import Departement, Employe, Utilisateur, SoldeConge
 
-# Common name components, combined at random — no real person is described.
+# Common name components, combined at random - no real person is described.
 NOMS = [
     "Ben Amor", "Trabelsi", "Gharbi", "Jelassi", "Mahjoub", "Khelifi", "Nasri",
     "Bouazizi", "Sassi", "Chaabane", "Belhaj", "Ferchichi", "Zouari", "Hamdi",
@@ -86,7 +86,7 @@ def main() -> None:
 
     try:
         if db.query(Employe).count() > 0:
-            print("This database already has employees — refusing to seed on top.")
+            print("This database already has employees - refusing to seed on top.")
             print("Use scripts/clean_database.py first if you want a fresh start.")
             return
 
@@ -182,7 +182,7 @@ def main() -> None:
         print("\nSign in with:")
         print(f"  admin  {admin.username}")
         print(f"  HR     {hr.username}")
-        print(f"  password: {args.password}   (demo data — change it before any real use)")
+        print(f"  password: {args.password}   (demo data - change it before any real use)")
         print("\nNext:")
         print("  python scripts/seed_holidays.py")
         print("  python scripts/seed_history.py --days 365")

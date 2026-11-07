@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 # ============================================================================
 # Database connection, driven entirely by environment variables so the same
 # code runs locally, in Docker and in the cloud. The defaults preserve the
-# original behaviour — SQL Server on localhost via Windows Authentication.
+# original behaviour - SQL Server on localhost via Windows Authentication.
 #
 # Select the backend with DB_ENGINE:
 #   DB_ENGINE=mssql     (default) -> Microsoft SQL Server via pyodbc
@@ -38,7 +38,7 @@ def _build_mssql_url(database: str) -> str:
             f"mssql+pyodbc://{quote_plus(DB_USER)}:{quote_plus(DB_PASSWORD)}@{host}"
             f"/{database}?driver={driver}"
         )
-    # Windows Authentication — the original local default.
+    # Windows Authentication - the original local default.
     return f"mssql+pyodbc://{DB_SERVER}/{database}?driver={driver}&trusted_connection=yes"
 
 
@@ -80,7 +80,7 @@ Base = declarative_base()
 #
 # create_engine() eagerly imports the DBAPI driver, so building it at module
 # level meant importing *any* model required pyodbc or psycopg to be installed
-# — which made the business logic impossible to unit test, and broke tooling
+# - which made the business logic impossible to unit test, and broke tooling
 # that only needs the schema. PEP 562 module __getattr__ keeps
 # `from config.database import engine, SessionLocal` working unchanged while
 # deferring the connection until something actually asks for it.
@@ -111,7 +111,7 @@ def __getattr__(name):
 
 
 # ============================================================================
-# Multi-tenancy — one database per client.
+# Multi-tenancy - one database per client.
 #
 # Every route already depends on get_db(), so resolving the tenant here routes
 # the whole application without touching a single endpoint. With no
@@ -163,7 +163,7 @@ def get_db(request=None):
     """Yield a session bound to the requesting client's database.
 
     `request` is optional so that scripts, the scheduler and tests can still
-    call get_db() directly — those fall back to the default tenant.
+    call get_db() directly - those fall back to the default tenant.
     """
     key = tenants.resolve_tenant(request)
     try:
@@ -171,7 +171,7 @@ def get_db(request=None):
     except KeyError:
         from fastapi import HTTPException
         # An unrecognised subdomain must not silently fall back to another
-        # client's data — refuse the request instead.
+        # client's data - refuse the request instead.
         raise HTTPException(status_code=404, detail="Unknown workspace")
 
     db = factory()

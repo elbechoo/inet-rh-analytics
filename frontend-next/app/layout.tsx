@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'iNET RH — Smart HR Management',
+  title: 'iNET RH - Smart HR Management',
   description: 'Intelligent HR management platform',
 };
 

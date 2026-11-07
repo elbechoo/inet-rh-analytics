@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ============================================================================
-   iNET RH — Design System
+   iNET RH - Design System
    Built on the iNET brand mark:
      azure square  #0FA3E0
      the "i"       #17557A  (deep navy)
@@ -10,7 +10,7 @@
    ========================================================================== */
 
 :root{
-  /* Brand azure — the logo square */
+  /* Brand azure - the logo square */
   --sky-700:#0A6E9C;
   --sky-600:#0B87BE;
   --sky-500:#0FA3E0;
@@ -20,7 +20,7 @@
   --sky-100:#DDF1FB;
   --sky-50 :#F0F9FE;
 
-  /* Navy — the "i" in the mark */
+  /* Navy - the "i" in the mark */
   --navy-900:#0A2C41;
   --navy-800:#0F3E5A;
   --navy-700:#17557A;
@@ -50,7 +50,7 @@
   --border  :#E1EAF1;
   --border-2:#CDDCE7;
 
-  /* Navigation plate — white, the azure carries the brand */
+  /* Navigation plate - white, the azure carries the brand */
   --nav     :#FFFFFF;
   --nav-2   :#F8FBFE;
   --nav-edge:#E1EAF1;
@@ -298,7 +298,7 @@ tbody tr:hover td{background:var(--blue-50)}
 .rail-item,.rail-tip{display:none}
 
 /* ============================================================================
-   Interaction layer — feedback on every action, not just entrance animations.
+   Interaction layer - feedback on every action, not just entrance animations.
    ========================================================================== */
 
 /* ── Ripple ─────────────────────────────────────────── */
@@ -392,7 +392,7 @@ a.badge:hover,button.badge:hover{transform:translateY(-1px) scale(1.03);filter:b
 }
 .view-enter{animation:viewIn 420ms var(--ease-out) both}
 
-/* ── Skeleton → content crossfade ───────────────────── */
+/* ── Skeleton -> content crossfade ───────────────────── */
 @keyframes contentIn{from{opacity:0}to{opacity:1}}
 .content-in{animation:contentIn 320ms var(--ease) both}
 

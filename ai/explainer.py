@@ -1,4 +1,4 @@
-"""Explainable AI — turn a risk score into human-readable reasons.
+"""Explainable AI - turn a risk score into human-readable reasons.
 
 The Random Forest already exposes `feature_importances_`, but a bare
 "73% risk" tells an HR manager nothing actionable. This module converts each
@@ -251,7 +251,7 @@ def explain_trend_row(row, importances: dict | None = None, top_n: int = 3) -> l
 
     w = lambda k: 0.35 + float(importances.get(k, 0.0))
 
-    # Rising absence — the headline signal for this model.
+    # Rising absence - the headline signal for this model.
     #
     # Threshold tuned during testing: a 90-day window on an employee who is
     # simply a *consistently* high absentee still drifts a few points from pure
@@ -264,7 +264,7 @@ def explain_trend_row(row, importances: dict | None = None, top_n: int = 3) -> l
         pts = d_abs * 100
         sev = "high" if pts >= 8 else "medium" if pts >= 4 else "low"
         add("delta_taux_absence",
-            f"Absence rate rising — up {pts:.1f} points vs the previous 90 days",
+            f"Absence rate rising - up {pts:.1f} points vs the previous 90 days",
             f"+{pts:.1f} pts", sev, pts * w("delta_taux_absence"))
 
     # Unjustified absences carry more weight than justified ones.
@@ -303,7 +303,7 @@ def explain_trend_row(row, importances: dict | None = None, top_n: int = 3) -> l
     if d_ret >= 0.05:
         pts = d_ret * 100
         add("delta_taux_retard",
-            f"Lateness rising — up {pts:.1f} points vs the previous 90 days",
+            f"Lateness rising - up {pts:.1f} points vs the previous 90 days",
             f"+{pts:.1f} pts", "medium", pts * 0.6 * w("delta_taux_retard"))
 
     out.sort(key=lambda r: r["contribution"], reverse=True)

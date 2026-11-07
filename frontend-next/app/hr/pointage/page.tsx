@@ -55,7 +55,7 @@ export default function GestionPointage() {
       <div style={{ marginBottom: 24 }}>
         <h1 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#0C2436', margin: 0, letterSpacing: '-0.3px' }}>Attendance</h1>
         <p style={{ color: '#6B879B', fontSize: '0.82rem', margin: '4px 0 0' }}>
-          Real-time — {new Date().toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long' })}
+          Real-time - {new Date().toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long' })}
         </p>
       </div>
 
@@ -121,9 +121,9 @@ export default function GestionPointage() {
                     onMouseLeave={ev => (ev.currentTarget.style.background = 'transparent')}
                   >
                     <td style={{ padding: '12px 16px', fontSize: '0.82rem', fontWeight: 600, color: '#0C2436', borderTop: '1px solid rgba(12,36,54,0.04)' }}>#{p.employe_id}</td>
-                    <td style={{ padding: '12px 16px', fontSize: '0.78rem', color: '#34546A', borderTop: '1px solid rgba(12,36,54,0.04)' }}>{p.heure_entree || '—'}</td>
-                    <td style={{ padding: '12px 16px', fontSize: '0.78rem', color: '#34546A', borderTop: '1px solid rgba(12,36,54,0.04)' }}>{p.heure_sortie || '—'}</td>
-                    <td style={{ padding: '12px 16px', fontSize: '0.78rem', color: '#34546A', borderTop: '1px solid rgba(12,36,54,0.04)' }}>{p.duree_travail ? `${p.duree_travail}h` : '—'}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '0.78rem', color: '#34546A', borderTop: '1px solid rgba(12,36,54,0.04)' }}>{p.heure_entree || '-'}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '0.78rem', color: '#34546A', borderTop: '1px solid rgba(12,36,54,0.04)' }}>{p.heure_sortie || '-'}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '0.78rem', color: '#34546A', borderTop: '1px solid rgba(12,36,54,0.04)' }}>{p.duree_travail ? `${p.duree_travail}h` : '-'}</td>
                     <td style={{ padding: '12px 16px', fontSize: '0.78rem', color: p.retard_minutes > 0 ? '#e3b341' : '#3fb950', fontWeight: 600, borderTop: '1px solid rgba(12,36,54,0.04)' }}>{p.retard_minutes || 0}</td>
                     <td style={{ padding: '12px 16px', borderTop: '1px solid rgba(12,36,54,0.04)' }}>
                       <span style={{ background: s.bg, color: s.color, padding: '3px 10px', borderRadius: 20, fontSize: '0.70rem', fontWeight: 700 }}>{p.statut}</span>

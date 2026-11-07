@@ -4,7 +4,7 @@ The two properties that matter are structural, so they can be checked without a
 database:
 
   * every action worth recording has a named constant, and
-  * recording never raises — an audit failure must not roll back the business
+  * recording never raises - an audit failure must not roll back the business
     action it was recording.
 """
 import pytest
@@ -59,7 +59,7 @@ def test_long_values_are_truncated_not_rejected():
     long_text = "x" * 5000
     out = audit_service._short(long_text)
     assert len(out) <= 500
-    assert out.endswith("…")
+    assert out.endswith("...")
 
 
 def test_short_handles_none_and_dates():

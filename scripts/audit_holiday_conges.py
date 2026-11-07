@@ -51,7 +51,7 @@ def main() -> None:
         feries = {j.date_ferie for j in db.query(JourFerie).filter(JourFerie.chome == True).all()}  # noqa: E712
 
         def old_rule(start, end):
-            """Weekends only — how the app counted before the holiday calendar."""
+            """Weekends only - how the app counted before the holiday calendar."""
             n, cur = 0, start
             while cur <= end:
                 if cur.weekday() < 5:
@@ -69,7 +69,7 @@ def main() -> None:
                 wrong.append((c, was, now, was - now))
 
         if not wrong:
-            print(f"Clean — none of your {len(conges)} leave records span a public holiday.")
+            print(f"Clean - none of your {len(conges)} leave records span a public holiday.")
             return
 
         # Only annual leave is deducted from the balance.
@@ -96,11 +96,11 @@ def main() -> None:
             print("Those days are owed back to their balance.")
 
         # Requests that consist entirely of holidays. Correcting these to zero is
-        # not possible (and not meaningful) — they should be cancelled outright.
+        # not possible (and not meaningful) - they should be cancelled outright.
         empty = [(c, was) for c, was, _now, diff in wrong
                  if c.nb_jours is not None and c.nb_jours - diff < 1]
         if empty:
-            print(f"\n{len(empty)} requests cover ONLY public holidays — "
+            print(f"\n{len(empty)} requests cover ONLY public holidays - "
                   f"they should be cancelled and refunded in full:")
             for c, was in empty[:15]:
                 emp = db.query(Employe).filter(Employe.employe_id == c.employe_id).first()
@@ -118,7 +118,7 @@ def main() -> None:
         if not args.yes:
             print(f"\nAbout to UPDATE {len(wrong)} leave records. Back up your database first.")
             if input("Type 'fix' to confirm: ").strip().lower() != "fix":
-                print("Cancelled — nothing was changed.")
+                print("Cancelled - nothing was changed.")
                 return
 
         # Subtract only the holiday days. This keeps whatever baseline the record
@@ -126,7 +126,7 @@ def main() -> None:
         # exactly the bug being fixed and nothing else.
         #
         # A result of zero means the request covered nothing but holidays. The
-        # schema forbids nb_jours <= 0 (CK_Conge_nb_jours), and rightly so — a
+        # schema forbids nb_jours <= 0 (CK_Conge_nb_jours), and rightly so - a
         # zero-day leave request is meaningless. Those are left untouched and
         # listed instead, because the correct action is to cancel the request and
         # refund it in full, which is HR's decision, not this script's.
@@ -140,7 +140,7 @@ def main() -> None:
         db.commit()
         print(f"\nCorrected {updated} leave records.")
         if empty:
-            print(f"{len(empty)} left unchanged — they cover only holidays and "
+            print(f"{len(empty)} left unchanged - they cover only holidays and "
                   f"need to be cancelled by hand.")
     finally:
         db.close()

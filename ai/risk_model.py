@@ -1,4 +1,4 @@
-"""Absenteeism risk model v2 — predicts *deterioration*, not level.
+"""Absenteeism risk model v2 - predicts *deterioration*, not level.
 
 What changed and why
 --------------------
@@ -30,7 +30,7 @@ v2 makes four changes:
    real probability; the UI displays it as a percentage people will act on, so
    it is wrapped in isotonic/sigmoid calibration.
 
-The rule-based baseline is retained and evaluated on the identical test set —
+The rule-based baseline is retained and evaluated on the identical test set -
 if v2 cannot beat it, that must stay visible rather than be quietly dropped.
 """
 from __future__ import annotations
@@ -74,7 +74,7 @@ def build_panel(
 ) -> tuple[pd.DataFrame, pd.Series, pd.Series]:
     """Stack snapshots across history into one panel dataset.
 
-    Returns (X, y, snapshot_date) — the dates are kept so the split can be
+    Returns (X, y, snapshot_date) - the dates are kept so the split can be
     temporal rather than random.
     """
     frames, labels, stamps = [], [], []
@@ -217,7 +217,7 @@ def train_risk_model(
 
 
 # ─────────────────────────────────────────────────────────────
-# Prediction (cached — no retraining per request)
+# Prediction (cached - no retraining per request)
 # ─────────────────────────────────────────────────────────────
 def model_available() -> bool:
     return os.path.exists(MODEL_V2_PATH) and os.path.exists(SCALER_V2_PATH)
@@ -240,7 +240,7 @@ def predict_risk(
 ) -> list[dict]:
     """Score every active employee for *rising* absenteeism risk.
 
-    Uses the cached model — training happens on the scheduler, not on every
+    Uses the cached model - training happens on the scheduler, not on every
     dashboard load. Returns an absolute-threshold list: if nobody is
     deteriorating, the list is legitimately empty (v1 always flagged the top
     25%, even in a perfectly healthy company).

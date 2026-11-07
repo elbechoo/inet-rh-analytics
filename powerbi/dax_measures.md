@@ -1,21 +1,21 @@
-# iNET RH — Power BI Report on the Kimball Star Schema
+# iNET RH - Power BI Report on the Kimball Star Schema
 
-This report is built **directly on the data-warehouse star schema** (`Dim_Date`, `Dim_Employe`, `Dim_Departement`, `Dim_Formation`, `Fact_Pointage`, `Fact_Absence`, `Fact_Conge`, `Fact_Formation`) — not on the operational tables. The star schema is created by `powerbi/star_schema.sql` and populated by `etl/load_star.py`. The three core dimensions (Date, Employee, Department) are conformed: each of the four facts joins to them by the same surrogate keys.
+This report is built **directly on the data-warehouse star schema** (`Dim_Date`, `Dim_Employe`, `Dim_Departement`, `Dim_Formation`, `Fact_Pointage`, `Fact_Absence`, `Fact_Conge`, `Fact_Formation`) - not on the operational tables. The star schema is created by `powerbi/star_schema.sql` and populated by `etl/load_star.py`. The three core dimensions (Date, Employee, Department) are conformed: each of the four facts joins to them by the same surrogate keys.
 
 Current load: Dim_Date 4 748 · Dim_Departement 10 · Dim_Employe 76 · Dim_Formation 54 · Fact_Pointage ≈195 591 · Fact_Absence ≈13 846 · Fact_Conge ≈14 848 · Fact_Formation ≈2 194.
 
 ---
 
-## Step 1 — Connect
+## Step 1 - Connect
 
-1. Power BI Desktop → **Home → Get Data → SQL Server**.
+1. Power BI Desktop -> **Home -> Get Data -> SQL Server**.
 2. Server: `localhost` · Database: `GestionRH_Intelligente` · Data Connectivity mode: **Import**.
 3. Select exactly these eight tables and load them:
    `Dim_Date`, `Dim_Employe`, `Dim_Departement`, `Dim_Formation`, `Fact_Pointage`, `Fact_Absence`, `Fact_Conge`, `Fact_Formation`.
 
-## Step 2 — Model (relationships)
+## Step 2 - Model (relationships)
 
-In **Model view**, create these relationships (Many → One, single direction, from fact to dimension). Power BI may auto-detect most of them; verify each one.
+In **Model view**, create these relationships (Many -> One, single direction, from fact to dimension). Power BI may auto-detect most of them; verify each one.
 
 | From (fact) | Column | To (dimension) | Column | Active |
 |---|---|---|---|---|
@@ -36,11 +36,11 @@ In **Model view**, create these relationships (Many → One, single direction, f
 
 Notes:
 - A pair of tables can have only one **active** relationship. `Fact_Conge` has two links to `Dim_Date` (start and end); keep `date_debut_id` active and `date_fin_id` inactive. The end-date link is only needed if you build an end-date measure with `USERELATIONSHIP`.
-- Mark `Dim_Date` as the date table: select `Dim_Date` → Table tools → **Mark as date table** → `date_complete`.
+- Mark `Dim_Date` as the date table: select `Dim_Date` -> Table tools -> **Mark as date table** -> `date_complete`.
 
-## Step 3 — Measures
+## Step 3 - Measures
 
-Create one empty table named `_Measures` (Home → Enter Data → table `_Measures`, delete the dummy column), then add the measures below. They use only columns that exist in the star schema.
+Create one empty table named `_Measures` (Home -> Enter Data -> table `_Measures`, delete the dummy column), then add the measures below. They use only columns that exist in the star schema.
 
 ```dax
 // ---------- Headcount ----------
@@ -153,69 +153,69 @@ SUMX (
 )
 ```
 
-## Step 4 — Pages and visuals
+## Step 4 - Pages and visuals
 
 The report has five pages built only from the four fact tables, so every visual is backed by real warehouse data.
 
-### Page 1 — Executive Overview
+### Page 1 - Executive Overview
 | Visual | Configuration |
 |---|---|
 | KPI cards (row) | `Total Employes`, `Taux Absenteisme %`, `Taux Retard %`, `Moy Heures Jour` |
-| Line chart | Axis `Dim_Date[annee]` → values `Taux Presence %`, `Taux Retard %`, `Taux Absenteisme %` |
-| Clustered bar | Axis `Dim_Departement[nom_departement]` → `Taux Absenteisme %` |
-| Donut | Legend `Dim_Employe[type_contrat]` → `Total Employes` |
+| Line chart | Axis `Dim_Date[annee]` -> values `Taux Presence %`, `Taux Retard %`, `Taux Absenteisme %` |
+| Clustered bar | Axis `Dim_Departement[nom_departement]` -> `Taux Absenteisme %` |
+| Donut | Legend `Dim_Employe[type_contrat]` -> `Total Employes` |
 | Slicer | `Dim_Date[annee]` |
 
-### Page 2 — Attendance & Lateness
+### Page 2 - Attendance & Lateness
 | Visual | Configuration |
 |---|---|
 | KPI cards | `Nb Presents`, `Nb Retards`, `Moy Minutes Retard`, `Nb Sorties Manquantes` |
-| Area chart | Axis `Dim_Date[nom_mois]` (sorted by `mois`) → `Taux Presence %` |
+| Area chart | Axis `Dim_Date[nom_mois]` (sorted by `mois`) -> `Taux Presence %` |
 | Matrix (heatmap) | Rows `Dim_Date[nom_mois]`, Columns `Dim_Date[annee]`, Values `Taux Retard %` |
-| Clustered bar | Axis `Dim_Departement[nom_departement]` → `Nb Retards` |
-| Column chart | Axis `Dim_Date[saison]` → `Taux Retard %` |
+| Clustered bar | Axis `Dim_Departement[nom_departement]` -> `Nb Retards` |
+| Column chart | Axis `Dim_Date[saison]` -> `Taux Retard %` |
 | Slicers | `Dim_Date[annee]`, `Dim_Departement[nom_departement]` |
 
-### Page 3 — Absences Analysis
+### Page 3 - Absences Analysis
 | Visual | Configuration |
 |---|---|
 | KPI cards | `Nb Absences`, `Nb Absences Non Justifiees`, `Taux Justification %`, `Taux Absenteisme %` |
-| Stacked column | Axis `Dim_Date[nom_mois]` → `Nb Absences Justifiees` + `Nb Absences Non Justifiees` |
-| Line chart | Axis `Dim_Date[annee]` → `Nb Absences` |
-| Bar chart | Axis `Dim_Departement[nom_departement]` → `Nb Absences` |
-| Column chart | Axis `Dim_Date[saison]` → `Nb Absences` |
+| Stacked column | Axis `Dim_Date[nom_mois]` -> `Nb Absences Justifiees` + `Nb Absences Non Justifiees` |
+| Line chart | Axis `Dim_Date[annee]` -> `Nb Absences` |
+| Bar chart | Axis `Dim_Departement[nom_departement]` -> `Nb Absences` |
+| Column chart | Axis `Dim_Date[saison]` -> `Nb Absences` |
 | Table | `Dim_Employe[nom_complet]`, `Nb Absences`, `Nb Absences Non Justifiees`, `Taux Absenteisme %` (sort desc) |
 | Slicers | `Dim_Date[annee]`, `Dim_Employe[nom_departement]` |
 
-### Page 4 — Leave Analysis
+### Page 4 - Leave Analysis
 | Visual | Configuration |
 |---|---|
 | KPI cards | `Nb Conges`, `Total Jours Conge`, average of `Fact_Conge[nb_jours]`, `Total Employes` |
-| Donut | Legend `Fact_Conge[type_conge]` → `Nb Conges` |
-| Bar chart | Axis `Fact_Conge[statut]` → `Nb Conges` |
-| Line chart | Axis `Dim_Date[nom_mois]` → `Total Jours Conge` |
-| Column chart | Axis `Dim_Date[saison]` → `Total Jours Conge` |
-| Bar chart | Axis `Dim_Departement[nom_departement]` → `Total Jours Conge` |
+| Donut | Legend `Fact_Conge[type_conge]` -> `Nb Conges` |
+| Bar chart | Axis `Fact_Conge[statut]` -> `Nb Conges` |
+| Line chart | Axis `Dim_Date[nom_mois]` -> `Total Jours Conge` |
+| Column chart | Axis `Dim_Date[saison]` -> `Total Jours Conge` |
+| Bar chart | Axis `Dim_Departement[nom_departement]` -> `Total Jours Conge` |
 | Slicer | `Dim_Date[annee]`, `Fact_Conge[type_conge]` |
 
-### Page 5 — Training Analytics
+### Page 5 - Training Analytics
 | Visual | Configuration |
 |---|---|
 | KPI cards | `Nb Formations`, `Nb Inscriptions`, `Taux Participation Formation %`, `Score Moyen Formation` |
-| Donut | Legend `Dim_Formation[type_formation]` → `Nb Inscriptions` |
-| Bar chart | Axis `Dim_Departement[nom_departement]` → `Taux Participation Formation %` |
-| Line chart | Axis `Dim_Date[annee]` → `Nb Formations` |
+| Donut | Legend `Dim_Formation[type_formation]` -> `Nb Inscriptions` |
+| Bar chart | Axis `Dim_Departement[nom_departement]` -> `Taux Participation Formation %` |
+| Line chart | Axis `Dim_Date[annee]` -> `Nb Formations` |
 | Scatter | X `Dim_Employe[nom_complet]`, Y `Score Moyen Formation`, size `Nb Inscriptions` |
 | Table | `Dim_Formation[titre]`, `Dim_Formation[type_formation]`, `Nb Inscriptions`, `Taux Participation Formation %`, `Score Moyen Formation` |
 | Slicers | `Dim_Date[annee]`, `Dim_Formation[type_formation]` |
 
-## Step 5 — Theme
+## Step 5 - Theme
 
-Apply a custom theme (View → Themes → Customize current theme) with:
+Apply a custom theme (View -> Themes -> Customize current theme) with:
 - Primary `#6366f1`, secondary `#4f46e5`, success `#10b981`, warning `#f59e0b`, danger `#dc2626`, background `#f8fafc`, dark `#0f172a`.
 
 Keep visuals minimal: no 3-D, no decorative backgrounds. Each visual must encode a value (dashboard design principle, Few 2006).
 
-## Step 6 — Capture for the report
+## Step 6 - Capture for the report
 
-Export or screenshot each of the four pages for Figures 5.11–5.14 of the report (see `rapport-pfe/99-screenshot-checklist.md`). Use the Power BI File → Export → PDF if you also want a PDF annex.
+Export or screenshot each of the four pages for Figures 5.11-5.14 of the report (see `rapport-pfe/99-screenshot-checklist.md`). Use the Power BI File -> Export -> PDF if you also want a PDF annex.

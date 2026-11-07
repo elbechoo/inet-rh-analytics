@@ -6,7 +6,7 @@ calendar and creates their first administrator account.
     python scripts/provision_tenant.py --key agencya --name "Agency A"
     python scripts/provision_tenant.py --key agencya --name "Agency A" --admin admin@agencya.tn
 
-The tenant is appended to config/tenants.json. Restart the API afterwards —
+The tenant is appended to config/tenants.json. Restart the API afterwards -
 the registry is read once at startup.
 
 Nothing is shared between clients: separate database, separate schema, separate
@@ -31,7 +31,7 @@ KEY_RE = re.compile(r"^[a-z0-9][a-z0-9_-]{0,62}$")
 
 def _server_url() -> str:
     """A connection to the server itself, for CREATE DATABASE."""
-    # master on SQL Server, postgres on PostgreSQL — you cannot create a
+    # master on SQL Server, postgres on PostgreSQL - you cannot create a
     # database from inside the one you are creating.
     return build_url("postgres" if DB_ENGINE == "postgres" else "master")
 
@@ -91,7 +91,7 @@ def main() -> None:
     display = args.name or key
 
     if db_name == DB_DATABASE:
-        sys.exit(f"Refusing to use {db_name!r} — that is the default workspace's database.")
+        sys.exit(f"Refusing to use {db_name!r} - that is the default workspace's database.")
 
     print(f"Provisioning '{display}'  (key={key}, database={db_name})\n")
 

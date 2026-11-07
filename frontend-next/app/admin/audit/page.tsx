@@ -114,13 +114,13 @@ export default function AuditPage() {
       }}>
         <Info size={15} style={{ color: '#0B87BE', flexShrink: 0, marginTop: 1 }} />
         <span>
-          A permanent record of decisions affecting employment — approvals, role changes,
+          A permanent record of decisions affecting employment - approvals, role changes,
           deletions. Entries are never edited or removed. For technical diagnostics see
           System&nbsp;Logs, which rotate and are eventually discarded.
         </span>
       </div>
 
-      {loading && <div style={{ color: '#6B879B', fontSize: '0.84rem', padding: 20 }}>Loading…</div>}
+      {loading && <div style={{ color: '#6B879B', fontSize: '0.84rem', padding: 20 }}>Loading...</div>}
 
       {!loading && rows.length === 0 && (
         <div style={{
@@ -165,11 +165,11 @@ export default function AuditPage() {
                       <Clock size={12} style={{ verticalAlign: -1, marginRight: 5, color: '#9DB3C2' }} />
                       {when ? when.toLocaleString('en-GB', {
                         day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit',
-                      }) : '—'}
+                      }) : '-'}
                     </td>
                     <td style={{ padding: '11px 16px', color: '#0C2436', whiteSpace: 'nowrap' }}>
                       <User size={12} style={{ verticalAlign: -1, marginRight: 5, color: '#9DB3C2' }} />
-                      {r.username ?? '—'}
+                      {r.username ?? '-'}
                       {r.role && (
                         <span style={{ color: '#9DB3C2', fontSize: '0.72rem', marginLeft: 6 }}>
                           {r.role}
@@ -183,7 +183,7 @@ export default function AuditPage() {
                       }}>{meta.label}</span>
                     </td>
                     <td style={{ padding: '11px 16px', color: '#6B879B', whiteSpace: 'nowrap' }}>
-                      {r.entite ? `${r.entite} #${r.entite_id ?? '—'}` : '—'}
+                      {r.entite ? `${r.entite} #${r.entite_id ?? '-'}` : '-'}
                     </td>
                     <td style={{ padding: '11px 16px', color: '#34546A', maxWidth: 320 }}>
                       {r.ancienne_valeur && (
@@ -191,10 +191,10 @@ export default function AuditPage() {
                           {r.ancienne_valeur}
                         </span>
                       )}
-                      {r.nouvelle_valeur ?? r.detail ?? '—'}
+                      {r.nouvelle_valeur ?? r.detail ?? '-'}
                     </td>
                     <td style={{ padding: '11px 16px', color: '#9DB3C2', fontSize: '0.75rem', whiteSpace: 'nowrap' }}>
-                      {r.adresse_ip ?? '—'}
+                      {r.adresse_ip ?? '-'}
                     </td>
                   </tr>
                 );

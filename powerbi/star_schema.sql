@@ -1,5 +1,5 @@
 -- =============================================================
--- iNET RH — Kimball Star Schema (Data Warehouse Layer)
+-- iNET RH - Kimball Star Schema (Data Warehouse Layer)
 -- Run once against GestionRH_Intelligente
 -- Grain of Fact_Pointage  : 1 row per employee per working day
 -- Grain of Fact_Absence   : 1 row per absence event
@@ -11,7 +11,7 @@ GO
 
 -- =============================================================
 -- DIMENSION: Dim_Date
--- Standard calendar dimension — populated by ETL (2015–2027)
+-- Standard calendar dimension - populated by ETL (2015-2027)
 -- =============================================================
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Dim_Date' AND xtype='U')
 CREATE TABLE Dim_Date (
@@ -24,7 +24,7 @@ CREATE TABLE Dim_Date (
     semaine         INT          NOT NULL,               -- ISO week
     jour            INT          NOT NULL,               -- 1-31
     nom_jour        VARCHAR(20)  NOT NULL,
-    jour_semaine_num INT         NOT NULL,               -- 0=Mon … 6=Sun
+    jour_semaine_num INT         NOT NULL,               -- 0=Mon ... 6=Sun
     est_weekend     BIT          NOT NULL DEFAULT 0,
     saison          VARCHAR(20)  NOT NULL                -- Hiver/Printemps/Été/Automne
 );
@@ -44,7 +44,7 @@ CREATE TABLE Dim_Departement (
 GO
 
 -- =============================================================
--- DIMENSION: Dim_Employe  (Type 1 SCD — latest state wins)
+-- DIMENSION: Dim_Employe  (Type 1 SCD - latest state wins)
 -- =============================================================
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Dim_Employe' AND xtype='U')
 CREATE TABLE Dim_Employe (

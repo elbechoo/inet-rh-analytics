@@ -129,7 +129,7 @@ def require_self_manager_or_hr(
 
     Wider than require_self_or_hr by exactly one step: a manager can see their
     own team. Used for team views and approvals, never for payslips or
-    documents — a manager having people report to them does not entitle them to
+    documents - a manager having people report to them does not entitle them to
     read those.
 
     Only direct reports, not the whole subtree. Skip-level access is a policy

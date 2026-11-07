@@ -1,4 +1,4 @@
-# Phase 2 — full stack in containers: Postgres + FastAPI + Next.js + Caddy.
+# Phase 2 - full stack in containers: Postgres + FastAPI + Next.js + Caddy.
 # Copy .env.example to .env, fill in SECRET_KEY / DB_PASSWORD, then:
 #   docker compose up --build
 # App: https://localhost   (or your SITE_ADDRESS domain)
@@ -15,6 +15,12 @@ services:
       POSTGRES_DB: ${DB_DATABASE:-inet_rh}
     volumes:
       - pgdata:/var/lib/postgresql/data
+    ports:
+      # Bound to loopback only, never 0.0.0.0: the database must not be
+      # reachable from the network. Published so host tools can connect -
+      # Alembic autogenerate, Power BI, DBeaver, psql - while the app itself
+      # still talks to it over the compose network as `db:5432`.
+      - "127.0.0.1:5432:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-inet} -d ${DB_DATABASE:-inet_rh}"]
       interval: 5s
@@ -84,6 +90,28 @@ services:
       - caddy_config:/config
     depends_on:
       - frontend
+
+  # Analytics layer. Not part of the running app, so it sits behind a profile
+  # and only starts when asked:
+  #   docker compose --profile analytics run --rm dbt build
+  dbt:
+    profiles: ["analytics"]
+    build:
+      context: ./dbt
+      dockerfile: Dockerfile
+    environment:
+      DB_SERVER: db
+      DB_PORT: "5432"
+      DB_DATABASE: ${DB_DATABASE:-inet_rh}
+      DB_USER: ${DB_USER:-inet}
+      DB_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in .env}
+    volumes:
+      # Mounted rather than copied so edits to models take effect without a
+      # rebuild, and so dbt docs land on the host where they can be opened.
+      - ./dbt:/dbt
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   pgdata:

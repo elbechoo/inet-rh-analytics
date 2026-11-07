@@ -40,7 +40,7 @@ class Employe(Base):
 
     # Reporting line. Self-referential and nullable: the top of the hierarchy
     # reports to nobody, and an employee may legitimately have no manager yet.
-    # Without this, a leave request can only be approved by "some HR person" —
+    # Without this, a leave request can only be approved by "some HR person" -
     # real approval flows go to the requester's own manager first.
     manager_id        = Column(Integer, ForeignKey("Employe.employe_id"), index=True)
 
@@ -91,8 +91,8 @@ class Pointage(Base):
     employe_id        = Column(Integer, ForeignKey("Employe.employe_id"), nullable=False)
     date_pointage     = Column(Date, nullable=False)
     heure_entree      = Column(Time)
-    heure_debut_pause = Column(Time)   # ← NOUVEAU
-    heure_fin_pause   = Column(Time)   # ← NOUVEAU
+    heure_debut_pause = Column(Time)   # <- NOUVEAU
+    heure_fin_pause   = Column(Time)   # <- NOUVEAU
     heure_sortie      = Column(Time)
     duree_travail     = Column(Float)
     retard_minutes    = Column(Integer, default=0)
@@ -139,7 +139,7 @@ class Absence(Base):
 class TokenRevoke(Base):
     """Sessions ended before their token would have expired.
 
-    A JWT is valid until it expires — the server does not store it, so deleting
+    A JWT is valid until it expires - the server does not store it, so deleting
     the cookie on logout only stops *this* browser from sending it. A token
     already copied elsewhere keeps working for the rest of its eight hours.
 
@@ -161,7 +161,7 @@ class AuditLog(Base):
 
     HR systems hold decisions that affect pay and employment: a rejected leave
     request, a changed role, a deleted record. When an employee disputes one,
-    "the system says so" is not an answer — there has to be a record of which
+    "the system says so" is not an answer - there has to be a record of which
     account made the change and at what time. Several jurisdictions require it,
     and it is the difference between an HR tool and an HR system of record.
 
@@ -175,7 +175,7 @@ class AuditLog(Base):
     date_action   = Column(DateTime, default=func.now(), nullable=False, index=True)
 
     # Who. user_id rather than employe_id: the actor is an account, and the
-    # account may be deleted later — so the username is denormalised here to
+    # account may be deleted later - so the username is denormalised here to
     # keep the trail readable after the fact.
     user_id       = Column(Integer, ForeignKey("Utilisateur.user_id"), index=True)
     username      = Column(String(100))
@@ -186,7 +186,7 @@ class AuditLog(Base):
     entite        = Column(String(40))          # Conge / Employe / Utilisateur
     entite_id     = Column(Integer, index=True)
 
-    # To whom — the employee affected, when different from the actor.
+    # To whom - the employee affected, when different from the actor.
     cible_employe_id = Column(Integer, index=True)
 
     ancienne_valeur = Column(String(500))
@@ -205,7 +205,7 @@ class JourFerie(Base):
 
     `type_ferie` distinguishes fixed civil dates from the Islamic ones, which
     move roughly 11 days earlier each year and are ultimately set by moon
-    sighting — so they are stored per year rather than computed, and HR can
+    sighting - so they are stored per year rather than computed, and HR can
     correct them when the official announcement differs.
     """
     __tablename__ = "JourFerie"
@@ -358,7 +358,7 @@ class AlerteIA(Base):
 
 
 # ============================================
-# 14. AdminEmploye (Admin 1 → N Employe)
+# 14. AdminEmploye (Admin 1 -> N Employe)
 # ============================================
 class AdminEmploye(Base):
     __tablename__ = "AdminEmploye"
@@ -376,7 +376,7 @@ class AdminEmploye(Base):
 # ============================================
 # 15. DW_KPI_Employe (Data Warehouse)
 # Schema matches etl/load.py and script.sql.
-# employe_id is the PK (not auto-increment — ETL inserts specific IDs).
+# employe_id is the PK (not auto-increment - ETL inserts specific IDs).
 # ============================================
 class DW_KPI_Employe(Base):
     __tablename__ = "DW_KPI_Employe"

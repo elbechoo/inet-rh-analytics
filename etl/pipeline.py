@@ -28,7 +28,7 @@ if not logger.handlers:
 def run_pipeline():
     """
     Exécuter le pipeline ETL complet:
-    Extract → Transform → Load
+    Extract -> Transform -> Load
     """
     start = datetime.now()
     logger.info("=" * 50)
@@ -49,13 +49,13 @@ def run_pipeline():
         transformed_data = transform_all(raw_data)
 
         # ============================================
-        # LOAD — KPI flat tables
+        # LOAD - KPI flat tables
         # ============================================
         logger.info("\n📥 ÉTAPE 3: CHARGEMENT KPI")
         result = load_all(transformed_data)
 
         # ============================================
-        # LOAD — Star schema (Kimball)
+        # LOAD - Star schema (Kimball)
         # ============================================
         logger.info("\n📥 ÉTAPE 4: CHARGEMENT STAR SCHEMA")
         run_star_etl()

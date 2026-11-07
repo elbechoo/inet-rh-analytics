@@ -95,7 +95,7 @@ def get_employe_features_periode(
     Compute per-employee behavioural features restricted to [date_debut, date_fin].
 
     Used for temporal validation: train features come from an earlier period,
-    label features come from a later period — avoiding data leakage.
+    label features come from a later period - avoiding data leakage.
 
     Employees with fewer than `min_activite` attendance+absence records in the
     period are excluded (not enough signal).

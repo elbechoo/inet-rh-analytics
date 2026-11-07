@@ -156,7 +156,7 @@ def build_html_digest(data: dict) -> str:
           <td style="padding:8px 12px;color:#333;">{row['nom_complet']}</td>
           <td style="padding:8px 12px;color:#666;">{row['nom_departement']}</td>
           <td style="padding:8px 12px;">{row['type_conge']}</td>
-          <td style="padding:8px 12px;">{str(row['date_debut'])[:10]} → {str(row['date_fin'])[:10]}</td>
+          <td style="padding:8px 12px;">{str(row['date_debut'])[:10]} -> {str(row['date_fin'])[:10]}</td>
           <td style="padding:8px 12px;text-align:center;font-weight:bold;">{row['nb_jours']}j</td>
         </tr>"""
 
@@ -187,7 +187,7 @@ def build_html_digest(data: dict) -> str:
   <!-- Header -->
   <tr>
     <td style="background:linear-gradient(135deg,#1a237e,#283593);padding:28px 32px;">
-      <h1 style="margin:0;color:white;font-size:22px;">📊 iNET RH — Rapport Quotidien</h1>
+      <h1 style="margin:0;color:white;font-size:22px;">📊 iNET RH - Rapport Quotidien</h1>
       <p style="margin:6px 0 0;color:#c5cae9;font-size:14px;">Synthèse du {rapport_date}</p>
     </td>
   </tr>
@@ -258,7 +258,7 @@ def build_html_digest(data: dict) -> str:
   <tr>
     <td style="background:#f8f9fa;padding:16px 32px;text-align:center;border-top:1px solid #eee;">
       <p style="margin:0;color:#999;font-size:12px;">
-        iNET RH Intelligente — Rapport généré automatiquement le {rapport_date}<br>
+        iNET RH Intelligente - Rapport généré automatiquement le {rapport_date}<br>
         <span style="color:#1a237e;">Ne pas répondre à cet email</span>
       </p>
     </td>
@@ -279,8 +279,8 @@ def build_and_get_subject(data: dict) -> str:
     nb_conges    = len(data["conges"])
 
     if nb_critiques > 0:
-        return f"🔴 iNET RH — {nb_critiques} Alerte(s) Critique(s) | Rapport du {data['date']}"
+        return f"🔴 iNET RH - {nb_critiques} Alerte(s) Critique(s) | Rapport du {data['date']}"
     elif nb_conges > 0:
-        return f"🟡 iNET RH — {nb_conges} Congé(s) en attente | Rapport du {data['date']}"
+        return f"🟡 iNET RH - {nb_conges} Congé(s) en attente | Rapport du {data['date']}"
     else:
-        return f"✅ iNET RH — Rapport quotidien du {data['date']}"
+        return f"✅ iNET RH - Rapport quotidien du {data['date']}"

@@ -1,4 +1,4 @@
-"""Alembic environment — wired to the app's env-driven DB config.
+"""Alembic environment - wired to the app's env-driven DB config.
 
 Autogenerate compares the live database against the ORM metadata in
 models/models.py, so `alembic revision --autogenerate` produces migrations that

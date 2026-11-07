@@ -4,7 +4,7 @@ These cover the bug that started this work: leave spanning a public holiday was
 charged to the employee's own balance, and nobody clocking in on a holiday was
 recorded as absent.
 
-No database — the calendar builder and the working-day arithmetic are pure, so
+No database - the calendar builder and the working-day arithmetic are pure, so
 they can be tested directly.
 """
 from datetime import date, timedelta
@@ -19,7 +19,7 @@ def _dates(cal):
 
 
 def test_calendar_has_one_entry_per_date():
-    """Civil and Islamic holidays collide — 20 March 2026 is both Independence
+    """Civil and Islamic holidays collide - 20 March 2026 is both Independence
     Day and the first day of Aïd El-Fitr. One date is one day off, and the
     database enforces a unique date, so the two must be merged rather than
     duplicated."""
@@ -80,13 +80,13 @@ def test_weekends_excluded():
 def test_holiday_inside_a_leave_is_not_charged():
     """The original bug: an employee taking the week of Aïd paid for it."""
     feries = {date(2026, 5, 27), date(2026, 5, 28), date(2026, 5, 29)}
-    start, end = date(2026, 5, 25), date(2026, 5, 29)   # Mon–Fri
+    start, end = date(2026, 5, 25), date(2026, 5, 29)   # Mon-Fri
     assert _working_days(start, end, set()) == 5        # old rule
     assert _working_days(start, end, feries) == 2       # corrected
 
 
 def test_holiday_on_a_weekend_changes_nothing():
-    """A three-day Aïd overlapping a weekend recovers fewer days — the reason
+    """A three-day Aïd overlapping a weekend recovers fewer days - the reason
     the measured per-employee figure is smaller than people expect."""
     saturday = date(2026, 6, 6)
     assert saturday.weekday() >= 5

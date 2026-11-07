@@ -46,7 +46,7 @@ LABEL_FIN   = date(2025, 12, 31)
 def _rule_based_f1(X_raw: pd.DataFrame, y: pd.Series) -> float:
     """
     Baseline classifier: flag employee as at-risk when their absence rate
-    is at or above the dataset 75th percentile — the simplest HR rule.
+    is at or above the dataset 75th percentile - the simplest HR rule.
     Comparing RF against this baseline proves the model adds value beyond
     what a plain threshold already captures.
     """
@@ -80,7 +80,7 @@ def _fit_and_evaluate(X: pd.DataFrame, y: pd.Series):
             "accuracy"    : round(model.score(X_scaled, y) * 100, 2),
             "precision"   : None, "recall": None, "f1": None,
             "baseline_f1" : baseline_f1,
-            "note"        : "Dataset too small for train/test split — trained on all samples",
+            "note"        : "Dataset too small for train/test split - trained on all samples",
         }
 
     X_train, X_test, y_train, y_test = train_test_split(
@@ -122,9 +122,9 @@ def entrainer_modele(db: Session):
     """
     Train the absenteeism risk model using temporal validation:
 
-    - Features computed from historical period (2016–2023)
-    - Labels derived from actual employee behaviour in 2024–2025
-      (employees in the top 25 % by absence rate in 2024–2025 are labelled
+    - Features computed from historical period (2016-2023)
+    - Labels derived from actual employee behaviour in 2024-2025
+      (employees in the top 25 % by absence rate in 2024-2025 are labelled
       as high-risk)
 
     This avoids the circular labelling problem where labels are derived
@@ -154,7 +154,7 @@ def entrainer_modele(db: Session):
 
         # Inner-join: only employees present in both periods
         df = df_train.merge(df_labels, on="employe_id")
-        validation_method = "temporal (2016-2023 features → 2024-2025 labels)"
+        validation_method = "temporal (2016-2023 features -> 2024-2025 labels)"
     else:
         # Fallback: heuristic labelling on all-time data
         df = get_employe_features(db)
@@ -226,8 +226,8 @@ def predire_absenteisme(db: Session, use_v2: bool = True):
     on disk, falling back to the legacy level-based model, then to the
     rule-based scorer. Callers keep the same result shape either way.
 
-    NOTE: this used to delete the model files and retrain on *every* call —
-    including every dashboard load — which made the weekly scheduled retrain
+    NOTE: this used to delete the model files and retrain on *every* call -
+    including every dashboard load - which made the weekly scheduled retrain
     pointless and would crawl on a real client's data. Training now happens only
     via the scheduler or an explicit request; prediction just loads the cache.
     """

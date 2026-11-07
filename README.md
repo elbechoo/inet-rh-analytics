@@ -1,10 +1,10 @@
 <div align="center">
 
-# iNET RH — Smart HR Management
+# iNET RH - Smart HR Management
 
 **Attendance, leave and absenteeism analytics for Tunisian companies**
 
-*Built at iNET · 2025–2026*
+*Built at iNET · 2025-2026*
 
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.136-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
@@ -19,7 +19,7 @@
 
 ## What it does
 
-HR departments collect a lot of data — clock-ins, leave, absences, training, missions — and rarely use it for anything beyond payroll. iNET RH turns that data into something a manager will actually read, and flags employees whose attendance is deteriorating before it becomes a resignation.
+HR departments collect a lot of data - clock-ins, leave, absences, training, missions - and rarely use it for anything beyond payroll. iNET RH turns that data into something a manager will actually read, and flags employees whose attendance is deteriorating before it becomes a resignation.
 
 Three separate workspaces, each with its own permissions:
 
@@ -43,7 +43,7 @@ Three separate workspaces, each with its own permissions:
 
 ## Run it
 
-The whole stack runs in containers — database, API, frontend and a reverse proxy with automatic HTTPS.
+The whole stack runs in containers - database, API, frontend and a reverse proxy with automatic HTTPS.
 
 ```bash
 git clone https://github.com/<you>/inet-rh.git
@@ -63,7 +63,7 @@ docker compose exec api python scripts/seed_extras.py     # training, missions, 
 
 Then open **https://localhost**. The seeder prints the login for the admin and HR accounts.
 
-For a real domain, set `SITE_ADDRESS=hr.yourcompany.tn` in `.env` — Caddy fetches a Let's Encrypt certificate on its own.
+For a real domain, set `SITE_ADDRESS=hr.yourcompany.tn` in `.env` - Caddy fetches a Let's Encrypt certificate on its own.
 
 ---
 
@@ -100,14 +100,14 @@ Layered on purpose: routes handle HTTP and permissions, services hold the busine
 
 Most of the engineering here went into access control rather than features.
 
-- **Authentication is enforced at the router level**, not per endpoint — a new route cannot be added without it
+- **Authentication is enforced at the router level**, not per endpoint - a new route cannot be added without it
 - **JWT in an httpOnly cookie**, so a cross-site scripting bug cannot steal a session
-- **Ownership checks on every route that takes an ID** — an employee cannot read a colleague's payslip, leave history or risk score by changing the URL
-- **Role separation** — HR analytics and model internals are unreachable from an employee account
+- **Ownership checks on every route that takes an ID** - an employee cannot read a colleague's payslip, leave history or risk score by changing the URL
+- **Role separation** - HR analytics and model internals are unreachable from an employee account
 - **Rate limiting on login** (5 attempts per IP per 15 minutes)
-- **Security headers** — `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, HSTS over TLS
+- **Security headers** - `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, HSTS over TLS
 - **bcrypt** password hashing, and no secret has a default value: the app refuses to boot without `SECRET_KEY`
-- **Document downloads return 404, not 403**, for files you do not own — a 403 would confirm the file exists and let IDs be enumerated
+- **Document downloads return 404, not 403**, for files you do not own - a 403 would confirm the file exists and let IDs be enumerated
 
 Multi-tenancy is available for hosting several companies from one deployment: each gets a **separate database**, selected by subdomain, and tokens are bound to the workspace that issued them.
 
@@ -117,7 +117,7 @@ Multi-tenancy is available for hosting several companies from one deployment: ea
 
 Leave and absence calculations are holiday-aware, which most generic HR software imported into Tunisia gets wrong.
 
-Without it, an employee taking leave across Aïd is charged those days from their own balance, and nobody clocking in on a public holiday is recorded as absent — which then feeds the absenteeism model as real signal. The calendar covers the fixed civil holidays plus Aïd El-Fitr, Aïd El-Idha, Ras El Am Hejri and Mouled.
+Without it, an employee taking leave across Aïd is charged those days from their own balance, and nobody clocking in on a public holiday is recorded as absent - which then feeds the absenteeism model as real signal. The calendar covers the fixed civil holidays plus Aïd El-Fitr, Aïd El-Idha, Ras El Am Hejri and Mouled.
 
 Islamic dates move each year and are fixed by moon sighting, so they are stored per year and HR can correct them from the interface when the official announcement differs.
 
@@ -127,11 +127,11 @@ Islamic dates move each year and are fixed by moon sighting, so they are stored 
 
 Predicts which employees are at risk of increasing absenteeism, and explains why.
 
-**How it works.** Features are built from attendance history — absence rate, lateness frequency, how absences cluster around weekends, deviation from the employee's own department. A random forest produces a probability; the explanation layer compares each feature against the department median and reports the ones that actually drive the score.
+**How it works.** Features are built from attendance history - absence rate, lateness frequency, how absences cluster around weekends, deviation from the employee's own department. A random forest produces a probability; the explanation layer compares each feature against the department median and reports the ones that actually drive the score.
 
 **Benchmarked on real data.** Results below are from the UCI *Absenteeism at
-Work* dataset — a Brazilian courier company, 740 absence records across 36
-employees — not from generated data. The task: given what is known when someone
+Work* dataset - a Brazilian courier company, 740 absence records across 36
+employees - not from generated data. The task: given what is known when someone
 calls in, will this absence cost a full working day or more?
 
 | Method | F1 | Precision | Recall | AUC |
@@ -145,7 +145,7 @@ calls in, will this absence cost a full working day or more?
 **+15.3 F1 points over the best hand-written rule.**
 
 **Why the split is grouped by employee.** Absences are very unevenly
-distributed — one employee accounts for 113 of the 740 rows. Split at random
+distributed - one employee accounts for 113 of the 740 rows. Split at random
 and the same person appears in training and test, so the model learns *that
 individual's* habits and scores well by recognising them. Splitting by employee
 means every person in the test set is unseen, which is the situation the model
@@ -159,7 +159,7 @@ than hidden.
 **The model does not get to assume it is useful.** Every deployment trains on
 its own data, scores against the rule-based baseline on a held-out temporal
 split, and the model is only promoted to serving if it wins by at least 5 F1
-points. Otherwise the rule serves and the system says so — `GET /ai/strategy`
+points. Otherwise the rule serves and the system says so - `GET /ai/strategy`
 reports which is active and why. On data where behaviour is stable, the rule is
 the correct answer, and pretending otherwise would be dishonest.
 
@@ -220,7 +220,7 @@ The database connection is entirely environment-driven (`DB_ENGINE=mssql|postgre
 
 | Script | Purpose |
 |---|---|
-| `seed_demo.py` | Fictional company — departments, employees, accounts |
+| `seed_demo.py` | Fictional company - departments, employees, accounts |
 | `seed_history.py` | Backfills realistic attendance over any period |
 | `seed_holidays.py` | Tunisian public holiday calendar |
 | `audit_holiday_absences.py` | Finds absences wrongly recorded on holidays |
@@ -234,6 +234,6 @@ The two audit scripts are read-only by default and report before they change any
 
 ## Project info
 
-**Author** — Hechem Zenati
-**Context** — built at iNET, 2025–2026
-**Status** — functional; demo data is simulated
+**Author** - Hechem Zenati
+**Context** - built at iNET, 2025-2026
+**Status** - functional; demo data is simulated

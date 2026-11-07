@@ -66,7 +66,7 @@ export default function MesFormationsPage() {
                 <div style={{ fontWeight: 600, color: '#0C2436', fontSize: '0.88rem', marginBottom: 2 }}>{f.titre}</div>
                 <div style={{ fontSize: '0.73rem', color: '#9DB3C2', display: 'flex', alignItems: 'center', gap: 6 }}>
                   <Calendar size={11} />
-                  {f.date_debut} — {f.date_fin}
+                  {f.date_debut} - {f.date_fin}
                   {f.organisateur && <span> · {f.organisateur}</span>}
                 </div>
               </div>
@@ -98,7 +98,7 @@ export default function MesFormationsPage() {
                 <div style={{ fontWeight: 600, color: '#6B879B', fontSize: '0.88rem', marginBottom: 2 }}>{f.titre}</div>
                 <div style={{ fontSize: '0.73rem', color: '#9DB3C2', display: 'flex', alignItems: 'center', gap: 6 }}>
                   <Calendar size={11} />
-                  {f.date_debut} — {f.date_fin}
+                  {f.date_debut} - {f.date_fin}
                 </div>
               </div>
             </div>

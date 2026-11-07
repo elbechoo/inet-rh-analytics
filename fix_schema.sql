@@ -7,7 +7,7 @@
 -- Notes:
 --   - CHECK and FK constraints use WITH NOCHECK to avoid failing on
 --     existing seed data. They will still enforce new inserts/updates.
---   - UNIQUE constraints will fail if duplicates already exist — fix
+--   - UNIQUE constraints will fail if duplicates already exist - fix
 --     the data first, then re-run those statements.
 --   - See the SCHEMA MISMATCH section at the bottom for a known
 --     DW_KPI_Employe / DW_KPI_Mensuel issue between script.sql and
@@ -19,7 +19,7 @@ GO
 
 -- =============================================================================
 -- 1. FIX VIEWS  (vw_Absence / vw_Conge return ROW_NUMBER() as the PK, which
---    is wrong — it shifts when ORDER changes. Return the real PK instead.)
+--    is wrong - it shifts when ORDER changes. Return the real PK instead.)
 -- =============================================================================
 
 IF OBJECT_ID('dbo.vw_Absence', 'V') IS NOT NULL DROP VIEW dbo.vw_Absence;
@@ -57,7 +57,7 @@ GO
 
 -- =============================================================================
 -- 2. UNIQUE CONSTRAINTS
---    These will error if duplicate rows already exist — clean the data first.
+--    These will error if duplicate rows already exist - clean the data first.
 -- =============================================================================
 
 -- Employe: matricule and email must be unique (ORM already declares both)
@@ -88,7 +88,7 @@ IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'UQ_PresenceFormation_form
     ALTER TABLE dbo.PresenceFormation ADD CONSTRAINT UQ_PresenceFormation_formation_employe UNIQUE (formation_id, employe_id);
 GO
 
--- AdminEmploye: no duplicate admin→employee pairs
+-- AdminEmploye: no duplicate admin->employee pairs
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'UQ_AdminEmploye_admin_employe' AND object_id = OBJECT_ID('dbo.AdminEmploye'))
     ALTER TABLE dbo.AdminEmploye ADD CONSTRAINT UQ_AdminEmploye_admin_employe UNIQUE (admin_id, employe_id);
 GO
@@ -210,7 +210,7 @@ GO
 
 
 -- =============================================================================
--- 4. CHECK CONSTRAINTS  (WITH NOCHECK — enforces new rows, not existing data)
+-- 4. CHECK CONSTRAINTS  (WITH NOCHECK - enforces new rows, not existing data)
 --    Values are derived from actual code in services/ and repositories/.
 -- =============================================================================
 
@@ -291,137 +291,137 @@ GO
 
 
 -- =============================================================================
--- 5. FOREIGN KEY CONSTRAINTS  (WITH NOCHECK — enforce new rows only)
+-- 5. FOREIGN KEY CONSTRAINTS  (WITH NOCHECK - enforce new rows only)
 --    Defined to match ForeignKey() declarations in models/models.py exactly.
 -- =============================================================================
 
--- Employe → Departement
+-- Employe -> Departement
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_Employe_Departement')
     ALTER TABLE dbo.Employe WITH NOCHECK
         ADD CONSTRAINT FK_Employe_Departement
         FOREIGN KEY (departement_id) REFERENCES dbo.Departement(departement_id);
 GO
 
--- Utilisateur → Employe
+-- Utilisateur -> Employe
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_Utilisateur_Employe')
     ALTER TABLE dbo.Utilisateur WITH NOCHECK
         ADD CONSTRAINT FK_Utilisateur_Employe
         FOREIGN KEY (employe_id) REFERENCES dbo.Employe(employe_id);
 GO
 
--- RH → Employe
+-- RH -> Employe
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_RH_Employe')
     ALTER TABLE dbo.RH WITH NOCHECK
         ADD CONSTRAINT FK_RH_Employe
         FOREIGN KEY (employe_id) REFERENCES dbo.Employe(employe_id);
 GO
 
--- Pointage → Employe
+-- Pointage -> Employe
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_Pointage_Employe')
     ALTER TABLE dbo.Pointage WITH NOCHECK
         ADD CONSTRAINT FK_Pointage_Employe
         FOREIGN KEY (employe_id) REFERENCES dbo.Employe(employe_id);
 GO
 
--- PointageLog → Employe
+-- PointageLog -> Employe
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_PointageLog_Employe')
     ALTER TABLE dbo.PointageLog WITH NOCHECK
         ADD CONSTRAINT FK_PointageLog_Employe
         FOREIGN KEY (employe_id) REFERENCES dbo.Employe(employe_id);
 GO
 
--- Absence → Employe
+-- Absence -> Employe
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_Absence_Employe')
     ALTER TABLE dbo.Absence WITH NOCHECK
         ADD CONSTRAINT FK_Absence_Employe
         FOREIGN KEY (employe_id) REFERENCES dbo.Employe(employe_id);
 GO
 
--- Conge → Employe (demandeur)
+-- Conge -> Employe (demandeur)
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_Conge_Employe')
     ALTER TABLE dbo.Conge WITH NOCHECK
         ADD CONSTRAINT FK_Conge_Employe
         FOREIGN KEY (employe_id) REFERENCES dbo.Employe(employe_id);
 GO
 
--- Conge.valide_par → Employe  (models.py line 147: ForeignKey("Employe.employe_id"))
+-- Conge.valide_par -> Employe  (models.py line 147: ForeignKey("Employe.employe_id"))
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_Conge_Validateur')
     ALTER TABLE dbo.Conge WITH NOCHECK
         ADD CONSTRAINT FK_Conge_Validateur
         FOREIGN KEY (valide_par) REFERENCES dbo.Employe(employe_id);
 GO
 
--- Document → Employe (demandeur)
+-- Document -> Employe (demandeur)
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_Document_Employe')
     ALTER TABLE dbo.Document WITH NOCHECK
         ADD CONSTRAINT FK_Document_Employe
         FOREIGN KEY (employe_id) REFERENCES dbo.Employe(employe_id);
 GO
 
--- Document.valide_par → Employe  (models.py line 168: ForeignKey("Employe.employe_id"))
+-- Document.valide_par -> Employe  (models.py line 168: ForeignKey("Employe.employe_id"))
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_Document_Validateur')
     ALTER TABLE dbo.Document WITH NOCHECK
         ADD CONSTRAINT FK_Document_Validateur
         FOREIGN KEY (valide_par) REFERENCES dbo.Employe(employe_id);
 GO
 
--- Mission → Employe (demandeur)
+-- Mission -> Employe (demandeur)
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_Mission_Employe')
     ALTER TABLE dbo.Mission WITH NOCHECK
         ADD CONSTRAINT FK_Mission_Employe
         FOREIGN KEY (employe_id) REFERENCES dbo.Employe(employe_id);
 GO
 
--- Mission.valide_par → Employe  (models.py line 191: ForeignKey("Employe.employe_id"))
+-- Mission.valide_par -> Employe  (models.py line 191: ForeignKey("Employe.employe_id"))
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_Mission_Validateur')
     ALTER TABLE dbo.Mission WITH NOCHECK
         ADD CONSTRAINT FK_Mission_Validateur
         FOREIGN KEY (valide_par) REFERENCES dbo.Employe(employe_id);
 GO
 
--- PresenceFormation → Formation
+-- PresenceFormation -> Formation
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_PresenceFormation_Formation')
     ALTER TABLE dbo.PresenceFormation WITH NOCHECK
         ADD CONSTRAINT FK_PresenceFormation_Formation
         FOREIGN KEY (formation_id) REFERENCES dbo.Formation(formation_id);
 GO
 
--- PresenceFormation → Employe
+-- PresenceFormation -> Employe
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_PresenceFormation_Employe')
     ALTER TABLE dbo.PresenceFormation WITH NOCHECK
         ADD CONSTRAINT FK_PresenceFormation_Employe
         FOREIGN KEY (employe_id) REFERENCES dbo.Employe(employe_id);
 GO
 
--- SoldeConge → Employe
+-- SoldeConge -> Employe
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_SoldeConge_Employe')
     ALTER TABLE dbo.SoldeConge WITH NOCHECK
         ADD CONSTRAINT FK_SoldeConge_Employe
         FOREIGN KEY (employe_id) REFERENCES dbo.Employe(employe_id);
 GO
 
--- AlerteIA → Employe (nullable FK)
+-- AlerteIA -> Employe (nullable FK)
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_AlerteIA_Employe')
     ALTER TABLE dbo.AlerteIA WITH NOCHECK
         ADD CONSTRAINT FK_AlerteIA_Employe
         FOREIGN KEY (employe_id) REFERENCES dbo.Employe(employe_id);
 GO
 
--- AlerteIA → Departement (nullable FK)
+-- AlerteIA -> Departement (nullable FK)
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_AlerteIA_Departement')
     ALTER TABLE dbo.AlerteIA WITH NOCHECK
         ADD CONSTRAINT FK_AlerteIA_Departement
         FOREIGN KEY (departement_id) REFERENCES dbo.Departement(departement_id);
 GO
 
--- AdminEmploye.admin_id → Utilisateur  (models.py line 277: ForeignKey("Utilisateur.user_id"))
+-- AdminEmploye.admin_id -> Utilisateur  (models.py line 277: ForeignKey("Utilisateur.user_id"))
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_AdminEmploye_Admin')
     ALTER TABLE dbo.AdminEmploye WITH NOCHECK
         ADD CONSTRAINT FK_AdminEmploye_Admin
         FOREIGN KEY (admin_id) REFERENCES dbo.Utilisateur(user_id);
 GO
 
--- AdminEmploye.employe_id → Employe
+-- AdminEmploye.employe_id -> Employe
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_AdminEmploye_Employe')
     ALTER TABLE dbo.AdminEmploye WITH NOCHECK
         ADD CONSTRAINT FK_AdminEmploye_Employe
@@ -492,19 +492,19 @@ GO
 
 
 -- =============================================================================
--- 7. DW_KPI_Employe — FK and index
+-- 7. DW_KPI_Employe - FK and index
 --    The ETL uses employe_id as the PK (no kpi_id). models/models.py has
 --    been updated to match. Add the FK here so SQL Server enforces it.
 -- =============================================================================
 
--- DW_KPI_Employe.employe_id → Employe (ETL inserts one row per employee)
+-- DW_KPI_Employe.employe_id -> Employe (ETL inserts one row per employee)
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_DW_KPI_Employe_Employe')
     ALTER TABLE dbo.DW_KPI_Employe WITH NOCHECK
         ADD CONSTRAINT FK_DW_KPI_Employe_Employe
         FOREIGN KEY (employe_id) REFERENCES dbo.Employe(employe_id);
 GO
 
--- Index on taux columns — used by digest_builder aggregate query
+-- Index on taux columns - used by digest_builder aggregate query
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_DW_KPI_Employe_taux')
     CREATE INDEX IX_DW_KPI_Employe_taux
         ON dbo.DW_KPI_Employe(taux_presence, taux_absence, taux_retard, nb_absences);

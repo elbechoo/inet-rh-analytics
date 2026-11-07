@@ -1,0 +1,38 @@
+name: inet_rh
+version: "1.0.0"
+config-version: 2
+
+profile: inet_rh
+
+model-paths:   ["models"]
+test-paths:    ["tests"]
+macro-paths:   ["macros"]
+seed-paths:    ["seeds"]
+target-path:   "target"
+clean-targets: ["target", "dbt_packages"]
+
+models:
+  inet_rh:
+    # Staging is one-to-one with the source tables: rename, cast, no business
+    # logic. Views, because they are cheap and always current.
+    staging:
+      +materialized: view
+      +schema: staging
+
+    # Intermediate holds the logic shared by several marts - the working-day
+    # calendar above all. Keeping it here means the holiday rule is defined
+    # once instead of repeated in every fact table.
+    intermediate:
+      +materialized: ephemeral
+
+    # Marts are the star schema Power BI connects to. Tables, because a BI
+    # tool re-queries them constantly and should not pay for the joins.
+    marts:
+      +materialized: table
+      +schema: marts
+
+vars:
+  # Calendar bounds for dim_date. Wide enough to cover hire dates in the past
+  # and leave requested into next year.
+  date_start: "2015-01-01"
+  date_end:   "2028-12-31"

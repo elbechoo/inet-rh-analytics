@@ -64,7 +64,7 @@ export default function MonProfil() {
                 <row.Icon size={13} color="#9DB3C2" />
                 <span style={{ fontSize: '0.76rem', color: '#6B879B' }}>{row.label}</span>
               </div>
-              <span style={{ fontSize: '0.76rem', fontWeight: 600, color: '#0C2436' }}>{row.value || '—'}</span>
+              <span style={{ fontSize: '0.76rem', fontWeight: 600, color: '#0C2436' }}>{row.value || '-'}</span>
             </div>
           ))}
         </div>

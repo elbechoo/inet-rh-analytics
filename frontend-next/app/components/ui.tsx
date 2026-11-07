@@ -1,6 +1,6 @@
 'use client';
 /* ============================================================================
-   iNET RH — UI primitives
+   iNET RH - UI primitives
    A small, dependency-free component set built on the design tokens in
    globals.css. Import these instead of writing inline styles, so pages stay
    consistent and the whole app can be re-themed (or white-labelled per client)
@@ -182,7 +182,7 @@ export function Progress({ value, tone = 'blue' }: { value: number; tone?: Tone 
 export function Avatar({ name, size = 30 }: { name?: string; size?: number }) {
   const initials = (name || '')
     .split(' ').filter(Boolean).slice(0, 2)
-    .map(w => w[0]?.toUpperCase()).join('') || '—';
+    .map(w => w[0]?.toUpperCase()).join('') || '-';
   return (
     <div style={{
       width: size, height: size, borderRadius: 'var(--radius-full)',

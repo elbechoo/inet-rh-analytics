@@ -1,4 +1,4 @@
-"""iNET RH — live demo feed.
+"""iNET RH - live demo feed.
 
 `simulate_day.py` writes a whole day in one shot, which is right for seeding
 history but wrong for a demo: by the time you open the dashboard, everything has
@@ -15,7 +15,7 @@ Usage
     python demo/live_feed.py --reset         # clear today first, then feed
     python demo/live_feed.py --exits         # feed evening exits instead
 
-Stop with Ctrl+C at any time — everything written so far stays.
+Stop with Ctrl+C at any time - everything written so far stays.
 """
 import argparse
 import os
@@ -49,7 +49,7 @@ def reset_today(db: Session, today: date) -> None:
     n_ptg = db.query(Pointage).filter(Pointage.date_pointage == today).delete(synchronize_session=False)
     n_abs = db.query(Absence).filter(Absence.date_absence == today).delete(synchronize_session=False)
     db.commit()
-    print(f"{DIM}reset — removed {n_ptg} punches, {n_logs} logs, {n_abs} absences for {today}{OFF}")
+    print(f"{DIM}reset - removed {n_ptg} punches, {n_logs} logs, {n_abs} absences for {today}{OFF}")
 
 
 def feed_one_arrival(db: Session, emp: Employe, today: date) -> str | None:
@@ -76,7 +76,7 @@ def feed_one_arrival(db: Session, emp: Employe, today: date) -> str | None:
             statut="Justifiée" if justifiee else "Non justifiée",
         ))
         db.commit()
-        return f"{RED}absent {OFF}{name}{DIM} — {'justified' if justifiee else 'unjustified'}{OFF}"
+        return f"{RED}absent {OFF}{name}{DIM} - {'justified' if justifiee else 'unjustified'}{OFF}"
 
     late = r < prob_absent + prob_late
     if late:
@@ -103,8 +103,8 @@ def feed_one_arrival(db: Session, emp: Employe, today: date) -> str | None:
     db.commit()
 
     if retard > 0:
-        return f"{YELLOW}late   {OFF}{name}{DIM} — {heure.strftime('%H:%M')} (+{retard} min){OFF}"
-    return f"{GREEN}on time{OFF} {name}{DIM} — {heure.strftime('%H:%M')}{OFF}"
+        return f"{YELLOW}late   {OFF}{name}{DIM} - {heure.strftime('%H:%M')} (+{retard} min){OFF}"
+    return f"{GREEN}on time{OFF} {name}{DIM} - {heure.strftime('%H:%M')}{OFF}"
 
 
 def feed_one_exit(db: Session, p: Pointage, today: date) -> str | None:
@@ -125,11 +125,11 @@ def feed_one_exit(db: Session, p: Pointage, today: date) -> str | None:
         type_pointage="SORTIE",
     ))
     db.commit()
-    return f"{DIM}exit   {emp.prenom} {emp.nom} — {sortie.strftime('%H:%M')} ({p.duree_travail}h){OFF}"
+    return f"{DIM}exit   {emp.prenom} {emp.nom} - {sortie.strftime('%H:%M')} ({p.duree_travail}h){OFF}"
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="iNET RH — live demo feed")
+    ap = argparse.ArgumentParser(description="iNET RH - live demo feed")
     ap.add_argument("--interval", type=float, default=6.0, help="seconds between events (default 6)")
     ap.add_argument("--burst", type=int, default=1, help="events per tick (default 1)")
     ap.add_argument("--reset", action="store_true", help="clear today before feeding")
@@ -167,7 +167,7 @@ def main() -> None:
                   f"Use --reset to replay the day.")
             return
 
-        print(f"feeding {total} {label} for {today} — one every {args.interval}s "
+        print(f"feeding {total} {label} for {today} - one every {args.interval}s "
               f"(burst {args.burst}). Ctrl+C to stop.\n")
 
         sent = 0
@@ -181,9 +181,9 @@ def main() -> None:
             if i + args.burst < total:
                 _time.sleep(args.interval)
 
-        print(f"\ndone — {sent} events written for {today}.")
+        print(f"\ndone - {sent} events written for {today}.")
     except KeyboardInterrupt:
-        print(f"\n{DIM}stopped — everything written so far is saved.{OFF}")
+        print(f"\n{DIM}stopped - everything written so far is saved.{OFF}")
     finally:
         db.close()
 

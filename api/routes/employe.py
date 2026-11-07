@@ -112,7 +112,7 @@ def get_all_employes(
 ):
     """Active employees.
 
-    Paginated because this is the busiest read in the app — the top bar calls it
+    Paginated because this is the busiest read in the app - the top bar calls it
     on every page load to fill its search box. Unbounded, a 5,000-employee
     client would ship several megabytes of JSON on every navigation and stall
     the browser parsing it.
@@ -183,7 +183,7 @@ def create_employe(data: EmployeCreate, request: Request, db: Session = Depends(
         action=audit_service.EMPLOYEE_CREATE, actor=current,
         entite="Employe", entite_id=(result or {}).get("employe_id"),
         cible_employe_id=(result or {}).get("employe_id"),
-        nouvelle_valeur=f"{employe_data.get('prenom')} {employe_data.get('nom')} — role {data.role}",
+        nouvelle_valeur=f"{employe_data.get('prenom')} {employe_data.get('nom')} - role {data.role}",
         request=request,
     )
     return result
@@ -193,7 +193,7 @@ def create_employe(data: EmployeCreate, request: Request, db: Session = Depends(
 def get_equipe(employe_id: int, db: Session = Depends(get_db)):
     """The people who report directly to this employee.
 
-    Returns identity and role only — no salary, documents or risk scores.
+    Returns identity and role only - no salary, documents or risk scores.
     Managing someone is not a reason to see their personnel file; approving
     their leave is a different permission from reading their records.
     """

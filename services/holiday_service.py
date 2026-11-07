@@ -1,4 +1,4 @@
-"""Public holidays — the single source of truth for "is this a working day".
+"""Public holidays - the single source of truth for "is this a working day".
 
 Everything that counts days (leave deduction, absence detection, attendance
 rates, the absenteeism model) must go through here, otherwise a public holiday
@@ -30,7 +30,7 @@ FIXED = [
 ]
 
 # ── Islamic holidays, official Tunisian dates ───────────────
-# Estimates beyond the announced year — HR should confirm each year.
+# Estimates beyond the announced year - HR should confirm each year.
 # name: [(year, month, day, duration_days)]
 ISLAMIC = {
     "Aïd El-Fitr": [
@@ -53,11 +53,11 @@ ISLAMIC = {
 
 
 def build_calendar(year_from: int, year_to: int) -> list[dict]:
-    """Return every holiday between the two years, inclusive — one entry per date.
+    """Return every holiday between the two years, inclusive - one entry per date.
 
     Civil and Islamic holidays do collide: in 2026 Aïd El-Fitr falls on 20 March,
     which is also Independence Day. One date is still one non-working day, so the
-    two are merged into a single entry rather than duplicated — the day off does
+    two are merged into a single entry rather than duplicated - the day off does
     not double up, and the date stays unique in the database.
     """
     by_date: dict[date, dict] = {}
@@ -115,7 +115,7 @@ def holiday_dates(db: Session, start: date, end: date) -> set[date]:
     rows = db.query(JourFerie.date_ferie).filter(
         JourFerie.date_ferie >= start,
         JourFerie.date_ferie <= end,
-        JourFerie.chome == True,        # noqa: E712 — SQLAlchemy needs ==
+        JourFerie.chome == True,        # noqa: E712 - SQLAlchemy needs ==
     ).all()
     return {r[0] for r in rows}
 
@@ -136,7 +136,7 @@ def is_working_day(db: Session, d: date) -> bool:
 def working_days_between(db: Session, start: date, end: date) -> int:
     """Working days in an inclusive range, excluding weekends and holidays.
 
-    This is what leave deduction must use — otherwise an employee taking a week
+    This is what leave deduction must use - otherwise an employee taking a week
     that contains Aïd pays for the holiday out of their own balance.
     """
     if end < start:

@@ -23,7 +23,7 @@ class PeriodeSchema(BaseModel):
     date_fin   : date
 
 # ============================================
-# Endpoints — Routes fixes EN PREMIER
+# Endpoints - Routes fixes EN PREMIER
 # ============================================
 
 @router.post("/pointer")
@@ -69,7 +69,7 @@ def get_logs_today(employe_id: int, db: Session = Depends(get_db)):
 @router.get("/kpis/global")
 @ttl_cache(seconds=120, key="kpis_global")
 def kpis_global(db: Session = Depends(get_db)):
-    """Global KPIs — served from the pre-aggregated warehouse table.
+    """Global KPIs - served from the pre-aggregated warehouse table.
 
     DW_KPI_Employe (76 rows) is rebuilt by the nightly ETL and holds every
     per-employee total we need; summing 76 rows is a couple of milliseconds
@@ -77,7 +77,7 @@ def kpis_global(db: Session = Depends(get_db)):
     Falls back to the OLTP path if the warehouse is empty (cold start).
     """
     try:
-        # Fast path — read totals out of the warehouse in one query.
+        # Fast path - read totals out of the warehouse in one query.
         row = db.execute(text("""
             SELECT
                 COUNT(*)                    AS nb_employes,
@@ -108,7 +108,7 @@ def kpis_global(db: Session = Depends(get_db)):
                 "taux_absenteisme" : round(total_absences / denom_abs * 100, 2),
             }
 
-        # Cold-start fallback — warehouse not built yet, scan OLTP once.
+        # Cold-start fallback - warehouse not built yet, scan OLTP once.
         p_row = db.query(
             func.count(Pointage.pointage_id),
             func.sum(case((Pointage.statut == "En retard", 1), else_=0)),
@@ -143,7 +143,7 @@ def kpis_global(db: Session = Depends(get_db)):
 @router.get("/kpis/departement")
 @ttl_cache(seconds=120, key="kpis_departement")
 def kpis_par_departement(db: Session = Depends(get_db)):
-    """Per-department KPIs — served from the warehouse in one GROUP BY.
+    """Per-department KPIs - served from the warehouse in one GROUP BY.
 
     DW_KPI_Employe already carries the department name on every row, so the
     whole answer is a single GROUP BY over 76 rows (typically <10 ms).
@@ -180,7 +180,7 @@ def kpis_par_departement(db: Session = Depends(get_db)):
                 })
             return resultats
 
-        # Cold-start fallback (warehouse empty) — original OLTP path.
+        # Cold-start fallback (warehouse empty) - original OLTP path.
         emp_rows = db.query(
             Departement.departement_id,
             Departement.nom_departement,
@@ -228,17 +228,17 @@ def kpis_par_departement(db: Session = Depends(get_db)):
 
 
 # ============================================
-# Stats Evolution — AVANT /stats/{employe_id}
+# Stats Evolution - AVANT /stats/{employe_id}
 # ============================================
 @router.get("/stats/evolution")
 @ttl_cache(seconds=120, key="stats_evolution")
 def evolution_annuelle(db: Session = Depends(get_db)):
-    """Yearly presence / absence / late rates — fed by the warehouse.
+    """Yearly presence / absence / late rates - fed by the warehouse.
 
     Presence + late counts come from DW_KPI_Mensuel (one tiny GROUP BY).
     Absences would also come from the warehouse, but the current monthly
     table doesn't carry that column populated, so we still hit the
-    Absence OLTP table — 14 k rows with an index on date_absence, so the
+    Absence OLTP table - 14 k rows with an index on date_absence, so the
     yearly GROUP BY runs in a few ms.
     """
     try:
@@ -262,7 +262,7 @@ def evolution_annuelle(db: Session = Depends(get_db)):
             ).group_by(func.year(Pointage.date_pointage)).all():
                 ptg_by_year[int(y)] = (int(c or 0), int(r or 0))
 
-        # Absences per year — small table, fast scan.
+        # Absences per year - small table, fast scan.
         abs_by_year: dict[int, int] = {}
         for y, c in db.query(
             func.year(Absence.date_absence),
@@ -290,7 +290,7 @@ def evolution_annuelle(db: Session = Depends(get_db)):
 
 
 # ============================================
-# Stats Retards — AVANT /stats/{employe_id}
+# Stats Retards - AVANT /stats/{employe_id}
 # ============================================
 @router.get("/stats/retards")
 def stats_retards(db: Session = Depends(get_db)):
@@ -309,7 +309,7 @@ def stats_retards(db: Session = Depends(get_db)):
 
 
 # ============================================
-# Routes dynamiques — EN DERNIER
+# Routes dynamiques - EN DERNIER
 # ============================================
 @router.get("/historique/{employe_id}", dependencies=[Depends(require_self_or_hr)])
 def get_historique(employe_id: int, limit: int = 30, db: Session = Depends(get_db)):
@@ -326,7 +326,7 @@ def get_taux_presence(employe_id: int, annee: int = None, mois: int = None, db: 
 
 @router.get("/stats/{employe_id}", dependencies=[Depends(require_self_or_hr)])
 def get_stats_employe(employe_id: int, annee: int = None, mois: int = None, db: Session = Depends(get_db)):
-    """Per-employee attendance summary — used by the employee dashboard KPI cards.
+    """Per-employee attendance summary - used by the employee dashboard KPI cards.
 
     Returns the field names the front-end actually reads (nb_presents,
     nb_retards, nb_absences, total_heures), computed over a meaningful
@@ -336,10 +336,10 @@ def get_stats_employe(employe_id: int, annee: int = None, mois: int = None, db: 
 
     Previous bugs fixed here:
       * field-name mismatch (returned jours_presents / total_retards,
-        frontend read nb_presents / nb_retards → cards always 0);
+        frontend read nb_presents / nb_retards -> cards always 0);
       * status comparison used "Present" while the simulator writes
-        "Présent" → jours_presents was always 0 even when computed;
-      * absences come from the Absence table, not Pointage — they were
+        "Présent" -> jours_presents was always 0 even when computed;
+      * absences come from the Absence table, not Pointage - they were
         never counted.
     """
     today = date.today()
@@ -357,7 +357,7 @@ def get_stats_employe(employe_id: int, annee: int = None, mois: int = None, db: 
             from datetime import timedelta as _td
             date_fin = date(annee, mois + 1, 1) - _td(days=1)
 
-    # Pointages — covers Présent + En retard + Sortie manquante.
+    # Pointages - covers Présent + En retard + Sortie manquante.
     p_row = db.query(
         func.count(Pointage.pointage_id),
         func.sum(case((Pointage.statut.in_(["Présent", "Present", "En retard", "Sortie manquante"]), 1), else_=0)),
@@ -398,7 +398,7 @@ def get_stats_employe(employe_id: int, annee: int = None, mois: int = None, db: 
 
 @router.get("/stats/monthly-range/{employe_id}", dependencies=[Depends(require_self_or_hr)])
 def get_monthly_range(employe_id: int, months: int = 6, db: Session = Depends(get_db)):
-    """Last N months of attendance stats for one employee — used by employee dashboard chart."""
+    """Last N months of attendance stats for one employee - used by employee dashboard chart."""
     import calendar
     today = date.today()
     result = []

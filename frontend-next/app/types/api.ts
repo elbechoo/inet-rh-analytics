@@ -1,4 +1,4 @@
-// Central API response types — replace `any` across all pages
+// Central API response types - replace `any` across all pages
 
 export interface Employe {
   employe_id:    number;

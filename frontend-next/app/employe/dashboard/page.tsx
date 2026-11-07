@@ -126,7 +126,7 @@ export default function EmployeeDashboard() {
         <div style={{ background: 'var(--surface)', borderRadius: 'var(--radius-lg)', padding: '20px', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)', marginBottom: 22 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
             <div>
-              <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#0C2436' }}>My Attendance — Last 6 Months</div>
+              <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#0C2436' }}>My Attendance - Last 6 Months</div>
               <div style={{ fontSize: '0.72rem', color: '#9DB3C2', marginTop: 2 }}>Present days, late arrivals, and absences per month</div>
             </div>
             <div style={{ display: 'flex', gap: 14 }}>
@@ -214,7 +214,7 @@ export default function EmployeeDashboard() {
                   <div style={{ fontSize: '0.80rem', fontWeight: 600, color: '#0C2436' }}>{c.type_conge}</div>
                   <div style={{ fontSize: '0.70rem', color: '#9DB3C2', marginTop: 2, display: 'flex', alignItems: 'center', gap: 4 }}>
                     <Calendar size={10} />
-                    {c.date_debut} — {c.date_fin}
+                    {c.date_debut} - {c.date_fin}
                   </div>
                 </div>
                 <span style={{ background: st.bg, color: st.color, padding: '3px 10px', borderRadius: 20, fontSize: '0.67rem', fontWeight: 700, flexShrink: 0 }}>
@@ -255,11 +255,11 @@ export default function EmployeeDashboard() {
 
         {/* AI Alerts */}
         <div style={{ background: 'var(--surface)', borderRadius: 'var(--radius-lg)', padding: '22px', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)' }}>
-          <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#0C2436', marginBottom: 14 }}>AI Alerts — About Me</div>
+          <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#0C2436', marginBottom: 14 }}>AI Alerts - About Me</div>
           {alertes.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '28px 0' }}>
               <CheckCircle2 size={30} color="#3fb950" style={{ margin: '0 auto 10px', display: 'block' }} />
-              <div style={{ fontSize: '0.84rem', color: '#3fb950', fontWeight: 600 }}>All clear — no alerts</div>
+              <div style={{ fontSize: '0.84rem', color: '#3fb950', fontWeight: 600 }}>All clear - no alerts</div>
               <div style={{ fontSize: '0.73rem', color: '#9DB3C2', marginTop: 4 }}>Your attendance looks great</div>
             </div>
           ) : alertes.map((a: any, i: number) => {
